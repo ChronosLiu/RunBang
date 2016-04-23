@@ -3,4 +3,22 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    
+    <color name="colorTheme">#FF5677FC</color>
+    <color name="theme_bg2">#FF188FFF</color>
+    <color name="theme_gray">#CCD6DF</color>
+    <color name="theme_while">#FFFFFF</color>
+
+    <color name="btn_login_normal">#FF5677FC</color>
+    <color name="btn_login_pressed">#965677FC</color>
+
+    <color name="hint_edt_text">#ff999999</color>
+    
+    <color name="edit_press">#ff999999</color>
+    <color name="edit_normal">#ffeeeeee</color>
+
+    <color name="primaryBlue">#ff188fff</color>
+
+
+
 </resources>

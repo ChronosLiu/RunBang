@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">RunGang</string>
+    
+    <string name="btn_login">登录</string>
+    
+    <string name="hint_username">请输入邮箱/手机号</string>
+    <string name="hint_password">请输入密码</string>
+    
+    <string name="text_rigister">新用户注册</string>
+    <string name="text_get_pwd_back">忘记密码？</string>
+    <string name="text_other_account">其它账号登录</string>
+
 </resources>

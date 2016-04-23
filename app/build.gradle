@@ -4,6 +4,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+
+    //**bmob-sdk版本依赖包，用于兼容Android6.0系统**
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.yang.rungang"
         minSdkVersion 14
@@ -23,4 +27,17 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
+    //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务
+    compile 'cn.bmob.android:bmob-sdk:3.4.6'
+    //bmob-push：Bmob的推送包
+    compile 'cn.bmob.android:bmob-push:0.8'
+    //bmob-im：Bmob的即时通讯包，如果想使用即时通讯服务，则添加以下两个包，注意每个版本的im依赖特定版本的bmob-sdk，而bmob-sdk又需要特定的依赖库，具体可以查看下面注释[2]中的对应关系
+    compile 'cn.bmob.android:bmob-im:2.0.3'
+    //okhttp：自`V3.4.3版本`开始，使用`okhttp`优化SDK的网络框架，和bmob-sdk一起配套使用。
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okio:okio:1.4.0'
+    //bmob-sdk:3.4.6需要依赖okhttp（2.4.0）、okio（2.4.0），如果需要兼容Android6.0系统，则还需要添加support-v4（23.2.1）及org.apache.http.legacy包，具体可查看下面注释[1]的解释
+    compile 'cn.bmob.android:bmob-sdk:3.4.6'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okio:okio:1.4.0'
 }
