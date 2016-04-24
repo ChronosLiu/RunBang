@@ -1,6 +1,8 @@
 package com.yang.rungang.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
 
 /**
  * 基Activity
@@ -8,4 +10,11 @@ import android.app.Activity;
  */
 public class BaseActivity extends Activity{
 
+    public Context context;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context=getApplicationContext();
+
+    }
 }

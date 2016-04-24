@@ -1,5 +1,6 @@
 package com.yang.rungang.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -57,6 +58,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.text_login_register: // 注册
+                Intent registerIntent = new Intent( LoginActivity.this, RegisterActivity.class);
+                startActivity( registerIntent );
 
                 break;
             case R.id.text_forget_pwd: // 忘记密码

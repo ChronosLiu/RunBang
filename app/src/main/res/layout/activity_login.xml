@@ -68,7 +68,7 @@
             android:text="@string/btn_login"
             android:layout_marginTop="15dp"
             android:textColor="@color/theme_while"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:padding="10dp"
             android:background="@drawable/btn_login_selector"
             />

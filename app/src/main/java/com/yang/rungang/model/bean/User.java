@@ -1,6 +1,9 @@
 package com.yang.rungang.model.bean;
 
+import java.util.Date;
+
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
@@ -9,11 +12,19 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 public class User extends BmobUser {
 
+    private String nickName;//昵称
+
     private Boolean sex; // 性别
 
     private Integer age; // 年龄
 
+    private BmobDate birthday; // 生日
+
     private BmobFile headImg; // 头像
+
+    public String getNickName() {
+        return nickName;
+    }
 
     public Boolean getSex() {
         return sex;
@@ -23,8 +34,12 @@ public class User extends BmobUser {
         return age;
     }
 
-    public BmobFile getHeadImg() {
-        return headImg;
+    public BmobDate getBirthday() {
+        return birthday;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public void setSex(Boolean sex) {
@@ -35,7 +50,16 @@ public class User extends BmobUser {
         this.age = age;
     }
 
+    public void setBirthday(BmobDate birthday) {
+        this.birthday = birthday;
+    }
+
     public void setHeadImg(BmobFile headImg) {
         this.headImg = headImg;
+    }
+
+    public BmobFile getHeadImg() {
+
+        return headImg;
     }
 }

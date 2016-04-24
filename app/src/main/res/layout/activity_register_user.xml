@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/theme_while">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorTheme">
+
+        <ImageView
+            android:id="@+id/img_register_user_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:padding="10dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/img_register_user_back"
+            android:gravity="center"
+            android:text="@string/title_register"
+            android:textColor="@color/theme_while"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_margin="24dp">
+        <com.yang.rungang.view.RoundImageView
+            android:id="@+id/register_user_headImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo_weibo_normal"
+            />
+
+        <TextView
+            android:id="@+id/text_register_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="@string/text_upload_headImg"
+            android:layout_marginTop="12dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/div_gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/text_nick"/>
+            <EditText
+                android:id="@+id/edt_register_nick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_nick"
+                android:maxLines="1"
+                android:textColorHint="@color/text_dark_gray"
+                android:singleLine="true"
+                android:layout_marginLeft="8dp"
+                android:textSize="16sp"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/div_gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/text_birthday"/>
+            <EditText
+                android:id="@+id/edt_register_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_birthday"
+                android:maxLines="1"
+                android:textColorHint="@color/text_dark_gray"
+                android:singleLine="true"
+                android:layout_marginLeft="8dp"
+                android:textSize="16sp"
+                android:inputType="none"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/div_gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/text_sex"/>
+            <RadioGroup
+                android:id="@+id/radiogroup_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="8dp">
+
+                <RadioButton
+                    android:id="@+id/radio_sex_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_male"/>
+                <RadioButton
+                    android:id="@+id/radio_sex_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_female"
+                    android:layout_marginLeft="8dp"/>
+            </RadioGroup>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_register"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/theme_while"
+            android:background="@drawable/btn_login_selector"
+            android:layout_marginTop="24dp"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,13 +1,37 @@
 <resources>
     <string name="app_name">RunGang</string>
-    
+
     <string name="btn_login">登录</string>
-    
+
     <string name="hint_username">请输入邮箱/手机号</string>
     <string name="hint_password">请输入密码</string>
-    
+    <string name="hint_mobile">请输入手机号</string>
+    <string name="hint_verify_code">请输入验证码</string>
+    <string name="hint_email">请输入邮箱号码</string>
+    <string name="hint_set_pwd">请输入6~20位密码</string>
+
+    <string name="hint_nick">请输入昵称</string>
+    <string name="hint_birthday">设置生日</string>
+
     <string name="text_rigister">新用户注册</string>
     <string name="text_get_pwd_back">忘记密码？</string>
     <string name="text_other_account">其它账号登录</string>
+
+    <string name="text_get_verify_code">发送验证码</string>
+    <string name="text_verify_code_count_down">秒重发</string>
+
+    <string name="action_next_step">下一步</string>
+    <string name="title_register">注册</string>
+    <string name="text_switch_to_mobile">切换至手机号注册</string>
+    <string name="text_switch_to_email">切换至邮箱注册</string>
+
+    <string name="text_upload_headImg">上传头像</string>
+    <string name="text_nick">昵称</string>
+    <string name="text_birthday">生日</string>
+    <string name="text_sex">性别</string>
+    <string name="btn_register">注册</string>
+    <string name="radio_male">男</string>
+    <string name="radio_female">女</string>
+
 
 </resources>
