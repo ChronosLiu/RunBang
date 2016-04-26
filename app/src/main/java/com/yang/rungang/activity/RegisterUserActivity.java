@@ -1,47 +1,120 @@
 package com.yang.rungang.activity;
 
-import android.content.Context;
+import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yang.rungang.R;
 import com.yang.rungang.model.bean.User;
+import com.yang.rungang.utils.FileUtil;
+import com.yang.rungang.utils.GeneralUtil;
 import com.yang.rungang.view.RoundImageView;
 
+
+import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 
-import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 public class RegisterUserActivity extends BaseActivity implements View.OnClickListener {
+
+
+
+    private final static int REQUEST_CODE_CAMERA=0X001; //拍照的requestcode
+
+    private final static int REQUEST_CODE_ALBUM = 0x002; // 从相册中选择图片的requestCode
+
+    private final static int UPLOAD_SUCCESS = 0x11; //上传图片成功
+
+    private final static int UPLOAD_FAILURE = 0x12; //上传图片失败
+
+    private final static int REGISTER_SUCCESS = 0x21; // 注册成功
+
+    private final static int REGISTER_FAILURE = 0X22; // 注册失败
 
     private ImageView backImg;
     private RoundImageView headImg;
     private TextView uploadText;
     private EditText nickEdt;
-    private EditText birthdayEdt;
+    private TextView birthdayText;
     private RadioGroup sexRGroup;
     private RadioButton maleRadioBtn,femaleRadioBtn;
     private Button registerBtn;
+    private RelativeLayout popupRelative;
+    private TextView photoText,cameraText,cancelText;
+    private PopupWindow popupWindow;
+    private DatePickerDialog birthdayDialog;
 
-    private String nickName=null;
-    private Date birthday=null;
-    private boolean sex=true;
+    private String birthdayStr = null; //选择的生日拼接字符串
+
+    private String nickName=null; //昵称
+    private Date birthday=null; //生日
+    private Integer age=null; //年龄
+    private boolean sex=true; //性别
 
     private String mobileNumber;
     private String email;
     private String password;
 
+    private Bitmap headBitmap = null; // 头像
+    private String picPath = null; //头像路径
+    private String headImgUrl = null; //头像存储在Bmob上的url
+
+
+
+
+    Handler handler=new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+
+                case UPLOAD_SUCCESS:
+                    //注册
+                    register();
+                    break;
+                case UPLOAD_FAILURE:
+
+                    Toast.makeText(context,"上传头像失败，注册失败",Toast.LENGTH_SHORT).show();
+
+                    break;
+                case REGISTER_SUCCESS:
+                    Intent intent=new Intent(RegisterUserActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    break;
+                case REGISTER_FAILURE:
+                    Toast.makeText(context,"注册失败",Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +125,10 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         mobileNumber = getIntent().getStringExtra("mobileNumber");
         email = getIntent().getStringExtra("email");
         password = getIntent().getStringExtra("password");
+
         initComponent();
+        initPopupWindow();
+        initBirthdayDataPicker();
         setListener();
     }
 
@@ -60,11 +136,12 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
      * 初始化化组件
      */
     private void initComponent() {
+
         backImg = (ImageView) findViewById(R.id.img_register_user_back);
         headImg = (RoundImageView) findViewById(R.id.register_user_headImg);
         uploadText = (TextView) findViewById(R.id.text_register_upload);
         nickEdt = (EditText) findViewById(R.id.edt_register_nick);
-        birthdayEdt = (EditText) findViewById(R.id.edt_register_birthday);
+        birthdayText = (TextView) findViewById(R.id.text_register_birthday);
         sexRGroup = (RadioGroup) findViewById(R.id.radiogroup_sex);
         maleRadioBtn = (RadioButton) findViewById(R.id.radio_sex_male);
         femaleRadioBtn = (RadioButton) findViewById(R.id.radio_sex_female);
@@ -74,7 +151,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
 
         backImg.setOnClickListener(this);
         headImg.setOnClickListener(this);
-        birthdayEdt.setOnClickListener(this);
+        birthdayText.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
 
     }
@@ -100,8 +177,50 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
+
     }
 
+    /**
+     * 初始化日期popup
+     */
+    private void initBirthdayDataPicker(){
+
+        Calendar c=Calendar.getInstance();
+
+        birthdayDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                birthdayStr=year+"-"+monthOfYear+"-"+dayOfMonth;
+                birthdayText.setText(birthdayStr);
+                //字符串转化为日期Date
+                birthday=GeneralUtil.stringToDate(birthdayStr);
+
+        }
+        },c.get(Calendar.YEAR),c.get(Calendar.MONTH),Calendar.DAY_OF_MONTH);
+
+    }
+
+    /**
+     * 初始化popup
+     */
+    private void initPopupWindow() {
+        View view=getLayoutInflater().inflate(R.layout.popup_get_headimg_layout,null);
+        popupWindow=new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+
+        popupRelative = (RelativeLayout) view.findViewById(R.id.popup_relative);
+        photoText = (TextView) view.findViewById(R.id.popup_photo);
+        cameraText = (TextView) view.findViewById(R.id.popup_camera);
+        cancelText = (TextView) view.findViewById(R.id.popup_cancel);
+
+        popupRelative.setOnClickListener(this);
+        photoText.setOnClickListener(this);
+        cameraText.setOnClickListener(this);
+        cancelText.setOnClickListener(this);
+
+    }
     @Override
     public void onClick(View v) {
 
@@ -110,16 +229,49 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                 RegisterUserActivity.this.finish();
                 break;
             case R.id.register_user_headImg:
-
+                popupWindow.showAtLocation(getLayoutInflater().inflate(R.layout.activity_register_user,null), Gravity.BOTTOM, 0, 0);
                 break;
-            case R.id.edt_register_birthday:
-
+            case R.id.text_register_birthday:
+                birthdayDialog.show();
                 break;
             case R.id.btn_register:
+                if(picPath!=null){
+                    uploadImage();
+                }else{
+                    register();
+                }
+                break;
 
-                register();
+            case R.id.popup_camera:
+                if(GeneralUtil.isSDCard()){
+                    Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if(cameraIntent.resolveActivity(getPackageManager())!=null){
+                        //判断系统是否有能处理cameraIntent的activity
+                        startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
+                        popupWindow.dismiss();
+                    }
+                }else{
+                    Toast.makeText(context,"没有检测到SD卡",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.popup_photo:
+
+                if(GeneralUtil.isSDCard()){
+                    Intent intent=new Intent(this,SelectPictureActivity.class);
+                    startActivityForResult(intent,REQUEST_CODE_ALBUM);
+
+                }else{
+                    Toast.makeText(context,"没有检测到SD卡",Toast.LENGTH_SHORT).show();
+                }
 
                 break;
+            case R.id.popup_cancel:
+                popupWindow.dismiss();
+                break;
+            case R.id.popup_relative:
+                popupWindow.dismiss();
+                break;
+
         }
     }
 
@@ -127,29 +279,107 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
      * 注册用户
      */
     private void register(){
+
         nickName=nickEdt.getText().toString();
 
         User user=new User();
-
+        user.setUsername(email);
         user.setNickName(nickName);
         user.setSex(sex);
         user.setEmail(email);
-        user.setHeadImg(null);
+        user.setHeadImgUrl(headImgUrl);
         user.setPassword(password);
         user.setMobilePhoneNumber(mobileNumber);
-        user.setAge(null);
-        user.setBirthday(null);
+        user.setAge(age);
+        user.setBirthday(new BmobDate(birthday));
         user.signUp(context, new SaveListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(context,"注册成功",Toast.LENGTH_SHORT).show();
+
+                Message msg=new Message();
+                msg.what=REGISTER_SUCCESS;
+                handler.handleMessage(msg);
             }
 
             @Override
             public void onFailure(int i, String s) {
-                Toast.makeText(context,"注册失败",Toast.LENGTH_SHORT).show();
+
+                Message msg=new Message();
+                msg.what=REGISTER_FAILURE;
+                handler.handleMessage(msg);
             }
         });
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA://拍照返回
+                if (resultCode == RESULT_OK) {
+                    Bitmap bitmap=null;
+                    Uri uri=data.getData();
+                    if (uri!=null) {
+                        bitmap= BitmapFactory.decodeFile(uri.getPath());
+                    }
+                    if (bitmap==null){
+                        Bundle bundle=data.getExtras();
+                        if (bundle!=null) {
+                            bitmap = (Bitmap) bundle.get("data");//缩略图
+                        } else {
+                            Toast.makeText(context,"拍照失败！",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                    destroyBitmap();
+                    this.headBitmap=bitmap;
+                    headImg.setImageBitmap(headBitmap);
+                    //获取拍照图片路径
+                    this.picPath= FileUtil.saveBitmapToFile(headBitmap);
+                }
+                break;
+            case REQUEST_CODE_ALBUM://从相册选取图片返回
+
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    /**
+     * 销毁图片headBitmap
+     */
+    private void destroyBitmap(){
+        if(this.headBitmap!=null && !this.headBitmap.isRecycled()){
+            headBitmap.recycle();
+            headBitmap=null;
+        }
+    }
+
+    /**
+     * 上传图片
+     */
+    private void uploadImage(){
+        final BmobFile bmobFile=new BmobFile(new File(picPath));
+        bmobFile.uploadblock(context, new UploadFileListener() {
+            @Override
+            public void onSuccess() {
+                //获取图片URL
+                headImgUrl=bmobFile.getFileUrl(context);
+
+                Message message=new Message();
+                message.what=UPLOAD_SUCCESS;
+                handler.handleMessage(message);
+
+            }
+            @Override
+            public void onFailure(int i, String s) {
+
+                Message message=new Message();
+                message.what=UPLOAD_FAILURE;
+                handler.handleMessage(message);
+            }
+        });
+    }
+
 }
