@@ -20,7 +20,7 @@ public class User extends BmobUser {
 
     private BmobDate birthday; // 生日
 
-    private BmobFile headImg; // 头像
+    private String headImgUrl; //头像Url
 
     public String getNickName() {
         return nickName;
@@ -54,12 +54,11 @@ public class User extends BmobUser {
         this.birthday = birthday;
     }
 
-    public void setHeadImg(BmobFile headImg) {
-        this.headImg = headImg;
+    public String getHeadImgUrl() {
+        return headImgUrl;
     }
 
-    public BmobFile getHeadImg() {
-
-        return headImg;
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
     }
 }

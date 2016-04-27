@@ -2,7 +2,11 @@ package com.yang.rungang.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yang.rungang.R;
+import com.yang.rungang.model.biz.ActivityManager;
 import com.yang.rungang.utils.ConfigUtil;
 import com.yang.rungang.utils.GeneralUtil;
 
@@ -22,14 +27,26 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.RequestSMSCodeListener;
+import cn.bmob.v3.listener.VerifySMSCodeListener;
 
 
 /**
  *注册Activity
  */
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
+
+
+    private static final int GET_CODE_SUCCESS = 0x100;//注册获取验证码成功
+    private static final int GET_CODE_FAILURE = 0x101; // 注册获取验证码失败
+
+    private static final int VERIFY_CODE_SUCCESS = 0x200; //验证验证码成功
+
+    private static final int VERIFY_CODE_FAILURE = 0x201; //验证验证码失败
 
     private ImageView backImg;
     private RelativeLayout registerByEmailRelative,registerByMobileRelative;
@@ -43,14 +60,47 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private boolean switchSign=true;//切换标示，true表示用手机注册，false表示用邮箱注册
 
-    private String mobileNumber;
-    private String email;
-    private String password;
+    private String mobileNumber=null;
+    private String email=null;
+    private String password=null;
+    private String code=null; //验证码
+
+    private MyCountTimer timer;//计时器
+
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+
+                case GET_CODE_SUCCESS:
+
+
+                    break;
+                case VERIFY_CODE_SUCCESS: //手机验证成功
+
+                    Intent intent=new Intent (RegisterActivity.this,RegisterUserActivity.class);
+                    intent.putExtra("mobileNumber",mobileNumber);
+                    intent.putExtra("password", password);
+                    startActivity(intent);
+                    break;
+                
+                case VERIFY_CODE_FAILURE: //手机验证失败
+
+                    Toast.makeText(context,"验证码错误",Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_register);
+        ActivityManager.getInstance().pushOneActivity(this);
         initComponent();
         Bmob.initialize(context, ConfigUtil.BMOB_APP_ID);
         setListener();
@@ -136,6 +186,25 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 password=setPwdEdt.getText().toString();
             }
         });
+
+        verifyCodeEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                code=verifyCodeEdt.getText().toString();
+            }
+        });
+
     }
     @Override
     public void onClick(View v) {
@@ -150,6 +219,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if(!switchSign && checkInput()){// 邮箱注册，输入检查正确,网络连接
 
                     BmobQuery<BmobUser> query=new BmobQuery<>();
+                    query.addWhereEqualTo("email",email);
                     query.findObjects(context, new FindListener<BmobUser>() {
                         @Override
                         public void onSuccess(List<BmobUser> list) {
@@ -159,7 +229,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                 intent.putExtra("password", password);
                                 startActivity(intent);
                             } else { //已存在
-                                Toast.makeText(context, "邮箱已存在", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "邮箱已存在"+list.size(), Toast.LENGTH_SHORT).show();
                             }
                         }
                         @Override
@@ -170,11 +240,27 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 }else if(switchSign && checkInput()){ //手机号注册，输入检查正确
 
+                    if(TextUtils.isEmpty(code)){
+                        Toast.makeText(context,"验证码不能为空",Toast.LENGTH_SHORT).show();
+                    }else if(GeneralUtil.isPasswordNumber(password)){
+                        //验证验证码
+                        verifyCode(code);
+                    }else{
+                        Toast.makeText(context,"密码位数不正确，请重新输入",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
 
             case R.id.btn_get_rerify_code: //获取验证码
 
+                if (checkInput()) {
+
+                    timer=new MyCountTimer(60000,1000);
+                    timer.start();
+                    //获取验证码
+                    getVerifyCode();
+
+                }
                 break;
 
             case R.id.text_switch_register: // 切换
@@ -208,6 +294,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private boolean checkInput(){
         if (GeneralUtil.isNetworkAvailable(context)) {
             if (switchSign == true) {//手机号注册
+                if (TextUtils.isEmpty(mobileNumber)) {
+                    Toast.makeText(context,"手机号不能为空",Toast.LENGTH_SHORT).show();
+                } else if(GeneralUtil.isMobileNumber(mobileNumber)) {
+                    return true;
+                } else{
+                    Toast.makeText(context,"手机号格式不正确",Toast.LENGTH_SHORT).show();
+                }
 
             } else {//邮箱注册
                 if ( GeneralUtil.isEmail(email) && GeneralUtil.isPasswordNumber(password)) {
@@ -222,6 +315,70 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             Toast.makeText(context,"未连接网络！！",Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+
+    /**
+     * 请求验证码
+     */
+    private void getVerifyCode(){
+        BmobSMS.requestSMSCode(context, mobileNumber, "注册验证码", new RequestSMSCodeListener() {
+            @Override
+            public void done(Integer integer, BmobException e) {
+                if (e==null) {//验证码发送成功
+                    Message msg=new Message();
+                    msg.what = GET_CODE_SUCCESS;
+                    handler.handleMessage(msg);
+                } else {
+
+                    timer.cancel();
+                    Toast.makeText(context,"获取验证码失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * 验证验证码
+     * @param code
+     */
+    private void verifyCode(String code){
+        BmobSMS.verifySmsCode(context, mobileNumber, code, new VerifySMSCodeListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e==null) {//验证成功
+
+                    Message msg=new Message();
+                    msg.what = VERIFY_CODE_SUCCESS;
+                    handler.handleMessage(msg);
+                } else {
+
+                    Message msg=new Message();
+                    msg.what = VERIFY_CODE_FAILURE;
+                    handler.handleMessage(msg);
+                }
+            }
+        });
+    }
+
+
+    /**
+     *计时器
+     */
+    class MyCountTimer extends CountDownTimer {
+
+        public MyCountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+        @Override
+        public void onTick(long millisUntilFinished) {
+            getVerifyCodeBtn.setText((millisUntilFinished / 1000) + "s后重发");
+        }
+        @Override
+        public void onFinish() {
+
+            getVerifyCodeBtn.setText("重新发送");
+        }
     }
 
 }

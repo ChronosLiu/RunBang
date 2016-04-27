@@ -3,7 +3,12 @@ package com.yang.rungang.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -123,6 +128,40 @@ public class GeneralUtil {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 判断是否存在SD卡
+     * @return
+     */
+    public static boolean isSDCard(){
+
+        String status = Environment.getExternalStorageState();
+        if (status.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    /**
+     * 字符串转化为Date
+     * @param str
+     * @return
+     */
+    public static Date stringToDate(String str){
+        Date date=null;
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            date=simpleDateFormat.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
 

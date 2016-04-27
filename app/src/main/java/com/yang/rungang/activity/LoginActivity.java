@@ -2,14 +2,24 @@ package com.yang.rungang.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yang.rungang.R;
+import com.yang.rungang.model.bean.User;
+import com.yang.rungang.model.biz.ActivityManager;
+import com.yang.rungang.utils.GeneralUtil;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -21,11 +31,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ImageView wechatImg;
     private ImageView weiboImg;
     private ImageView qqImg;
+
+    private String userName;
+    private String password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
+        ActivityManager.getInstance().pushOneActivity(this);
         initComponent();
     }
 
@@ -56,13 +71,37 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.btn_login: // 登录
 
+                if ( GeneralUtil.isNetworkAvailable(context) && checkInput()) {
+
+                        BmobUser.loginByAccount(context, userName, password, new LogInListener<User>() {
+                            @Override
+                            public void done(User user, BmobException e) {
+
+                                if (user!=null) {
+
+                                    Toast.makeText(context,"登录成功",Toast.LENGTH_SHORT).show();
+                                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                                    startActivity(intent);
+
+                                } else {
+                                    Toast.makeText(context,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+
+                }else if ( !GeneralUtil.isNetworkAvailable(context)) {
+                    Toast.makeText(context,"未连接网络！！",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.text_login_register: // 注册
                 Intent registerIntent = new Intent( LoginActivity.this, RegisterActivity.class);
                 startActivity( registerIntent );
-
                 break;
             case R.id.text_forget_pwd: // 忘记密码
+
+                Intent resetPwdIntent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                startActivity(resetPwdIntent);
 
                 break;
             case R.id.img_wechat_login: // 微信登录
@@ -75,5 +114,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
         }
+
+    }
+
+    /**
+     * 检查输入
+     * @return
+     */
+    private boolean checkInput() {
+        userName = usernameEdt.getText().toString();
+        password = passwordEdt.getText().toString();
+
+        if (userName.length()>0 && password.length()>0 ) {
+            return true;
+        }else if ( userName.length()<=0) {
+            Toast.makeText(context,"用户名不能为空",Toast.LENGTH_SHORT).show();
+
+        } else if ( password.length()<=0){
+            Toast.makeText(context,"密码不能为空",Toast.LENGTH_SHORT).show();
+        }
+        return  false;
     }
 }

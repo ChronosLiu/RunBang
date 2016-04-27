@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_register_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -40,7 +41,7 @@
             android:id="@+id/register_user_headImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/logo_weibo_normal"
+            android:src="@drawable/upload_head_pic"
             />
 
         <TextView
@@ -63,18 +64,20 @@
             android:gravity="center_vertical">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:textSize="16sp"
-                android:text="@string/text_nick"/>
+                android:text="@string/text_register_username"/>
             <EditText
-                android:id="@+id/edt_register_nick"
+                android:id="@+id/edt_register_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_nick"
+                android:layout_height="match_parent"
+                android:hint="@string/hint_register_name"
                 android:maxLines="1"
                 android:textColorHint="@color/text_dark_gray"
                 android:singleLine="true"
                 android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:background="@android:color/transparent"/>
         </LinearLayout>
@@ -89,18 +92,17 @@
             android:gravity="center_vertical">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:text="@string/text_birthday"/>
-            <EditText
-                android:id="@+id/edt_register_birthday"
+            <TextView
+                android:id="@+id/text_register_birthday"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:hint="@string/hint_birthday"
-                android:maxLines="1"
-                android:textColorHint="@color/text_dark_gray"
-                android:singleLine="true"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:inputType="none"
                 android:background="@android:color/transparent"/>
@@ -124,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="8dp">
+                android:layout_marginLeft="20dp">
 
                 <RadioButton
                     android:id="@+id/radio_sex_male"
@@ -144,7 +146,7 @@
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_register"
+            android:text="@string/btn_finish"
             android:textSize="16sp"
             android:gravity="center"
             android:textColor="@color/theme_while"

@@ -10,6 +10,7 @@
     <string name="hint_email">请输入邮箱号码</string>
     <string name="hint_set_pwd">请输入6~20位密码</string>
 
+    <string name="hint_register_name">请输入用户名</string>
     <string name="hint_nick">请输入昵称</string>
     <string name="hint_birthday">设置生日</string>
 
@@ -26,12 +27,23 @@
     <string name="text_switch_to_email">切换至邮箱注册</string>
 
     <string name="text_upload_headImg">上传头像</string>
+    <string name="text_register_username">用户名</string>
     <string name="text_nick">昵称</string>
     <string name="text_birthday">生日</string>
     <string name="text_sex">性别</string>
-    <string name="btn_register">注册</string>
+    <string name="btn_finish">完成</string>
     <string name="radio_male">男</string>
     <string name="radio_female">女</string>
+
+    <string name="title_select_picture">选择图片</string>
+
+    <string name="title_reset_pwd">忘记密码</string>
+    <string name="hint_set_password">请输入密码</string>
+    <string name="hint_again_password">请确认密码</string>
+    <string name="btn_reset_pwd">确定</string>
+    <string name="hint_reset_pwd_email">请输入登录邮箱</string>
+    <string name="text_switch_to_mobile_reset">切换至手机修改</string>
+    <string name="text_switch_to_email_reset">切换至邮箱修改</string>
 
 
 </resources>

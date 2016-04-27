@@ -1,6 +1,8 @@
 package com.yang.rungang.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.DialogPreference;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +34,7 @@ import android.widget.Toast;
 
 import com.yang.rungang.R;
 import com.yang.rungang.model.bean.User;
+import com.yang.rungang.model.biz.ActivityManager;
 import com.yang.rungang.utils.FileUtil;
 import com.yang.rungang.utils.GeneralUtil;
 import com.yang.rungang.view.RoundImageView;
@@ -60,7 +68,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
     private ImageView backImg;
     private RoundImageView headImg;
     private TextView uploadText;
-    private EditText nickEdt;
+    private EditText usernameEdt;
     private TextView birthdayText;
     private RadioGroup sexRGroup;
     private RadioButton maleRadioBtn,femaleRadioBtn;
@@ -72,14 +80,15 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
 
     private String birthdayStr = null; //选择的生日拼接字符串
 
+    private String userName=null; //用户名
     private String nickName=null; //昵称
     private Date birthday=null; //生日
     private Integer age=null; //年龄
     private boolean sex=true; //性别
 
-    private String mobileNumber;
-    private String email;
-    private String password;
+    private String mobileNumber=null;
+    private String email=null;
+    private String password=null;
 
     private Bitmap headBitmap = null; // 头像
     private String picPath = null; //头像路径
@@ -96,16 +105,13 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
 
                 case UPLOAD_SUCCESS:
                     //注册
-                    register();
+                    registerUser();
                     break;
                 case UPLOAD_FAILURE:
-
                     Toast.makeText(context,"上传头像失败，注册失败",Toast.LENGTH_SHORT).show();
-
                     break;
                 case REGISTER_SUCCESS:
-                    Intent intent=new Intent(RegisterUserActivity.this,MainActivity.class);
-                    startActivity(intent);
+                    resultSuccessDialog();
                     break;
                 case REGISTER_FAILURE:
                     Toast.makeText(context,"注册失败",Toast.LENGTH_SHORT).show();
@@ -121,6 +127,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_register_user);
+        ActivityManager.getInstance().pushOneActivity(this);
 
         mobileNumber = getIntent().getStringExtra("mobileNumber");
         email = getIntent().getStringExtra("email");
@@ -140,7 +147,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         backImg = (ImageView) findViewById(R.id.img_register_user_back);
         headImg = (RoundImageView) findViewById(R.id.register_user_headImg);
         uploadText = (TextView) findViewById(R.id.text_register_upload);
-        nickEdt = (EditText) findViewById(R.id.edt_register_nick);
+        usernameEdt = (EditText) findViewById(R.id.edt_register_name);
         birthdayText = (TextView) findViewById(R.id.text_register_birthday);
         sexRGroup = (RadioGroup) findViewById(R.id.radiogroup_sex);
         maleRadioBtn = (RadioButton) findViewById(R.id.radio_sex_male);
@@ -175,6 +182,24 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                         sex=true;
                         break;
                 }
+            }
+        });
+
+        usernameEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                userName = usernameEdt.getText().toString();
             }
         });
 
@@ -235,13 +260,15 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                 birthdayDialog.show();
                 break;
             case R.id.btn_register:
-                if(picPath!=null){
+                if(TextUtils.isEmpty(userName)){
+                    Toast.makeText(context,"用户名不能为空！",Toast.LENGTH_SHORT).show();
+                }else if(picPath!=null){
+                    //上传头像，注册用户
                     uploadImage();
                 }else{
-                    register();
+                    //无头像，注册用户
+                    registerUser();
                 }
-                break;
-
             case R.id.popup_camera:
                 if(GeneralUtil.isSDCard()){
                     Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -278,12 +305,10 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
     /**
      * 注册用户
      */
-    private void register(){
-
-        nickName=nickEdt.getText().toString();
+    private void registerUser(){
 
         User user=new User();
-        user.setUsername(email);
+        user.setUsername(userName);
         user.setNickName(nickName);
         user.setSex(sex);
         user.setEmail(email);
@@ -303,7 +328,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onFailure(int i, String s) {
-
+                Log.i("TAG",s+i);
                 Message msg=new Message();
                 msg.what=REGISTER_FAILURE;
                 handler.handleMessage(msg);
@@ -375,11 +400,36 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onFailure(int i, String s) {
 
+                Log.i("TAG",s+i);
                 Message message=new Message();
                 message.what=UPLOAD_FAILURE;
                 handler.handleMessage(message);
             }
         });
     }
+
+    /**
+     * 注册成功弹窗提示
+     */
+    private void resultSuccessDialog(){
+        new AlertDialog.Builder(RegisterUserActivity.this)
+                .setMessage("注册成功！请登录..")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent=new Intent(RegisterUserActivity.this,LoginActivity.class);
+                        startActivity(intent);
+                        RegisterUserActivity.this.finish();
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create().show();
+    }
+
 
 }
