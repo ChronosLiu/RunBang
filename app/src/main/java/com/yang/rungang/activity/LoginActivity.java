@@ -76,20 +76,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         BmobUser.loginByAccount(context, userName, password, new LogInListener<User>() {
                             @Override
                             public void done(User user, BmobException e) {
-
                                 if (user!=null) {
-
                                     Toast.makeText(context,"登录成功",Toast.LENGTH_SHORT).show();
                                     Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(intent);
-
+                                    LoginActivity.this.finish();
                                 } else {
                                     Toast.makeText(context,"用户名或密码错误",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-
-
                 }else if ( !GeneralUtil.isNetworkAvailable(context)) {
                     Toast.makeText(context,"未连接网络！！",Toast.LENGTH_SHORT).show();
                 }
