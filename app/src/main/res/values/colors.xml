@@ -8,6 +8,7 @@
     <color name="theme_bg2">#FF188FFF</color>
     <color name="theme_gray">#CCD6DF</color>
     <color name="theme_while">#FFFFFF</color>
+    <color name="theme_black">#615c5c</color>
 
     <color name="div_gray">#FFE8E8E8</color>
 
@@ -24,6 +25,9 @@
 
     <color name="text_dark_gray">#ffdddddd</color>
     <color name="text_black">#ff000000</color>
+
+    <color name="title_home_text_normal">#96FFFFFF</color>
+    <color name="title_home_text_press">#FFFFFFFF</color>
 
 
 

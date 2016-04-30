@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:state_pressed="true">
+        <shape
+            android:shape="oval">
+            <size
+                android:height="100dp"
+                android:width="100dp"/>
+
+            <solid
+                android:color="@color/btn_login_pressed"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/div_gray"/>
+            <padding
+                android:bottom="3dp"
+                android:left="3dp"
+                android:right="3dp"
+                android:top="3dp"/>
+
+        </shape>
+
+    </item>
+    <item
+        android:state_pressed="false">
+        <shape
+            android:shape="oval">
+            <size
+                android:height="100dp"
+                android:width="100dp"/>
+            <solid
+                android:color="@color/btn_login_normal"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/div_gray"/>
+            <padding
+                android:bottom="3dp"
+                android:left="3dp"
+                android:right="3dp"
+                android:top="3dp"/>
+        </shape>
+    </item>
+</selector>

@@ -25,15 +25,15 @@
         android:supportsRtl="true"
         android:theme="@style/RungangTheme">
         <activity android:name=".activity.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.RegisterUserActivity"></activity>
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.SelectPictureActivity" />
         <activity android:name=".activity.ResetPasswordActivity"></activity>
     </application>
