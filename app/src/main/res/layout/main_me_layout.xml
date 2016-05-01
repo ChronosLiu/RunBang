@@ -4,31 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/theme_while"
-    android:visibility="gone">
+    android:visibility="gone"
+    >
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorTheme">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/title_me_fragment"
-            android:textColor="@color/theme_while"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="3dp"
-            android:padding="12dp"
-            android:src="@drawable/set" />
-    </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

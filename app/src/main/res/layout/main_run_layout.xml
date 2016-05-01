@@ -3,30 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:visibility="gone"
     >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorTheme">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_run"
-            android:textColor="@color/theme_while"
-            android:textSize="18sp"
-            android:layout_centerInParent="true"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/set"
-            android:layout_alignParentRight="true"
-            android:padding="12dp"
-            android:layout_marginRight="3dp"
-            />
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

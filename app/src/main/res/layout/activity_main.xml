@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@color/theme_while">
 
+    <include layout="@layout/main_toolbar_layout"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -3,8 +3,11 @@ package com.yang.rungang.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,8 +24,10 @@ import android.widget.TextView;
 import com.yang.rungang.R;
 import com.yang.rungang.fragment.DynamicFragment;
 import com.yang.rungang.fragment.NewsFragment;
+import com.yang.rungang.model.bean.IBmobCallback;
 import com.yang.rungang.model.bean.User;
 import com.yang.rungang.model.biz.ActivityManager;
+import com.yang.rungang.utils.IdentiferUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,7 +36,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.DownloadFileListener;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener {
+public class MainActivity extends FragmentActivity implements View.OnClickListener,IBmobCallback {
 
     private Context context;
 
@@ -49,16 +54,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TextView meText;
     private TextView runText;
 
+    private ImageView noticeImg;
+    private TextView titleText;
+    private RelativeLayout homeTitleRelative;
     private TextView dynamicText;
     private TextView newsText;
     private View dynamicLine;
     private View newsLine;
+    private ImageView setImg;
+
     private ViewPager homeViewPager;
 
 
 
     private User user;
     private ArrayList<Fragment> homeFragments;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +81,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         context=getApplicationContext();
         ActivityManager.getInstance().pushOneActivity(this);
         judeFirstLogin();
+        //初始化工具栏
+        initToolbar();
+        //初始化组件
         initComponent();
+
         initHomeComponent();
         init();
         user=BmobUser.getCurrentUser(context,User.class);
@@ -76,11 +93,29 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void init() {
+        homeTitleRelative.setVisibility(View.VISIBLE);
+
         homeLinear.setVisibility(View.VISIBLE);
         homeImg.setImageResource(R.drawable.tab_home_press_img);
         homeText.setTextColor(getResources().getColor(R.color.colorTheme));
     }
 
+    private void initToolbar(){
+        noticeImg = (ImageView) findViewById(R.id.toolbar_notice_img);
+        titleText = (TextView) findViewById(R.id.toobar_title_text);
+        setImg = (ImageView) findViewById(R.id.toolbar_set_img);
+        homeTitleRelative = (RelativeLayout) findViewById(R.id.toolbar_home_relative);
+        dynamicText = (TextView) findViewById(R.id.toolbar_home_dynamic_text);
+        newsText = (TextView) findViewById(R.id.toolbar_home_news_text);
+        dynamicLine = findViewById(R.id.toolbar_home_dynamic_line);
+        newsLine = findViewById(R.id.toolbar_home_news_line);
+
+        noticeImg.setOnClickListener(this);
+        setImg.setOnClickListener(this);
+        dynamicText.setOnClickListener(this);
+        newsText.setOnClickListener(this);
+
+    }
     /**
      * 初始化组件
      */
@@ -108,22 +143,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
      * 初始化Home组件
      */
     private void initHomeComponent() {
-        dynamicText = (TextView) findViewById(R.id.main_home_title_dynamic);
-        newsText = (TextView) findViewById(R.id.main_home_title_news);
-        dynamicLine = findViewById(R.id.main_home_title_dynamic_line);
-        newsLine = findViewById(R.id.main_home_title_news_line);
         homeViewPager = (ViewPager) findViewById(R.id.main_home_mViewPager);
-
-        dynamicText.setOnClickListener(this);
-        newsText.setOnClickListener(this);
 
         initHomeViewpager();
     }
 
     /**
-     * 重置Home标题状态
+     * 重置Home标题线条状态
      */
-    private void resetLine(){
+    private void resetLineState(){
         newsText.setTextColor(getResources().getColor(R.color.title_home_text_normal));
         dynamicText.setTextColor(getResources().getColor(R.color.title_home_text_normal));
         dynamicLine.setVisibility(View.INVISIBLE);
@@ -164,12 +192,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                 switch (position) {
                     case 0:
-                        resetLine();
+                        resetLineState();
                         dynamicLine.setVisibility(View.VISIBLE);
                         dynamicText.setTextColor(getResources().getColor(R.color.title_home_text_press));
                         break;
                     case 1:
-                        resetLine();
+                        resetLineState();
                         newsLine.setVisibility(View.VISIBLE);
                         newsText.setTextColor(getResources().getColor(R.color.title_home_text_press));
                         break;
@@ -201,42 +229,62 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.main_tab_home_layout:
-                resetTabItem();
+            case R.id.main_tab_home_layout: //首页
+                resetComponentState();
                 homeLinear.setVisibility(View.VISIBLE);
                 homeImg.setImageResource(R.drawable.tab_home_press_img);
                 homeText.setTextColor(getResources().getColor(R.color.colorTheme));
 
+                homeTitleRelative.setVisibility(View.VISIBLE);
+
                 break;
-            case R.id.main_tab_run_layout:
-                resetTabItem();
+            case R.id.main_tab_run_layout: //跑步
+                resetComponentState();
                 runLinear.setVisibility(View.VISIBLE);
                 runImg.setImageResource(R.drawable.tab_run_press_img);
                 runText.setTextColor(getResources().getColor(R.color.colorTheme));
+
+                titleText.setVisibility(View.VISIBLE);
+                titleText.setText("跑步");
+
+
                 break;
-            case R.id.main_tab_me_layout:
-                resetTabItem();
+            case R.id.main_tab_me_layout:  //我的
+                resetComponentState();
                 meLinear.setVisibility(View.VISIBLE);
                 meImg.setImageResource(R.drawable.tab_me_press_img);
                 meText.setTextColor(getResources().getColor(R.color.colorTheme));
+
+                titleText.setVisibility(View.VISIBLE);
+                titleText.setText("我的");
+                setImg.setVisibility(View.VISIBLE);
+
                 break;
 
-            case R.id.main_home_title_dynamic://动态
+            case R.id.toolbar_home_dynamic_text://动态
                 homeViewPager.setCurrentItem(0);
                 break;
-            case R.id.main_home_title_news://资讯
+            case R.id.toolbar_home_news_text://资讯
                 homeViewPager.setCurrentItem(1);
                 break;
         }
     }
 
     /**
-     * 重置tab元素
+     * 重置组件状态,初始状态
      */
-    private void resetTabItem(){
+    private void resetComponentState(){
+
+        //标题栏
+        titleText.setVisibility(View.GONE);
+        homeTitleRelative.setVisibility(View.GONE);
+        setImg.setVisibility(View.GONE);
+
+        //主布局
         homeLinear.setVisibility(View.GONE);
         runLinear.setVisibility(View.GONE);
         meLinear.setVisibility(View.GONE);
+        //tab栏
         homeImg.setImageResource(R.drawable.tab_home_normal_img);
         homeText.setTextColor(getResources().getColor(R.color.theme_black));
         runImg.setImageResource(R.drawable.tab_run_normal_img);
@@ -245,22 +293,38 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         meText.setTextColor(getResources().getColor(R.color.theme_black));
     }
 
-    /**
-     * 下载头像
-     */
-    private void downheadImg(String url){
-        BmobFile bmobFile=new BmobFile("headimg.png","",url);
-        File saveFile = new File(Environment.getExternalStorageDirectory(),bmobFile.getFilename());
-        bmobFile.download(context, saveFile, new DownloadFileListener() {
-            @Override
-            public void onSuccess(String s) {
+    @Override
+    public void onFinish(int identifier, String str) {
 
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-
-            }
-        });
+        Message msg = new Message();
+        msg.what=identifier;
+        if(str!=null){
+            msg.obj=str;
+        }
+        handler.handleMessage(msg);
     }
+
+    @Override
+    public void onFailure(int identifier) {
+
+        Message msg = new Message();
+        msg.what=identifier;
+        handler.handleMessage(msg);
+    }
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case IdentiferUtil.DOWN_FILE_SUCCESS:
+
+                    break;
+                case IdentiferUtil.DOWN_FILE_FAIL:
+
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
 }
