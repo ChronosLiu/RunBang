@@ -1,6 +1,7 @@
 package com.yang.rungang.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.widget.ImageView;
 
@@ -54,4 +55,23 @@ public class FileUtil {
             }
         return  picPath;
     }
+
+    /**
+     * 根据路径，从文件中获取图片
+     * @param path
+     * @return
+     */
+    public static Bitmap getBitmapFromFile(String path) {
+
+        Bitmap bitmap = null;
+
+        File file = new File(path);
+
+        if(file.exists()) {
+            bitmap = BitmapFactory.decodeFile(path);
+        }
+
+        return bitmap;
+    }
+
 }

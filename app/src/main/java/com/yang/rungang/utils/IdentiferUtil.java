@@ -18,4 +18,9 @@ public class IdentiferUtil {
      */
     public static final int DOWN_FILE_FAIL = 0x02;
 
+    /**
+     * 查询单个数据成功
+     */
+    public static final int QUERY_SINGLE_DATA_SUCCESS = 0x03;
+
 }

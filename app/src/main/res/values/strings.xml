@@ -61,7 +61,7 @@
     <string name="text_me_scan">扫一扫</string>
 
     <string name="title_run">跑步</string>
-    
+
     <string name="btn_run_start_run">开始跑步</string>
     <string name="text_run_air_quality">空气质量</string>
     <string name="text_run_PM_2_5">PM2.5</string>
@@ -77,8 +77,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
-    
 
 
 </resources>

@@ -10,9 +10,9 @@ public interface IBmobCallback {
     /**
      * 成功
      * @param identifier 标识
-     * @param str
+     * @param object
      */
-    void onFinish(int identifier,String str);
+    void onFinish(int identifier,Object object);
 
     /**
      * 失败

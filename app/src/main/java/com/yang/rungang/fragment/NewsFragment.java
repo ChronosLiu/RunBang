@@ -1,12 +1,23 @@
 package com.yang.rungang.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.yang.rungang.R;
+import com.yang.rungang.adapter.NewsListAdapter;
+import com.yang.rungang.model.bean.IBmobCallback;
+import com.yang.rungang.model.bean.News;
+import com.yang.rungang.utils.BmobUtil;
+import com.yang.rungang.utils.IdentiferUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,7 +26,7 @@ import com.yang.rungang.R;
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements IBmobCallback{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -24,6 +35,10 @@ public class NewsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ListView mListView;
+    private NewsListAdapter mAdapter;
+    private List<News>  data = new ArrayList<>();
 
 
     public NewsFragment() {
@@ -61,7 +76,63 @@ public class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news, container, false);
+
+        View view=inflater.inflate(R.layout.fragment_news, container, false);
+
+        getData();
+
+        mListView = (ListView) view.findViewById(R.id.news_listview);
+
+
+        setmAdapter();
+
+
+
+        return view;
     }
+
+    private void getData(){
+
+        BmobUtil.querySingleData(getActivity().getApplicationContext(),"o5NwIIIb",this);
+        BmobUtil.querySingleData(getActivity().getApplicationContext(),"ecZAQQQd",this);
+    }
+
+    /**
+     *
+     */
+    private void setmAdapter(){
+
+        mAdapter = new NewsListAdapter(getActivity(),data);
+        mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onFinish(int identifier, Object object) {
+        Message msg = new Message();
+        msg.what=identifier;
+        if(object!=null){
+            msg.obj=object;
+        }
+        handler.handleMessage(msg);
+    }
+
+    @Override
+    public void onFailure(int identifier) {
+
+    }
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case IdentiferUtil.QUERY_SINGLE_DATA_SUCCESS:
+                    News news= (News) msg.obj;
+                    data.add(news);
+                    mAdapter.notifyDataSetChanged();
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
 }

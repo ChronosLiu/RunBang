@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/theme_while"
+    android:padding="12dp">
+    <ImageView
+        android:id="@+id/news_item_img"
+        android:layout_width="130dp"
+        android:layout_height="80dp"
+        android:background="@color/bg_gray"
+        android:src="@drawable/upload_head_pic"/>
+
+    <TextView
+        android:id="@+id/news_item_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="我跑顾我在"
+        android:textColor="@color/text_black"
+        android:layout_toRightOf="@id/news_item_img"
+        android:layout_alignTop="@id/news_item_img"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="6dp"/>
+    <TextView
+        android:id="@+id/news_item_brief_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/news_item_title_text"
+        android:text="分享自己的跑步故事"
+        android:maxLines="3"
+        android:layout_toRightOf="@id/news_item_img"
+        android:layout_margin="6dp"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/news_item_img"
+        android:gravity="center"
+        android:layout_marginRight="3dp"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/see"/>
+        <TextView
+            android:id="@+id/news_item_read_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1233"/>
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

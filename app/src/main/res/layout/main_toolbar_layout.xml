@@ -101,7 +101,8 @@
             android:layout_height="match_parent"
             android:padding="12dp"
             android:layout_marginRight="3dp"
-            android:src="@drawable/set"/>
+            android:src="@drawable/set"
+            android:visibility="gone"/>
     </FrameLayout>
 
 

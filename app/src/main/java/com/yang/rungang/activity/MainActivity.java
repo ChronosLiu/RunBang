@@ -2,6 +2,7 @@ package com.yang.rungang.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
@@ -27,7 +28,12 @@ import com.yang.rungang.fragment.NewsFragment;
 import com.yang.rungang.model.bean.IBmobCallback;
 import com.yang.rungang.model.bean.User;
 import com.yang.rungang.model.biz.ActivityManager;
+import com.yang.rungang.utils.BmobUtil;
+import com.yang.rungang.utils.FileUtil;
 import com.yang.rungang.utils.IdentiferUtil;
+import com.yang.rungang.view.RoundImageView;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,6 +71,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private ViewPager homeViewPager;
 
+    private RoundImageView headImg;
+    private TextView usernameText;
+    private TextView followNumber;
+    private TextView fansNubmer;
+    private RelativeLayout followRelative;
+    private RelativeLayout fansRelative;
+    private TextView meDistanceText;
+    private TextView meTimeText;
+    private RelativeLayout meRunScoreRelative;
+    private RelativeLayout meFriendsListRelative;
+    private RelativeLayout meScanRelative;
+
 
 
     private User user;
@@ -80,26 +98,33 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
         context=getApplicationContext();
         ActivityManager.getInstance().pushOneActivity(this);
+        //判断是否初次登录，是否有缓存用户
         judeFirstLogin();
         //初始化工具栏
         initToolbar();
         //初始化组件
         initComponent();
+        //初始状态
+        initState();
 
-        initHomeComponent();
-        init();
-        user=BmobUser.getCurrentUser(context,User.class);
+
 
     }
 
-    private void init() {
+    /**
+     * 初始状态
+     */
+    private void initState() {
         homeTitleRelative.setVisibility(View.VISIBLE);
-
         homeLinear.setVisibility(View.VISIBLE);
         homeImg.setImageResource(R.drawable.tab_home_press_img);
         homeText.setTextColor(getResources().getColor(R.color.colorTheme));
+        homeViewPager.setCurrentItem(0);
     }
 
+    /**
+     * 初始化工具栏toolbar
+     */
     private void initToolbar(){
         noticeImg = (ImageView) findViewById(R.id.toolbar_notice_img);
         titleText = (TextView) findViewById(R.id.toobar_title_text);
@@ -133,35 +158,54 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         meImg = (ImageView) findViewById(R.id.main_tab_me_img);
         meText = (TextView) findViewById(R.id.main_tab_me_text);
 
+        initMeComponent();
+        initHomeComponent();
+        initRunComponent();
+
         homeLayout.setOnClickListener(this);
         runLayout.setOnClickListener(this);
         meLayout.setOnClickListener(this);
     }
 
+    /**
+     * 初始化化run组件
+     */
+    private void initRunComponent(){
+
+    }
+    /**
+     * 初始化me组件
+     */
+    private void initMeComponent(){
+        headImg = (RoundImageView) findViewById(R.id.me_headimg_roundImg);
+        usernameText = (TextView) findViewById(R.id.me_username_text);
+        followNumber = (TextView) findViewById(R.id.me_follow_number_text);
+        followRelative = (RelativeLayout) findViewById(R.id.me_follow_relative);
+        fansNubmer = (TextView) findViewById(R.id.me_fans_number_text);
+        fansRelative = (RelativeLayout) findViewById(R.id.me_fans_relative);
+
+        meDistanceText = (TextView) findViewById(R.id.me_count_distance);
+        meTimeText = (TextView) findViewById(R.id.me_count_time);
+
+        meRunScoreRelative = (RelativeLayout) findViewById(R.id.me_run_score_relative);
+        meFriendsListRelative = (RelativeLayout) findViewById(R.id.me_run_list_relative);
+        meScanRelative = (RelativeLayout) findViewById(R.id.me_scan_relative);
+
+        headImg.setOnClickListener(this);
+        followRelative.setOnClickListener(this);
+        fansRelative.setOnClickListener(this);
+        meRunScoreRelative.setOnClickListener(this);
+        meFriendsListRelative.setOnClickListener(this);
+        meScanRelative.setOnClickListener(this);
+
+    }
 
     /**
-     * 初始化Home组件
+     * 初始化Home组件，viewpager设置adapter，页面改变监听
      */
     private void initHomeComponent() {
         homeViewPager = (ViewPager) findViewById(R.id.main_home_mViewPager);
 
-        initHomeViewpager();
-    }
-
-    /**
-     * 重置Home标题线条状态
-     */
-    private void resetLineState(){
-        newsText.setTextColor(getResources().getColor(R.color.title_home_text_normal));
-        dynamicText.setTextColor(getResources().getColor(R.color.title_home_text_normal));
-        dynamicLine.setVisibility(View.INVISIBLE);
-        newsLine.setVisibility(View.INVISIBLE);
-    }
-
-    /**
-     * 初始化homeViewpager，设置监听
-     */
-    private void initHomeViewpager(){
         homeFragments = new ArrayList<>();
         final DynamicFragment dynamicFragment=new DynamicFragment();
         NewsFragment newsFragment = new NewsFragment();
@@ -209,16 +253,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             }
         });
-
-        homeViewPager.setCurrentItem(0);
-
-
     }
+
+    /**
+     * 重置Home标题线条状态
+     */
+    private void resetLineState(){
+        newsText.setTextColor(getResources().getColor(R.color.title_home_text_normal));
+        dynamicText.setTextColor(getResources().getColor(R.color.title_home_text_normal));
+        dynamicLine.setVisibility(View.INVISIBLE);
+        newsLine.setVisibility(View.INVISIBLE);
+    }
+
     /**
      * 判断是否初次登录
      */
     private  void  judeFirstLogin(){
-        User user=BmobUser.getCurrentUser(context,User.class);
+        user = BmobUser.getCurrentUser(context,User.class);
         if(user ==null){ //无缓存的用户信息，初次登录，
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
@@ -267,9 +318,27 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.toolbar_home_news_text://资讯
                 homeViewPager.setCurrentItem(1);
                 break;
+
+            case R.id.toolbar_set_img:
+                Intent intent = new Intent(MainActivity.this,SetActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
+    private void setHeadImg() {
+
+        if(user == null){
+            return;
+        }
+        String url = user.getHeadImgUrl();
+        if (url != null) {
+            BmobUtil.downHeadImg(context,url, this);
+            usernameText.setText(user.getUsername());
+        }
+
+
+    }
     /**
      * 重置组件状态,初始状态
      */
@@ -294,12 +363,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
-    public void onFinish(int identifier, String str) {
+    public void onFinish(int identifier, Object object) {
 
         Message msg = new Message();
         msg.what=identifier;
-        if(str!=null){
-            msg.obj=str;
+        if(object!=null){
+            msg.obj=object;
         }
         handler.handleMessage(msg);
     }
@@ -316,10 +385,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case IdentiferUtil.DOWN_FILE_SUCCESS:
+                case IdentiferUtil.DOWN_FILE_SUCCESS://下载文件成功
 
+                    String path = (String) msg.obj;
+                    Bitmap bitmap = FileUtil.getBitmapFromFile(path);
+                    if (bitmap!=null) {
+                        headImg.setImageBitmap(bitmap);
+                    }
                     break;
-                case IdentiferUtil.DOWN_FILE_FAIL:
+                case IdentiferUtil.DOWN_FILE_FAIL: // 下载文件失败
 
                     break;
             }

@@ -33,8 +33,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:text="100.00 km"
+                android:text="100.0"
                 android:textColor="@color/text_black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Km"
+                android:textSize="16sp"
+                android:layout_marginLeft="3dp"
+                android:textColor="@color/text_black"
+                android:layout_toRightOf="@id/me_count_distance"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,8 +69,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:text="10.0 h"
+                android:text="10.0"
                 android:textColor="@color/text_black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="h"
+                android:textColor="@color/text_black"
+                android:textSize="16sp"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/me_count_time"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
