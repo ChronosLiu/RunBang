@@ -23,4 +23,9 @@ public class IdentiferUtil {
      */
     public static final int QUERY_SINGLE_DATA_SUCCESS = 0x03;
 
+    /**
+     * 计时任务
+     */
+    public static final int TIME_TASK = 0x04;
+
 }

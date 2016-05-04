@@ -165,5 +165,47 @@ public class GeneralUtil {
     }
 
 
+    /**
+     * 总秒数转换为00:00:00 格式字符串
+     * @param time
+     * @return
+     */
+    public static  String secondsToString(int time) {
+
+        int house = 0; //小时
+        int minute = 0; // 分钟
+        int second = 0; //秒
+
+        String houseStr ="00";
+        String minuteStr ="00";
+        String secondStr = "00";
+
+        second = time % 60;
+        minute = (time / 60) % 60;
+        house = (time /60) / 60;
+        if (second <10) {
+            secondStr = "0"+second;
+        } else {
+            secondStr = Integer.toString(second);
+        }
+
+        if ( minute < 10) {
+            minuteStr = "0"+minute;
+        } else {
+            minuteStr = Integer.toString(minute);
+        }
+
+        if (house < 10) {
+            houseStr = "0"+house;
+
+        } else {
+            houseStr = Integer.toString(house);
+        }
+
+        return houseStr+":"+minuteStr+":"+secondStr;
+
+    }
+
+
 
 }

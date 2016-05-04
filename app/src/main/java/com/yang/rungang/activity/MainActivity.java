@@ -91,6 +91,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +107,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initComponent();
         //初始状态
         initState();
+
+
 
 
 
