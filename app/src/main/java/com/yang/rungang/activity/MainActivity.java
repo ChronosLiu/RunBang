@@ -17,26 +17,41 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.yang.rungang.R;
+import com.yang.rungang.db.DBManager;
 import com.yang.rungang.fragment.DynamicFragment;
 import com.yang.rungang.fragment.NewsFragment;
+import com.yang.rungang.https.HttpsUtil;
 import com.yang.rungang.model.bean.IBmobCallback;
+import com.yang.rungang.model.bean.IHttpCallback;
 import com.yang.rungang.model.bean.User;
+import com.yang.rungang.model.bean.weather.WeatherData;
 import com.yang.rungang.model.biz.ActivityManager;
+import com.yang.rungang.model.biz.CityList;
 import com.yang.rungang.utils.BmobUtil;
+import com.yang.rungang.utils.ConfigUtil;
 import com.yang.rungang.utils.FileUtil;
+import com.yang.rungang.utils.GeneralUtil;
 import com.yang.rungang.utils.IdentiferUtil;
+import com.yang.rungang.utils.JsonUtil;
 import com.yang.rungang.view.RoundImageView;
 
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -71,6 +86,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private ViewPager homeViewPager;
 
+    //我的
     private RoundImageView headImg;
     private TextView usernameText;
     private TextView followNumber;
@@ -83,14 +99,29 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private RelativeLayout meFriendsListRelative;
     private RelativeLayout meScanRelative;
 
+    //跑步
+
+    private Button startBtn;
+    private TextView ditanceText;
+    private TextView timeText;
+    private TextView scoreNumberText;
+
+    private TextView cityText;
+    private TextView tempText;
+    private TextView airQuality;
+    private TextView pm2_5Text;
+    private TextView stateText;
+    private TextView timeNowText;
 
 
     private User user;
     private ArrayList<Fragment> homeFragments;
 
+    private LocationClient client = null;
+    private BDLocationListener locationListener = new MyLocationListener();
 
-
-
+    private String cityCode; //城市代码
+    private String cityName; //城市名称
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +130,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
         context=getApplicationContext();
         ActivityManager.getInstance().pushOneActivity(this);
-        //判断是否初次登录，是否有缓存用户
-        judeFirstLogin();
+//        //判断是否初次登录，是否有缓存用户
+//        judeFirstLogin();
         //初始化工具栏
         initToolbar();
         //初始化组件
@@ -108,8 +139,31 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //初始状态
         initState();
 
+        client = new LocationClient(context);
+        client.registerLocationListener(locationListener);
+        initLocation();
+        client.start();
 
-
+//        HttpsUtil.getCityList(ConfigUtil.CITY_LIST_API, new IHttpCallback() {
+//            @Override
+//            public void onSuccess(String response) {
+//
+//                CityList cityList = JsonUtil.parseCityListJson(response);
+//
+//                if(cityList.getCities().size()>0) {
+//                    Log.i("TAG",cityList.getCities().get(0).getCity());
+//                    Log.i("TAG",cityList.getCities().get(cityList.getCities().size()-1).getCity());
+//                }
+//
+//                DBManager.getInstance(context).insertCitys(cityList.getCities());
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Exception e) {
+//
+//            }
+//        });
 
 
     }
@@ -175,6 +229,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
      */
     private void initRunComponent(){
 
+        timeNowText = (TextView) findViewById(R.id.main_run_weather_time);
+        stateText = (TextView) findViewById(R.id.main_run_weather_sate);
+        startBtn = (Button) findViewById(R.id.main_run_start_btn);
+        ditanceText = (TextView) findViewById(R.id.main_run_data_distance);
+        timeText = (TextView) findViewById(R.id.main_run_data_time);
+        scoreNumberText = (TextView) findViewById(R.id.main_run_data_score);
+        cityText = (TextView) findViewById(R.id.main_run_weather_city);
+        tempText = (TextView) findViewById(R.id.main_run_weather_temp);
+        airQuality = (TextView) findViewById(R.id.main_run_weather_airquality);
+        pm2_5Text = (TextView) findViewById(R.id.main_run_weather_pm_2_5);
+
+        scoreNumberText.setOnClickListener(this);
+        startBtn.setOnClickListener(this);
     }
     /**
      * 初始化me组件
@@ -280,6 +347,77 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    private class MyLocationListener implements BDLocationListener{
+
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            if (bdLocation.getLocType() == BDLocation.TypeGpsLocation
+                    ||bdLocation.getLocType() == BDLocation.TypeNetWorkLocation) {// GPS或网络定位
+                cityName = bdLocation.getCity();//获取城市名称
+                cityName = cityName.substring(0,cityName.length()-1);
+                if(cityName != null) {
+                    cityCode = DBManager.getInstance(context).queryIdByName(cityName);
+                    queryWeatherfromNet(cityCode);
+                }
+                client.stop();
+            } else {
+                client.stop();
+            }
+        }
+    }
+    /**
+     * 初始化定位，设置定位参数
+     */
+    private void initLocation(){
+        //用来设置定位sdk的定位方式
+        LocationClientOption option = new LocationClientOption();
+
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
+        int span=2000;
+        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
+        option.setOpenGps(true);//可选，默认false,设置是否使用gps
+        option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
+        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+        option.setIsNeedLocationPoiList(false);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+        option.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
+        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
+        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
+
+        client.setLocOption(option);
+
+    }
+
+    /**
+     * 从网络获取天气信息
+     * @param cityCode
+     */
+    private void queryWeatherfromNet(String cityCode){
+
+        if(cityCode!=null){
+            String url = ConfigUtil.WEATHER_API+"?cityid="+cityCode;
+            HttpsUtil.httpGetRequest(url, new IHttpCallback() {
+                @Override
+                public void onSuccess(String response) {
+                   WeatherData weatherData = JsonUtil.parseWeatherJson(response.toString());
+                    if (weatherData !=null) {
+                        Message msg = new Message();
+                        msg.what = IdentiferUtil.GET_WEATHER_SUCCESS;
+                        msg.obj = weatherData;
+                        handler.sendMessage(msg);
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+        }
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -325,6 +463,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.toolbar_set_img:
                 Intent intent = new Intent(MainActivity.this,SetActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.main_run_start_btn: // 开始跑步
+                Intent runIntent = new Intent(MainActivity.this,RunActivity.class);
+                startActivity(runIntent);
+                break;
+            case R.id.main_run_data_score: //跑步记录
+
                 break;
         }
     }
@@ -397,6 +543,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     }
                     break;
                 case IdentiferUtil.DOWN_FILE_FAIL: // 下载文件失败
+
+                    break;
+
+                case IdentiferUtil.GET_WEATHER_SUCCESS : //获取天气成功
+
+
+                    WeatherData weatherData = (WeatherData) msg.obj;
+
+                    cityText.setText(weatherData.getBasic().getCity());
+
+                    stateText.setText(weatherData.getNow().getCond().getTxt());
+
+                    tempText.setText(weatherData.getNow().getTmp());
+
+                    timeNowText.setText(new SimpleDateFormat("MM-dd").format(new Date()));
+
+                    airQuality.setText(GeneralUtil.valueToAQIState(weatherData.getAqi().getCity().getAqi()));
+
+                    pm2_5Text.setText(weatherData.getAqi().getCity().getPm25());
 
                     break;
             }

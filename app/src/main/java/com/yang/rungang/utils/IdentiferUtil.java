@@ -28,4 +28,9 @@ public class IdentiferUtil {
      */
     public static final int TIME_TASK = 0x04;
 
+    /**
+     * 获取天气数据成功
+     */
+    public static final int GET_WEATHER_SUCCESS = 0X05;
+
 }

@@ -13,14 +13,42 @@
         android:layout_marginLeft="24dp"
         />
     <TextView
+        android:id="@+id/main_run_weather_sate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="晴"
+
+        android:textSize="16sp"
+        android:layout_toRightOf="@id/main_run_weather_city"
+        android:layout_alignBottom="@id/main_run_weather_city"
+        android:layout_marginLeft="24dp"/>
+    <TextView
         android:id="@+id/main_run_weather_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="24°"
+        android:text="24"
         android:layout_centerHorizontal="true"
         android:textSize="16sp"
         android:layout_marginTop="10dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="°C"
+        android:textSize="16sp"
+        android:layout_toRightOf="@id/main_run_weather_temp"
+        android:layout_alignBottom="@id/main_run_weather_temp"/>
+
+    <TextView
+        android:id="@+id/main_run_weather_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9-06"
+        android:textSize="16sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/main_run_weather_temp"
+        android:layout_marginRight="24dp"/>
+
     <TextView
         android:id="@+id/main_run_weather_air"
         android:layout_width="wrap_content"

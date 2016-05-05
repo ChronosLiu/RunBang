@@ -26,4 +26,20 @@ public class ConfigUtil {
      */
     public static final String BMOB_MASTER_KEY = "f42e76d52e9b8962ed6f9e0ccfb47e94";
 
+    /**
+     * apikey ，APIStore通用key
+     */
+    public  static final String APISTORE_API_KEY = "618aa2b9fcfa0575e8acefb8c843f76a";
+
+    /**
+     * 天气接口地址
+     */
+    public static final String WEATHER_API = "http://apis.baidu.com/heweather/weather/free";
+
+    /**
+     * 城市列表接口
+     */
+    public static final String CITY_LIST_API = " https://api.heweather.com/x3/citylist?search=allchina" +
+            "&key=a7ec86e719d9458da2e1f67ebc73d2e4";
+
 }

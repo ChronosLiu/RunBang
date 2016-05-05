@@ -16,6 +16,7 @@ import cn.bmob.v3.Bmob;
 public class BaseActivity extends Activity{
 
     public Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

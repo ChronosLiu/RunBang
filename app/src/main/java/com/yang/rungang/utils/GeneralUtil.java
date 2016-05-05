@@ -206,6 +206,55 @@ public class GeneralUtil {
 
     }
 
+    /**
+     * 距离(米）转化为字符串 0.00格式
+     * @param distance
+     * @return
+     */
+    public static String doubleToString(double distance) {
+        String distanceStr = "0.00";
+
+        //转化为千米（公里）
+        double km = distance/1000;
+
+        // 四舍五入，保留2为小数
+        double d= Math.round(km*100)/100;
+
+        //转化为字符串
+        if(d > 0) {
+            distanceStr = Double.toString(d);
+        }
+
+
+        return distanceStr;
+    }
+
+    /**
+     * 空气质量指数AQI ，根据AQI数值返回空气质量状况
+     * @param aqi
+     * @return
+     */
+    public static String valueToAQIState( String aqi) {
+
+        String state = null;
+        int value = Integer.parseInt(aqi);
+
+        if( value <= 50) {
+            state = "优";
+        } else if (value <= 100) {
+            state = "良";
+        } else if (value <= 150) {
+            state = "轻度污染";
+        } else if (value <= 200) {
+            state = "中度污染";
+        } else if (value <= 300) {
+            state = "重度污染";
+        } else if (value >300) {
+            state = "严重污染";
+        }
+        return state;
+
+    }
 
 
 }
