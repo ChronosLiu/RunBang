@@ -33,4 +33,5 @@ public class IdentiferUtil {
      */
     public static final int GET_WEATHER_SUCCESS = 0X05;
 
+
 }

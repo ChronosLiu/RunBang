@@ -31,6 +31,12 @@ public class ConfigUtil {
      */
     public  static final String APISTORE_API_KEY = "618aa2b9fcfa0575e8acefb8c843f76a";
 
+
+    /**
+     * 鹰眼服务id
+     */
+    public static final String YINGYAN_SERVICE_ID = "115788";
+
     /**
      * 天气接口地址
      */

@@ -3,6 +3,7 @@ package com.yang.rungang.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -16,32 +17,63 @@ import java.util.Date;
  */
 public class FileUtil {
 
+
     /**
-     * 获取拍照存储图片路径
-     * @param bitmap
-     * @return
+     * 一级目录 rungang
      */
-    public static String saveBitmapToFile(Bitmap bitmap){
+    public static String  FIRST_DIR_PATH = Environment.getExternalStorageDirectory().getPath()
+            +File.separator+"rungang";
+
+    /**
+     * 二级目录 图片images
+     */
+    private static String  IMAGES_DIR_PATH = FIRST_DIR_PATH+File.separator+"images";
+
+
+
+    /**
+     * 保存图片
+     * @param bitmap
+     * @param filePath
+     * @return 保存路径
+     */
+    public static String saveBitmapToFile(Bitmap bitmap, String filePath){
         String picPath=null;
         FileOutputStream fileOutputStream = null;
         try {
-            // 获取 SD 卡根目录
-            String saveDir = Environment.getExternalStorageDirectory() + "/headbitmap";
-            // 新建目录
+
+            // 新建一级目录
+            File firstDir = new File(FIRST_DIR_PATH);
+            if(!firstDir.exists()) {
+                firstDir.exists();
+            }
+            //建立二级图片目录
+            File imagedir = new File(IMAGES_DIR_PATH);
+            if (! imagedir.exists()) {
+                imagedir.mkdir();
+
+            }
+            //三级分类目录
+            String saveDir = IMAGES_DIR_PATH+File.separator+filePath;
             File dir = new File(saveDir);
-            if (! dir.exists()) dir.mkdir();
-            // 生成文件名
+            if(!dir.exists()) {
+                dir.mkdirs();
+            }
+           // 生成文件名
             SimpleDateFormat t = new SimpleDateFormat("yyyyMMddssSSS");
-            String filename = "Head" + (t.format(new Date())) + ".jpg";
+            String fileName = filePath + (t.format(new Date()))+".png";
+            Log.i("TAG","文件名"+fileName);
             // 新建文件
-            File file = new File(saveDir, filename);
+            File file = new File(saveDir, fileName);
             // 打开文件输出流
             fileOutputStream = new FileOutputStream(file);
+            Log.i("TAG","文件输出流");
             // 生成图片文件
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             // 相片的完整路径
             picPath = file.getPath();
 
+            Log.i("TAG","图片存储成功"+picPath);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -73,5 +105,6 @@ public class FileUtil {
 
         return bitmap;
     }
+
 
 }

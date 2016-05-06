@@ -131,7 +131,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         context=getApplicationContext();
         ActivityManager.getInstance().pushOneActivity(this);
 //        //判断是否初次登录，是否有缓存用户
-//        judeFirstLogin();
+        judeFirstLogin();
         //初始化工具栏
         initToolbar();
         //初始化组件
@@ -139,31 +139,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //初始状态
         initState();
 
-        client = new LocationClient(context);
-        client.registerLocationListener(locationListener);
-        initLocation();
-        client.start();
-
-//        HttpsUtil.getCityList(ConfigUtil.CITY_LIST_API, new IHttpCallback() {
-//            @Override
-//            public void onSuccess(String response) {
-//
-//                CityList cityList = JsonUtil.parseCityListJson(response);
-//
-//                if(cityList.getCities().size()>0) {
-//                    Log.i("TAG",cityList.getCities().get(0).getCity());
-//                    Log.i("TAG",cityList.getCities().get(cityList.getCities().size()-1).getCity());
-//                }
-//
-//                DBManager.getInstance(context).insertCitys(cityList.getCities());
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Exception e) {
-//
-//            }
-//        });
+//        client = new LocationClient(context);
+//        client.registerLocationListener(locationListener);
+//        initLocation();
+//        client.start();
 
 
     }

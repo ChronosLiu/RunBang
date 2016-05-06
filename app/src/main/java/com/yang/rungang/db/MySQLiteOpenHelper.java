@@ -24,6 +24,15 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             "lat text," +
             "lon text)";
 
+    public static final String CREATE_TABLE_RUNRECORD ="create table runrecord ("+
+            "userid text,"+
+            "time real,"+
+            "distance real,"+
+            "mapshotpath text,"+
+            "points text,"+
+            "speeds text,"+
+            "createtime text)";
+
     public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         this.context = context;
@@ -32,8 +41,10 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        //创建表
+        //创建城市表
         db.execSQL(CREATE_TABLE_CITY);
+        //创建记录表
+        db.execSQL(CREATE_TABLE_RUNRECORD);
 
     }
 
@@ -41,6 +52,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("drop table if exists city");
+
+        db.execSQL("drop table if exists runrecord");
 
         onCreate(db);
     }

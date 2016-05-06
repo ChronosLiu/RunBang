@@ -1,9 +1,12 @@
 package com.yang.rungang.utils;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.yang.rungang.model.bean.weather.WeatherData;
 import com.yang.rungang.model.bean.weather.WeatherList;
 import com.yang.rungang.model.biz.CityList;
+
+import java.util.List;
 
 /**
  * Json解析工具类
@@ -36,6 +39,18 @@ public class JsonUtil {
 
         return weatherList.getWeatherDatas().get(0);
 
+    }
+
+
+    /**
+     * list集合转化为json
+     */
+    public static String listTojson(List list) {
+
+        String json = null;
+        Gson gson = new Gson();
+        json = gson.toJson(list);
+        return json;
     }
 
 }

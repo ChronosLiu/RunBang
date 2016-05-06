@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.yang.rungang.model.bean.City;
+import com.yang.rungang.model.bean.RunRecord;
+import com.yang.rungang.utils.JsonUtil;
 
 import java.util.List;
 
@@ -94,4 +96,37 @@ public class DBManager {
 
         return id;
     }
+
+    /**
+     * 增加跑步记录
+     * @param runRecord
+     */
+    public void insertRunRecord(RunRecord runRecord) {
+        if (runRecord == null) {
+            return;
+        }
+        db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put("userid", runRecord.getUserId());
+            values.put("time", runRecord.getTime());
+            values.put("distance", runRecord.getDistance());
+            values.put("mapshotpath", runRecord.getMapShotPath());
+            values.put("points", JsonUtil.listTojson(runRecord.getPoints())); //转化为json字符串存入数据库
+            values.put("speeds", JsonUtil.listTojson(runRecord.getSpeeds())); //转化为Json字符串存入数据库
+            values.put("createtime", runRecord.getCreateTime());
+            db.insert("runrecord", null, values);
+            values.clear();
+            db.setTransactionSuccessful();
+            Log.i("TAG","成功插入数据库");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+    }
+
+
 }

@@ -1,9 +1,11 @@
 package com.yang.rungang.utils;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -207,7 +209,7 @@ public class GeneralUtil {
     }
 
     /**
-     * 距离(米）转化为字符串 0.00格式
+     * 距离(米）转化为字符串 0.00格式 公里
      * @param distance
      * @return
      */
@@ -218,11 +220,12 @@ public class GeneralUtil {
         double km = distance/1000;
 
         // 四舍五入，保留2为小数
-        double d= Math.round(km*100)/100;
+        double d= Math.round(km*100)/100.0;
+
 
         //转化为字符串
         if(d > 0) {
-            distanceStr = Double.toString(d);
+            distanceStr = String.valueOf(d);
         }
 
 
@@ -254,6 +257,27 @@ public class GeneralUtil {
         }
         return state;
 
+    }
+
+
+    /**
+     * 判断是否打开GPS
+     * @param context
+     * @return
+     */
+    public static boolean isOpenGPS(Context context){
+
+        LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+
+        // 通过GPS卫星定位，定位级别可以精确到街（通过24颗卫星定位，在室外和空旷的地方定位准确、速度快）
+        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // 通过WLAN或移动网络(3G/2G)确定的位置（也称作AGPS，辅助GPS定位。主要用于在室内或遮盖物（建筑群或茂密的深林等）密集的地方定位）
+        boolean agps = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if(gps || agps) {
+            return true;
+        }
+        return false;
     }
 
 

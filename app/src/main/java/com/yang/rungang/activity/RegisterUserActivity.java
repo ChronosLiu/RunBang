@@ -360,7 +360,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                     this.headBitmap=bitmap;
                     headImg.setImageBitmap(headBitmap);
                     //获取拍照图片路径
-                    this.picPath= FileUtil.saveBitmapToFile(headBitmap);
+                    this.picPath= FileUtil.saveBitmapToFile(headBitmap,"headImg");
                 }
                 break;
             case REQUEST_CODE_ALBUM://从相册选取图片返回
