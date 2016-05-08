@@ -25,6 +25,16 @@
             android:text="跑步"
             android:textColor="@color/theme_while"
             android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/run_set_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:src="@drawable/set"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
+            />
     </RelativeLayout>
 
     <com.baidu.mapapi.map.MapView

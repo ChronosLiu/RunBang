@@ -24,6 +24,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             "lat text," +
             "lon text)";
 
+    /**
+     * 创建表runrecord
+     */
     public static final String CREATE_TABLE_RUNRECORD ="create table runrecord ("+
             "userid text,"+
             "time real,"+
@@ -32,6 +35,20 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             "points text,"+
             "speeds text,"+
             "createtime text)";
+
+    /**
+     * 创建表 offlinecity
+     */
+    public static final String CREATE_TABLE_OFFLINECITY = "create table offlinecity ("+
+            "cityid integer,"+
+            "cityname text,"+
+            "citytype integer,"+
+            "size integer,"+
+            "status integer,"+
+            "radio integer,"+
+            "isupdate numeric,"+
+            "childcities text)";
+
 
     public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -45,6 +62,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CITY);
         //创建记录表
         db.execSQL(CREATE_TABLE_RUNRECORD);
+        //创建离线地图城市表
+        db.execSQL(CREATE_TABLE_OFFLINECITY);
 
     }
 
@@ -54,6 +73,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists city");
 
         db.execSQL("drop table if exists runrecord");
+
+        db.execSQL("drop table if exists offlinecity");
 
         onCreate(db);
     }

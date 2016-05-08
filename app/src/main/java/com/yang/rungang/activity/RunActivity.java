@@ -3,6 +3,7 @@ package com.yang.rungang.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -517,6 +518,8 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
 
             case R.id.run_set_img : //设置
 
+                Intent mapset = new Intent(this,OLMapActivity.class);
+                startActivity(mapset);
                 break;
         }
     }

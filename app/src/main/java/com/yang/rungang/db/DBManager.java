@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.yang.rungang.model.bean.City;
+import com.yang.rungang.model.bean.OLCity;
 import com.yang.rungang.model.bean.RunRecord;
 import com.yang.rungang.utils.JsonUtil;
 
@@ -127,6 +128,39 @@ public class DBManager {
         }
 
     }
+
+    /**
+     * 增加离线城市列表
+     * @param olCity
+     */
+    public void insertOffline(OLCity olCity) {
+        if (olCity == null) {
+            return;
+        }
+        db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put("cityid",olCity.getCityID());
+            values.put("cityname",olCity.getCityName());
+            values.put("citytype",olCity.getCityType());
+            values.put("size",olCity.getSize());
+            values.put("status",olCity.getStatus());
+            values.put("radio",olCity.getRatio());
+            values.put("isupdate",olCity.isUpdate());
+            values.put("childcities",JsonUtil.listTojson(olCity.getChildCities()));
+            db.insert("offlinecity",null,values);
+            values.clear();
+            Log.i("TAG","插入成功");
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+    }
+
 
 
 }

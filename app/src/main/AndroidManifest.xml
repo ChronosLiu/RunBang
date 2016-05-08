@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 获取wifi网络状态的信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 改变wifi网络转态-->
+    <!-- 改变wifi网络转态 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -16,19 +16,19 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 允许读取手机状态 用于创建BmobInstallation -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 获取摄像头权限-->
+    <!-- 获取摄像头权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 获取sd卡读权限-->
+    <!-- 获取sd卡读权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <!-- 这个权限用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <!-- 这个权限用于访问GPS定位-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <!-- SD卡读取权限，用户写入离线定位数据-->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <application
         android:allowBackup="true"
@@ -37,10 +37,10 @@
         android:supportsRtl="true"
         android:theme="@style/RungangTheme">
 
-        <!--百度地图api配置 -->
+        <!-- 百度地图api配置 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="nhturWDn5lC7Gwiuzx7UwXlcgUx9zHNn"/>
+            android:value="nhturWDn5lC7Gwiuzx7UwXlcgUx9zHNn" />
 
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
@@ -55,12 +55,25 @@
         <activity android:name=".activity.SelectPictureActivity" />
         <activity android:name=".activity.ResetPasswordActivity" />
         <activity android:name=".activity.SetActivity" />
-        <activity android:name=".activity.RunActivity"></activity>
+        <activity android:name=".activity.RunActivity" />
 
-        <service android:name="com.baidu.location.f"
+        <!-- 百度定位服务 -->
+        <service
+            android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
-        
+            android:process=":remote" />
+
+        <!-- 百度鹰眼轨迹服务 -->
+        <service
+            android:name="com.baidu.trace.LBSTraceService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.MonitorService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".activity.OLMapActivity"></activity>
     </application>
 
 </manifest>

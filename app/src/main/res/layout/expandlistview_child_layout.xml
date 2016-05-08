@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="45dp">
+    <RelativeLayout
+        android:id="@+id/child_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/child_city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="城市"
+            android:textSize="16sp"
+            android:textColor="@color/text_black"
+            android:layout_marginLeft="12dp"
+            />
+        <TextView
+            android:id="@+id/chile_data_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18.2"
+            android:textSize="16sp"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/child_city_name"/>
+        <TextView
+            android:id="@+id/child_downloaded"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已下载"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:visibility="gone"/>
+
+
+        <ImageView
+            android:id="@+id/child_download_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/download"/>
+
+        <TextView
+            android:id="@+id/child_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="53%"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="48dp"
+
+            />
+    </RelativeLayout>
+</LinearLayout>

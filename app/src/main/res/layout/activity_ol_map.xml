@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorTheme">
+        <ImageView
+            android:id="@+id/ol_map__back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"
+            android:padding="12dp"
+            android:layout_marginLeft="3dp"/>
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            android:padding="3dp"
+            android:layout_margin="5dp">
+            <TextView
+                android:id="@+id/ol_map_toolbar_all"
+                android:layout_width="1dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="全部"
+                android:textSize="16sp"
+                android:textColor="@color/theme_while"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/ol_map_toolbar_downloaded"
+                android:layout_width="1dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="已下载"
+                android:textSize="16sp"
+                android:textColor="@color/theme_while"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ol_map_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/ol_map_search_layout"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:padding="5dp"
+                android:background="@color/edt_search_bg">
+                <EditText
+                    android:id="@+id/ol_map_search_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/edit_text_gray_normal"
+                    android:drawableLeft="@drawable/search"
+                    android:paddingLeft="5dp"
+                    android:drawablePadding="5dp"
+                    android:hint="输入城市名称进行搜索"/>
+            </RelativeLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ListView
+                    android:id="@+id/ol_map_search_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:visibility="gone"></ListView>
+
+                <ExpandableListView
+                    android:id="@+id/ol_map_expandableListview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></ExpandableListView>
+            </FrameLayout>
+        </LinearLayout>
+        <ListView
+            android:id="@+id/ol_map_download_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:visibility="gone"
+            ></ListView>
+
+    </FrameLayout>
+
+
+
+
+
+
+
+</LinearLayout>

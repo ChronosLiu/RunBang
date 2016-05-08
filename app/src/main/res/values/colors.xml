@@ -34,6 +34,8 @@
     <color name="title_home_text_normal">#96FFFFFF</color>
     <color name="title_home_text_press">#FFFFFFFF</color>
 
+    <color name="edt_search_bg">#bfbfbf</color>
+
 
 
 </resources>
