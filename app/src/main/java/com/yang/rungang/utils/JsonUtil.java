@@ -2,6 +2,7 @@ package com.yang.rungang.utils;
 
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yang.rungang.model.bean.weather.WeatherData;
 import com.yang.rungang.model.bean.weather.WeatherList;
 import com.yang.rungang.model.biz.CityList;
@@ -51,6 +52,38 @@ public class JsonUtil {
         Gson gson = new Gson();
         json = gson.toJson(list);
         return json;
+    }
+
+    /**
+     * json转化为list,获取坐标点集合
+     * @param json
+     * @return
+     */
+    public static List<LatLng> jsonToListPoint(String json) {
+
+        List<LatLng> list = null;
+        Gson gson = new Gson();
+
+        list = gson.fromJson(json, new TypeToken<List<LatLng>>() {
+        }.getType());
+
+        return list;
+    }
+
+    /**
+     * json转化为list,获取速度集合
+     * @param json
+     * @return
+     */
+    public static List<Float> jsonToListSpeed(String json){
+
+        List<Float> list = null;
+        Gson gson = new Gson();
+
+        list = gson.fromJson(json,new TypeToken<List<Float>>(){}.getType());
+
+        return list;
+
     }
 
 }

@@ -33,5 +33,23 @@ public class IdentiferUtil {
      */
     public static final int GET_WEATHER_SUCCESS = 0X05;
 
+    /**
+     * 删除一条runRecord成功
+     */
+    public  static final int DELETE_RUN_RECORD_SUCCESS = 0X06;
+
+    /**
+     * 删除一条runRecord失败
+     */
+    public  static final int DELETE_RUN_RECORD_FAILURE = 0X07;
+    /**
+     * 保存数据成功
+     */
+    public static final int SAVE_DATA_TO_BMOB_SUCCESS = 0X08;
+    /**
+     * 保存数据失败
+     */
+    public static final int SAVE_DATA_TO_BMOB_FAILURE = 0X09;
+
 
 }

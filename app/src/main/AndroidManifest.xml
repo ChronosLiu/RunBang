@@ -73,7 +73,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.OLMapActivity"></activity>
+        <activity android:name=".activity.OLMapActivity" />
+        <activity android:name=".activity.RunRecordActivity" />
+        <activity android:name=".activity.RunRecordDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -28,12 +28,15 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
      * 创建表runrecord
      */
     public static final String CREATE_TABLE_RUNRECORD ="create table runrecord ("+
+            "recordid text,"+
+            "objectid text,"+
             "userid text,"+
             "time real,"+
             "distance real,"+
             "mapshotpath text,"+
             "points text,"+
             "speeds text,"+
+            "issync numeric,"+
             "createtime text)";
 
     /**

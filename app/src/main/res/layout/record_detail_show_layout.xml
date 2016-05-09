@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/record_details_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.baidu.mapapi.map.MapView>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/linear_details_shap">
+            <TextView
+                android:id="@+id/record_details_create_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016-11-2"
+                android:textSize="16sp"
+                android:textColor="@color/theme_while"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:padding="12dp"
+            android:layout_margin="24dp"
+            android:background="@drawable/linear_details_shap">
+        <RelativeLayout
+            android:layout_width="1dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/record_details_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00:00"
+                android:textColor="@color/theme_while"
+                android:textSize="25sp"/>
+            <ImageView
+                android:id="@+id/record_details_time_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/time"
+                android:layout_below="@id/record_details_time_text"
+                android:layout_marginTop="6dp"/>
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="总计时间"
+                android:textColor="@color/text_while_gray"
+                android:layout_below="@id/record_details_time_text"
+                android:layout_toRightOf="@id/record_details_time_img"
+                android:layout_alignBottom="@id/record_details_time_img"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="6dp"/>
+
+        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="1dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/record_details_distance_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.20"
+                    android:textColor="@color/theme_while"
+                    android:layout_alignParentRight="true"
+                    android:textSize="25sp"/>
+                <TextView
+                    android:id="@+id/record_details_distance_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全程距离：公里"
+                    android:textColor="@color/text_while_gray"
+                    android:layout_below="@id/record_details_distance_text"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_alignParentRight="true"/>
+                <ImageView
+                    android:id="@+id/record_details_distance_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/distance"
+                    android:layout_below="@id/record_details_distance_text"
+                    android:layout_marginTop="6dp"
+                    android:layout_toLeftOf="@id/record_details_distance_unit" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

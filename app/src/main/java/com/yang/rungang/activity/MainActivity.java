@@ -450,6 +450,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.main_run_data_score: //跑步记录
 
+                Intent recordIntent = new Intent(MainActivity.this,RunRecordActivity.class);
+                startActivity(recordIntent);
                 break;
         }
     }

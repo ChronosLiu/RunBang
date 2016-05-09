@@ -159,6 +159,21 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
                     timeText.setText(GeneralUtil.secondsToString(msg.arg1));
                     break;
 
+                case IdentiferUtil.SAVE_DATA_TO_BMOB_SUCCESS:
+
+                    runRecord.setIsSync(true);
+
+                    DBManager.getInstance(context).insertRunRecord(runRecord);
+
+                    Log.i("TAG", "objecid" + runRecord.getObjectId());
+
+                    break;
+
+                case IdentiferUtil.SAVE_DATA_TO_BMOB_FAILURE:
+                    runRecord.setIsSync(false);
+                    DBManager.getInstance(context).insertRunRecord(runRecord);
+                    break;
+
             }
 
             super.handleMessage(msg);
@@ -314,6 +329,7 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
                 if (bdLocation.getLocType() == BDLocation.TypeGpsLocation ||
                         bdLocation.getLocType() == BDLocation.TypeNetWorkLocation ){ //gps,网络定位成功定位
 
+                    startTimer();
                     double latitude = bdLocation.getLatitude(); //纬度
                     double longitude = bdLocation.getLongitude(); // 经度
                     double radius = bdLocation.getRadius(); //精度
@@ -485,7 +501,7 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
                 } else { //未开始，开始按钮
 
                     isStart = true ;
-                    startTimer();
+//                    startTimer();
                     startOrPauseImg.setImageResource(R.drawable.run_stop);
                     stateText.setText("暂停");
                     mLocationClient.start(); // 开始定位
@@ -551,6 +567,9 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
 
         runRecord = new RunRecord();
 
+        String id= new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        Log.i("TAG", "id" + id);
+        runRecord.setRecordid(id);
         runRecord.setPoints(pointList);
         runRecord.setDistance(distance);
         runRecord.setTime(time);
@@ -559,27 +578,35 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
         runRecord.setMapShotPath(picPath);
         runRecord.setSpeeds(speedList);
 
-        //存入数据库(本地)
-        DBManager.getInstance(context).insertRunRecord(runRecord);
-
         if (GeneralUtil.isNetworkAvailable(context)) { //网络连接
 
+            runRecord.setIsSync(true);
             //存储到服务器端
             runRecord.save(context, new SaveListener() {
                 @Override
                 public void onSuccess() {
 
                     Log.i("TAG", "成功上传到云端");
-                    runRecord = null;
-                    RunActivity.this.finish();
+                    Message msg = new Message();
+                    msg.what = IdentiferUtil.SAVE_DATA_TO_BMOB_SUCCESS;
+                    handler.sendMessage(msg);
                 }
 
                 @Override
                 public void onFailure(int i, String s) {
 
+                    Message msg = new Message();
+                    msg.what = IdentiferUtil.SAVE_DATA_TO_BMOB_FAILURE;
+                    handler.sendMessage(msg);
                 }
             });
+        } else {
+            runRecord.setIsSync(false);
+            DBManager.getInstance(context).insertRunRecord(runRecord);
         }
+
+        Log.i("TAG","objecid111"+runRecord.getObjectId());
+        RunActivity.this.finish();
 
     }
 

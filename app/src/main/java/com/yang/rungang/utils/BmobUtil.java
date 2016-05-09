@@ -7,11 +7,13 @@ import android.util.Log;
 
 import com.yang.rungang.model.bean.IBmobCallback;
 import com.yang.rungang.model.bean.News;
+import com.yang.rungang.model.bean.RunRecord;
 
 import java.io.File;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.GetListener;
 
@@ -85,18 +87,46 @@ public class BmobUtil {
         query.getObject(context, objectId, new GetListener<News>() {
             @Override
             public void onSuccess(News news) {
-                if(callback!=null){
-                    callback.onFinish(IdentiferUtil.QUERY_SINGLE_DATA_SUCCESS,news);
+                if (callback != null) {
+                    callback.onFinish(IdentiferUtil.QUERY_SINGLE_DATA_SUCCESS, news);
                 }
             }
 
             @Override
             public void onFailure(int i, String s) {
 
-                Log.i("TAG",s+i);
+                Log.i("TAG", s + i);
             }
         });
     }
 
+    /**
+     * 从bmob服务器删除一条runrecord
+     * @param context
+     * @param objectId
+     * @param callback
+     */
+    public static void deleteDataFromRunRecord(Context context,String objectId,final IBmobCallback callback) {
+        RunRecord runRecord = new RunRecord();
+        runRecord.setObjectId(objectId);
+        runRecord.delete(context, new DeleteListener() {
+            @Override
+            public void onSuccess() {
+
+                if(callback!= null) {
+                    callback.onFinish(IdentiferUtil.DELETE_RUN_RECORD_SUCCESS,null);
+                }
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+                if(callback!= null) {
+                    callback.onFinish(IdentiferUtil.DELETE_RUN_RECORD_FAILURE,null);
+                }
+            }
+        });
+
+    }
 
 }

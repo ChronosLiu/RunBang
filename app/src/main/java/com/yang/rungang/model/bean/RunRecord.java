@@ -16,9 +16,10 @@ import cn.bmob.v3.datatype.BmobDate;
 public class RunRecord extends BmobObject {
 
 
-    private String userId;        // 用户id
+    private String recordid;    //记录id
+    private String userId;      // 用户id
 
-    private double time;          // 用时
+    private int time;          // 用时
 
     private double distance;      // 距离
 
@@ -30,12 +31,13 @@ public class RunRecord extends BmobObject {
 
     private String createTime;    //创建时间
 
+    private boolean isSync; //同步标示，true 已同步，false 未同步
 
     public String getUserId() {
         return userId;
     }
 
-    public double getTime() {
+    public int getTime() {
         return time;
     }
 
@@ -51,12 +53,15 @@ public class RunRecord extends BmobObject {
         return createTime;
     }
 
+    public boolean isSync() {
+        return isSync;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
     
-    public void setTime(double time) {
+    public void setTime(int time) {
         this.time = time;
     }
 
@@ -86,5 +91,18 @@ public class RunRecord extends BmobObject {
 
     public void setSpeeds(List<Float> speeds) {
         this.speeds = speeds;
+    }
+
+    public void setIsSync(boolean isSync) {
+        this.isSync = isSync;
+    }
+
+    public void setRecordid(String recordid) {
+        this.recordid = recordid;
+    }
+
+    public String getRecordid() {
+
+        return recordid;
     }
 }

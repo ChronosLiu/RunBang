@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@color/theme_while">
+
+    <TextView
+        android:id="@+id/record_create_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2016/05/11"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:layout_marginTop="3dp">
+
+        <ImageView
+            android:id="@+id/record_distance_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/distance"/>
+        <TextView
+            android:id="@+id/record_distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10.1"
+            android:textSize="20sp"
+            android:textColor="@color/text_black"
+            android:layout_toRightOf="@id/record_distance_img"
+            android:layout_marginLeft="12dp"/>
+        <TextView
+            android:id="@+id/record_distance_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="公里"
+            android:textSize="16sp"
+            android:layout_toRightOf="@id/record_distance_text"
+            android:layout_alignBottom="@id/record_distance_text"/>
+        <ImageView
+            android:id="@+id/record_time_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/time"
+            android:layout_toRightOf="@id/record_distance_unit"
+            android:layout_marginLeft="24dp"
+            />
+        <TextView
+            android:id="@+id/record_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textSize="18sp"
+            android:layout_toRightOf="@id/record_time_img"
+            android:layout_alignBottom="@id/record_distance_text"
+            android:layout_marginLeft="12dp"/>
+        <ImageView
+            android:id="@+id/record_sync_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sync"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

@@ -9,8 +9,10 @@ import android.util.Log;
 import com.yang.rungang.model.bean.City;
 import com.yang.rungang.model.bean.OLCity;
 import com.yang.rungang.model.bean.RunRecord;
+import com.yang.rungang.utils.GeneralUtil;
 import com.yang.rungang.utils.JsonUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +30,8 @@ public class DBManager {
 
     private SQLiteDatabase db;
 
+    private List<RunRecord> runRecords = null; //runrecord表集合
+
     private DBManager(Context context) {
         this.context = context;
     }
@@ -43,6 +47,16 @@ public class DBManager {
         return dbManager;
     }
 
+    public List<RunRecord> getRunRecords() {
+        if (runRecords == null) {
+
+            runRecords = new ArrayList<>();
+            //从数据库中获取
+            runRecords = getAllRunRecord();
+
+        }
+        return runRecords;
+    }
 
     /**
      * 插入城市数据
@@ -110,12 +124,15 @@ public class DBManager {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
+            values.put("objectid",runRecord.getObjectId());
+            values.put("recordid",runRecord.getRecordid());
             values.put("userid", runRecord.getUserId());
             values.put("time", runRecord.getTime());
             values.put("distance", runRecord.getDistance());
             values.put("mapshotpath", runRecord.getMapShotPath());
             values.put("points", JsonUtil.listTojson(runRecord.getPoints())); //转化为json字符串存入数据库
             values.put("speeds", JsonUtil.listTojson(runRecord.getSpeeds())); //转化为Json字符串存入数据库
+            values.put("issync",runRecord.isSync());
             values.put("createtime", runRecord.getCreateTime());
             db.insert("runrecord", null, values);
             values.clear();
@@ -126,6 +143,120 @@ public class DBManager {
         } finally {
             db.endTransaction();
         }
+
+    }
+
+    /**
+     * 从数据库中获取所有的跑步记录
+     * @return
+     */
+    private List<RunRecord> getAllRunRecord(){
+
+        List<RunRecord> points =  new ArrayList<>();
+
+        String sql = "select * from runrecord";
+        db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+
+        try {
+            Cursor cursor = db.rawQuery(sql, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    RunRecord record = new RunRecord();
+
+                    record.setObjectId(cursor.getString(cursor.getColumnIndex("objectid")));
+                    record.setRecordid(cursor.getString(cursor.getColumnIndex("recordid")));
+                    record.setUserId(cursor.getString(cursor.getColumnIndex("userid")));
+                    record.setTime(cursor.getInt(cursor.getColumnIndex("time")));
+                    record.setDistance(cursor.getDouble(cursor.getColumnIndex("distance")));
+                    record.setMapShotPath(cursor.getString(cursor.getColumnIndex("mapshotpath")));
+                    record.setPoints(JsonUtil.jsonToListPoint(
+                            cursor.getString(cursor.getColumnIndex("points"))));
+                    record.setSpeeds(JsonUtil.jsonToListSpeed(
+                            cursor.getString(cursor.getColumnIndex("speeds"))));
+                    int issync = cursor.getInt(cursor.getColumnIndex("issync"));
+                    if (issync == 1) {
+                        record.setIsSync(true);
+                    } else {
+                        record.setIsSync(false);
+                    }
+                    record.setCreateTime(cursor.getString(cursor.getColumnIndex("createtime")));
+                    points.add(record);
+                } while (cursor.moveToNext());
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+        return points;
+
+    }
+
+
+    /**
+     * 同步数据时，更新数据库信息
+     * @param recordid
+     * @param objectid
+     * @param isSync
+     */
+    public void updateOneRunRecord(String recordid,String objectid,boolean isSync){
+
+        db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+
+        try {
+
+            ContentValues values  = new ContentValues();
+            values.put("objectid",objectid);
+            values.put("issync",isSync);
+
+            db.update("runrecord",values,"recordid = ?",new String[]{recordid});
+
+            db.setTransactionSuccessful();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    /**
+     * 删除一条跑步记录
+     * @param position
+     */
+    public void deleteOneRunRecord(int position){
+
+        String recordid = runRecords.get(position).getRecordid();
+
+        db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+
+        try {
+
+            String sql = "delete from runrecord where recordid ="+recordid;
+
+            db.execSQL(sql);
+
+            runRecords.remove(position);
+
+            Log.i("TAG","删除成功");
+            db.setTransactionSuccessful();
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+
 
     }
 
