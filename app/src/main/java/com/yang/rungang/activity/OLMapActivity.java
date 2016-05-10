@@ -30,11 +30,13 @@ import com.yang.rungang.adapter.CitylistViewAdapter;
 import com.yang.rungang.db.DBManager;
 import com.yang.rungang.model.bean.OLCity;
 import com.yang.rungang.model.biz.ActivityManager;
+import com.yang.rungang.utils.GeneralUtil;
 
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OLMapActivity extends BaseActivity implements View.OnClickListener, MKOfflineMapListener {
 
@@ -61,7 +63,7 @@ public class OLMapActivity extends BaseActivity implements View.OnClickListener,
     private ArrayList<MKOLUpdateElement> updateElements = null; // 更新信息
 
 
-    private ArrayList<OLCity> data = new ArrayList<>(); //适配器数据
+    private List<OLCity> data = new ArrayList<>(); //适配器数据
 
     private ArrayList<OLCity> searchData = new ArrayList<>(); //搜索数据
 
@@ -84,8 +86,6 @@ public class OLMapActivity extends BaseActivity implements View.OnClickListener,
 
         //初始化离线地图
         initOfflineMap();
-        //获取离线地图城市列表
-        cityList = offlineMap.getOfflineCityList();
 
         // 获取数据
         getData();
@@ -131,108 +131,121 @@ public class OLMapActivity extends BaseActivity implements View.OnClickListener,
      * 适配数据
      */
     private void getData(){
-        data = new ArrayList<>();
 
-        //直辖市
-        OLCity zhixiaCity = new OLCity();
-        zhixiaCity.setCityName("直辖市");
-        ArrayList<OLCity> zhixia = new ArrayList<>();
-        OLCity beijing = new OLCity();
-        searchCityList = offlineMap.searchCity("北京市");
-        beijing.setCityName(searchCityList.get(0).cityName);
-        beijing.setSize(searchCityList.get(0).size);
-        beijing.setCityType(searchCityList.get(0).cityType);
-        beijing.setCityID(searchCityList.get(0).cityID);
-        zhixia.add(beijing);
-        OLCity shanghai = new OLCity();
-        searchCityList = null;
-        searchCityList = offlineMap.searchCity("上海市");
-        shanghai.setCityName(searchCityList.get(0).cityName);
-        shanghai.setSize(searchCityList.get(0).size);
-        shanghai.setCityType(searchCityList.get(0).cityType);
-        shanghai.setCityID(searchCityList.get(0).cityID);
-        zhixia.add(shanghai);
-        OLCity tianjing = new OLCity();
-        searchCityList = null;
-        searchCityList = offlineMap.searchCity("天津市");
-        tianjing.setCityName(searchCityList.get(0).cityName);
-        tianjing.setSize(searchCityList.get(0).size);
-        tianjing.setCityType(searchCityList.get(0).cityType);
-        tianjing.setCityID(searchCityList.get(0).cityID);
-        zhixia.add(tianjing);
-        OLCity chongqing = new OLCity();
-        searchCityList = null;
-        searchCityList = offlineMap.searchCity("重庆市");
-        chongqing.setCityName(searchCityList.get(0).cityName);
-        chongqing.setSize(searchCityList.get(0).size);
-        chongqing.setCityType(searchCityList.get(0).cityType);
-        chongqing.setCityID(searchCityList.get(0).cityID);
-        zhixia.add(chongqing);
-        zhixiaCity.setChildCities(zhixia);
-        data.add(zhixiaCity);
+        data = DBManager.getInstance(context).getAllOfflineCity();
 
-        //港澳
-        OLCity gangao = new OLCity();
-        gangao.setCityName("港澳");
-        ArrayList<OLCity> gangaoList = new ArrayList<>();
-        OLCity xianggang = new OLCity();
-        searchCityList = null;
-        searchCityList = offlineMap.searchCity("香港特别行政区");
-        xianggang.setCityName(searchCityList.get(0).cityName);
-        xianggang.setSize(searchCityList.get(0).size);
-        xianggang.setCityType(searchCityList.get(0).cityType);
-        xianggang.setCityID(searchCityList.get(0).cityID);
-        gangaoList.add(xianggang);
+        if(data == null || data.size() <= 0) {
 
-        OLCity aomen = new OLCity();
-        searchCityList = null;
-        searchCityList = offlineMap.searchCity("澳门特别行政区");
-        aomen.setCityName(searchCityList.get(0).cityName);
-        aomen.setSize(searchCityList.get(0).size);
-        aomen.setCityType(searchCityList.get(0).cityType);
-        aomen.setCityID(searchCityList.get(0).cityID);
-        gangaoList.add(aomen);
+            if(GeneralUtil.isNetworkAvailable(context)) {
+                //获取离线地图城市列表
+                cityList = offlineMap.getOfflineCityList();
+                data = new ArrayList<>();
+                //直辖市
+                OLCity zhixiaCity = new OLCity();
+                zhixiaCity.setCityName("直辖市");
+                ArrayList<OLCity> zhixia = new ArrayList<>();
+                OLCity beijing = new OLCity();
+                searchCityList = offlineMap.searchCity("北京市");
+                beijing.setCityName(searchCityList.get(0).cityName);
+                beijing.setSize(searchCityList.get(0).size);
+                beijing.setCityType(searchCityList.get(0).cityType);
+                beijing.setCityID(searchCityList.get(0).cityID);
+                zhixia.add(beijing);
+                OLCity shanghai = new OLCity();
+                searchCityList = null;
+                searchCityList = offlineMap.searchCity("上海市");
+                shanghai.setCityName(searchCityList.get(0).cityName);
+                shanghai.setSize(searchCityList.get(0).size);
+                shanghai.setCityType(searchCityList.get(0).cityType);
+                shanghai.setCityID(searchCityList.get(0).cityID);
+                zhixia.add(shanghai);
+                OLCity tianjing = new OLCity();
+                searchCityList = null;
+                searchCityList = offlineMap.searchCity("天津市");
+                tianjing.setCityName(searchCityList.get(0).cityName);
+                tianjing.setSize(searchCityList.get(0).size);
+                tianjing.setCityType(searchCityList.get(0).cityType);
+                tianjing.setCityID(searchCityList.get(0).cityID);
+                zhixia.add(tianjing);
+                OLCity chongqing = new OLCity();
+                searchCityList = null;
+                searchCityList = offlineMap.searchCity("重庆市");
+                chongqing.setCityName(searchCityList.get(0).cityName);
+                chongqing.setSize(searchCityList.get(0).size);
+                chongqing.setCityType(searchCityList.get(0).cityType);
+                chongqing.setCityID(searchCityList.get(0).cityID);
+                zhixia.add(chongqing);
+                zhixiaCity.setChildCities(zhixia);
+                data.add(zhixiaCity);
 
-        gangao.setChildCities(gangaoList);
+                //港澳
+                OLCity gangao = new OLCity();
+                gangao.setCityName("港澳");
+                ArrayList<OLCity> gangaoList = new ArrayList<>();
+                OLCity xianggang = new OLCity();
+                searchCityList = null;
+                searchCityList = offlineMap.searchCity("香港特别行政区");
+                xianggang.setCityName(searchCityList.get(0).cityName);
+                xianggang.setSize(searchCityList.get(0).size);
+                xianggang.setCityType(searchCityList.get(0).cityType);
+                xianggang.setCityID(searchCityList.get(0).cityID);
+                gangaoList.add(xianggang);
 
-        data.add(gangao);
+                OLCity aomen = new OLCity();
+                searchCityList = null;
+                searchCityList = offlineMap.searchCity("澳门特别行政区");
+                aomen.setCityName(searchCityList.get(0).cityName);
+                aomen.setSize(searchCityList.get(0).size);
+                aomen.setCityType(searchCityList.get(0).cityType);
+                aomen.setCityID(searchCityList.get(0).cityID);
+                gangaoList.add(aomen);
 
-        if(cityList != null && cityList.size() > 0) {
-            for (MKOLSearchRecord city : cityList) {
+                gangao.setChildCities(gangaoList);
 
-                //省份
-                if(city.cityType == 1) {
-                    OLCity olCity = new OLCity();
-                    olCity.setCityID(city.cityID);
-                    olCity.setCityName(city.cityName);
-                    olCity.setCityType(city.cityType);
-                    olCity.setSize(city.size);
+                data.add(gangao);
 
-                    // 城市
-                    ArrayList<OLCity> childlist = new ArrayList<>();
-                    for (MKOLSearchRecord record :city.childCities) {
-                        OLCity childCity = new OLCity();
-                        childCity.setCityID(record.cityID);
-                        childCity.setCityName(record.cityName);
-                        childCity.setCityType(record.cityType);
-                        childCity.setSize(record.size);
-                        childlist.add(childCity);
+                if (cityList != null && cityList.size() > 0) {
+                    for (MKOLSearchRecord city : cityList) {
+
+                        //省份
+                        if (city.cityType == 1) {
+                            OLCity olCity = new OLCity();
+                            olCity.setCityID(city.cityID);
+                            olCity.setCityName(city.cityName);
+                            olCity.setCityType(city.cityType);
+                            olCity.setSize(city.size);
+
+                            // 城市
+                            ArrayList<OLCity> childlist = new ArrayList<>();
+                            for (MKOLSearchRecord record : city.childCities) {
+                                OLCity childCity = new OLCity();
+                                childCity.setCityID(record.cityID);
+                                childCity.setCityName(record.cityName);
+                                childCity.setCityType(record.cityType);
+                                childCity.setSize(record.size);
+                                childlist.add(childCity);
+                            }
+                            olCity.setChildCities(childlist);
+                            data.add(olCity);
+                        }
                     }
-                    olCity.setChildCities(childlist);
-                    data.add(olCity);
                 }
+
+                DBManager.getInstance(context).insertOffline(data);
+
+            }else {
+                Toast.makeText(context,"请连接网络，下载离线地图",Toast.LENGTH_SHORT);
             }
         }
-//
-//        for(OLCity city:data) {
-//            DBManager.getInstance(context).insertOffline(city);
-//        }
 
     }
 
     private void setAdapter() {
-        adapter = new CityExpandableListAdapter(context,data);
-        expandableListView.setAdapter(adapter);
+
+        if(data.size()>0) {
+            adapter = new CityExpandableListAdapter(context,data);
+            expandableListView.setAdapter(adapter);
+        }
         updateView();
 
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {

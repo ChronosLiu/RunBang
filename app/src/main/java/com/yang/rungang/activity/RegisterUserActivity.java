@@ -69,6 +69,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
     private RoundImageView headImg;
     private TextView uploadText;
     private EditText usernameEdt;
+    private EditText nicknameEdt;
     private TextView birthdayText;
     private RadioGroup sexRGroup;
     private RadioButton maleRadioBtn,femaleRadioBtn;
@@ -148,6 +149,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         headImg = (RoundImageView) findViewById(R.id.register_user_headImg);
         uploadText = (TextView) findViewById(R.id.text_register_upload);
         usernameEdt = (EditText) findViewById(R.id.edt_register_name);
+        nicknameEdt = (EditText) findViewById(R.id.edt_register_nickname);
         birthdayText = (TextView) findViewById(R.id.text_register_birthday);
         sexRGroup = (RadioGroup) findViewById(R.id.radiogroup_sex);
         maleRadioBtn = (RadioButton) findViewById(R.id.radio_sex_male);
@@ -200,6 +202,24 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
             public void afterTextChanged(Editable s) {
 
                 userName = usernameEdt.getText().toString();
+            }
+        });
+
+        nicknameEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                nickName = nicknameEdt.getText().toString();
             }
         });
 
@@ -312,6 +332,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         user.setNickName(nickName);
         user.setSex(sex);
         user.setEmail(email);
+        user.setHeadImgPath(picPath);
         user.setHeadImgUrl(headImgUrl);
         user.setPassword(password);
         user.setMobilePhoneNumber(mobileNumber);

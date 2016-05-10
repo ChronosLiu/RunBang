@@ -3,6 +3,7 @@ package com.yang.rungang.utils;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yang.rungang.model.bean.OLCity;
 import com.yang.rungang.model.bean.weather.WeatherData;
 import com.yang.rungang.model.bean.weather.WeatherList;
 import com.yang.rungang.model.biz.CityList;
@@ -84,6 +85,20 @@ public class JsonUtil {
 
         return list;
 
+    }
+
+    /**
+     * json转化为list,获取离线城市集合
+     * @param json
+     * @return
+     */
+    public static List<OLCity> jsonToListOfflineCity(String json) {
+        List<OLCity> list = null;
+
+        Gson gson = new Gson();
+        list = gson.fromJson(json,new TypeToken<List<OLCity>>(){}.getType());
+
+        return list;
     }
 
 }

@@ -209,6 +209,28 @@ public class GeneralUtil {
     }
 
     /**
+     * 秒数转化为小时
+     * @param time
+     * @return
+     */
+    public static String secondsToHourString(int time){
+
+        String timeStr = "0.0";
+
+        double hour = time/3600.0;
+
+        double h = Math.round(hour*10)/10.0;
+
+        if(h>0){
+            timeStr = h+"";
+        }
+
+        return timeStr;
+
+
+    }
+
+    /**
      * 距离(米）转化为字符串 0.00格式 公里
      * @param distance
      * @return

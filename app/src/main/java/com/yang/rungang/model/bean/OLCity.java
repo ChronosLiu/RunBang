@@ -1,6 +1,7 @@
 package com.yang.rungang.model.bean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 离线地图城市
@@ -15,7 +16,7 @@ public class OLCity {
     private int status; //下载状态
     private int ratio; //下载比率
     private boolean update; //是否为更新
-    private ArrayList<OLCity> childCities; //子城市列表
+    private List<OLCity> childCities; //子城市列表
 
     public int getCityID() {
         return cityID;
@@ -29,7 +30,7 @@ public class OLCity {
         return cityType;
     }
 
-    public ArrayList<OLCity> getChildCities() {
+    public List<OLCity> getChildCities() {
         return childCities;
     }
 
@@ -37,7 +38,7 @@ public class OLCity {
         return size;
     }
 
-    public void setChildCities(ArrayList<OLCity> childCities) {
+    public void setChildCities(List<OLCity> childCities) {
         this.childCities = childCities;
     }
 

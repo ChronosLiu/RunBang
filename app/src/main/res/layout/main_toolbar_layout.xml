@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
-
         <TextView
             android:id="@+id/toobar_title_text"
             android:layout_width="wrap_content"
@@ -26,70 +25,8 @@
             android:textColor="@color/theme_while"
             android:textSize="16sp" />
 
-
-        <RelativeLayout
-            android:id="@+id/toolbar_home_relative"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/colorTheme"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:id="@+id/toolbar_home_title_linear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/toolbar_home_dynamic_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="动态"
-                    android:textColor="@color/title_home_text_press"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/toolbar_home_news_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:padding="10dp"
-                    android:text="资讯"
-                    android:textColor="@color/title_home_text_normal"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/toolbar_home_title_linear"
-                android:layout_alignRight="@id/toolbar_home_title_linear"
-                android:layout_below="@id/toolbar_home_title_linear"
-                android:orientation="horizontal">
-
-                <View
-                    android:id="@+id/toolbar_home_dynamic_line"
-                    android:layout_width="1dp"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_while"
-                    />
-
-                <View
-                    android:id="@+id/toolbar_home_news_line"
-                    android:layout_width="1dp"
-                    android:layout_height="2dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="1"
-                    android:background="@color/theme_while"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
     </FrameLayout>
+
 
     <FrameLayout
         android:layout_width="wrap_content"

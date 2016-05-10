@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.yang.rungang.model.bean.City;
+import com.yang.rungang.model.bean.WeatherCity;
 import com.yang.rungang.model.bean.OLCity;
 import com.yang.rungang.model.bean.RunRecord;
-import com.yang.rungang.utils.GeneralUtil;
 import com.yang.rungang.utils.JsonUtil;
 
 import java.util.ArrayList;
@@ -61,13 +61,13 @@ public class DBManager {
     /**
      * 插入城市数据
      */
-    public void insertCitys(List<City> cities){
+    public void insertCitys(List<WeatherCity> cities){
         db = dbHelper.getWritableDatabase();
         //开启事务
         db.beginTransaction();
 
         try {
-            for (City city : cities) {
+            for (WeatherCity city : cities) {
                 ContentValues values = new ContentValues();
                 values.put("id", city.getId());
                 values.put("city", city.getCity());
@@ -75,7 +75,7 @@ public class DBManager {
                 values.put("cnty", city.getCnty());
                 values.put("lat", city.getLat());
                 values.put("lon", city.getLon());
-                db.insert("city", null, values);
+                db.insert("weathercity", null, values);
                 Log.i("TAG",city.getCity());
             }
             db.setTransactionSuccessful(); //事务执行成功
@@ -98,7 +98,7 @@ public class DBManager {
         String id = null;
 
         // 模糊查询
-        String sql = "select id from city where city like '"+name+"%'";
+        String sql = "select id from weathercity where city like '"+name+"%'";
 
         Cursor cursor = db.rawQuery(sql,new String[]{});
 
@@ -136,6 +136,7 @@ public class DBManager {
             values.put("createtime", runRecord.getCreateTime());
             db.insert("runrecord", null, values);
             values.clear();
+            runRecords.add(runRecord);
             db.setTransactionSuccessful();
             Log.i("TAG","成功插入数据库");
         } catch (Exception e) {
@@ -247,7 +248,7 @@ public class DBManager {
 
             runRecords.remove(position);
 
-            Log.i("TAG","删除成功");
+            Log.i("TAG", "删除成功");
             db.setTransactionSuccessful();
 
         }catch (Exception e) {
@@ -262,28 +263,32 @@ public class DBManager {
 
     /**
      * 增加离线城市列表
-     * @param olCity
+     * @param olCities
      */
-    public void insertOffline(OLCity olCity) {
-        if (olCity == null) {
+    public void insertOffline(List<OLCity> olCities) {
+        if (olCities == null) {
             return;
         }
         db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
-            ContentValues values = new ContentValues();
-            values.put("cityid",olCity.getCityID());
-            values.put("cityname",olCity.getCityName());
-            values.put("citytype",olCity.getCityType());
-            values.put("size",olCity.getSize());
-            values.put("status",olCity.getStatus());
-            values.put("radio",olCity.getRatio());
-            values.put("isupdate",olCity.isUpdate());
-            values.put("childcities",JsonUtil.listTojson(olCity.getChildCities()));
-            db.insert("offlinecity",null,values);
-            values.clear();
-            Log.i("TAG","插入成功");
+
+            for(OLCity olCity:olCities) {
+
+                ContentValues values = new ContentValues();
+                values.put("cityid", olCity.getCityID());
+                values.put("cityname", olCity.getCityName());
+                values.put("citytype", olCity.getCityType());
+                values.put("size", olCity.getSize());
+                values.put("status", olCity.getStatus());
+                values.put("ratio", olCity.getRatio());
+                values.put("isupdate", olCity.isUpdate());
+                values.put("childcities", JsonUtil.listTojson(olCity.getChildCities()));
+                db.insert("offlinecity", null, values);
+
+            }
             db.setTransactionSuccessful();
+            Log.i("TAG", "插入成功");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -291,6 +296,57 @@ public class DBManager {
         }
 
     }
+
+    /**
+     * 获取全部的离线城市
+     * @return
+     */
+    public List<OLCity> getAllOfflineCity(){
+        List<OLCity> olCityList = new ArrayList<>();
+
+        db = dbHelper.getReadableDatabase();
+
+        db.beginTransaction();
+
+        try {
+            String sql = "select * from offlinecity";
+
+            Cursor cursor = db.rawQuery(sql,null);
+
+            while(cursor.moveToNext()) {
+
+                OLCity olCity = new OLCity();
+
+                olCity.setCityID(cursor.getInt(cursor.getColumnIndex("cityid")));
+                olCity.setCityName(cursor.getString(cursor.getColumnIndex("cityname")));
+                olCity.setCityType(cursor.getInt(cursor.getColumnIndex("citytype")));
+                olCity.setSize(cursor.getInt(cursor.getColumnIndex("size")));
+                olCity.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                olCity.setRatio(cursor.getInt(cursor.getColumnIndex("ratio")));
+                olCity.setChildCities(JsonUtil.jsonToListOfflineCity(
+                        cursor.getString(cursor.getColumnIndex("childcities"))));
+
+                int isupdate = cursor.getInt(cursor.getColumnIndex("isupdate"));
+
+                if(isupdate  ==1) {
+                    olCity.setUpdate(true);
+                } else {
+                    olCity.setUpdate(false);
+                }
+                olCityList.add(olCity);
+            }
+
+            db.setTransactionSuccessful();
+            Log.i("TAG", "查询成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
+
+        return olCityList;
+    }
+
 
 
 

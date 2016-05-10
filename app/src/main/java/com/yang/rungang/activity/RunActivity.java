@@ -329,7 +329,6 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
                 if (bdLocation.getLocType() == BDLocation.TypeGpsLocation ||
                         bdLocation.getLocType() == BDLocation.TypeNetWorkLocation ){ //gps,网络定位成功定位
 
-                    startTimer();
                     double latitude = bdLocation.getLatitude(); //纬度
                     double longitude = bdLocation.getLongitude(); // 经度
                     double radius = bdLocation.getRadius(); //精度
@@ -501,7 +500,7 @@ public class RunActivity extends BaseActivity implements View.OnClickListener {
                 } else { //未开始，开始按钮
 
                     isStart = true ;
-//                    startTimer();
+                    startTimer();
                     startOrPauseImg.setImageResource(R.drawable.run_stop);
                     stateText.setText("暂停");
                     mLocationClient.start(); // 开始定位

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.yang.rungang.utils.ConfigUtil;
 import com.yang.rungang.utils.GeneralUtil;
 
@@ -21,6 +22,7 @@ public class BaseActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getApplicationContext();
+        SDKInitializer.initialize(context);
         Bmob.initialize(context,ConfigUtil.BMOB_APP_ID);
 
     }

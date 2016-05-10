@@ -16,6 +16,7 @@ import com.yang.rungang.utils.GeneralUtil;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,12 +28,12 @@ public class CityExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
 
-    private ArrayList<OLCity> data = null; //城市列表
+    private List<OLCity> data = null; //城市列表
 
     private LayoutInflater layoutInflater;
 
 
-    public CityExpandableListAdapter(Context context, ArrayList<OLCity> data) {
+    public CityExpandableListAdapter(Context context, List<OLCity> data) {
         this.context = context;
         this.data = data;
         layoutInflater = LayoutInflater.from(context);

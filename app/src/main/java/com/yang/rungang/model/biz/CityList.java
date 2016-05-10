@@ -1,7 +1,7 @@
 package com.yang.rungang.model.biz;
 
 import com.google.gson.annotations.SerializedName;
-import com.yang.rungang.model.bean.City;
+import com.yang.rungang.model.bean.WeatherCity;
 
 import java.util.List;
 
@@ -14,15 +14,15 @@ import java.util.List;
 public class CityList {
 
     @SerializedName("city_info")
-    public  List<City> cities;
+    public  List<WeatherCity> cities;
 
     private String status;
 
-    public List<City> getCities() {
+    public List<WeatherCity> getCities() {
         return cities;
     }
 
-    public void setCities(List<City> cities) {
+    public void setCities(List<WeatherCity> cities) {
         this.cities = cities;
     }
 

@@ -8,16 +8,10 @@
 
     <include layout="@layout/main_toolbar_layout"/>
     <FrameLayout
+        android:id="@+id/main_framenlayout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_weight="1">
-        <include layout="@layout/main_home_layout"
-            android:id="@+id/main_home_layout" />
-        <include layout="@layout/main_run_layout"
-            android:id="@+id/main_run_layout"/>
-        <include layout="@layout/main_me_layout"
-            android:id="@+id/main_me_layout"/>
-
     </FrameLayout>
     <View
         android:layout_width="match_parent"

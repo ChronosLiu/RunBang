@@ -30,7 +30,9 @@
             android:textSize="20sp" />
 
     </RelativeLayout>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -77,6 +79,35 @@
                 android:textColorHint="@color/text_dark_gray"
                 android:singleLine="true"
                 android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+
+            android:background="@color/div_gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:text="昵称"/>
+            <EditText
+                android:id="@+id/edt_register_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/hint_register_name"
+                android:maxLines="1"
+                android:textColorHint="@color/text_dark_gray"
+                android:singleLine="true"
+                android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:background="@android:color/transparent"/>
@@ -155,6 +186,7 @@
 
 
     </LinearLayout>
+    </ScrollView>
 
 
 

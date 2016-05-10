@@ -16,7 +16,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     /**
      * 建表语句
      */
-    public  static final String CREATE_TABLE_CITY = "create table city (" +
+    public  static final String CREATE_TABLE_CITY = "create table weathercity (" +
             "id text," +
             "city text," +
             "prov text," +
@@ -48,7 +48,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             "citytype integer,"+
             "size integer,"+
             "status integer,"+
-            "radio integer,"+
+            "ratio integer,"+
             "isupdate numeric,"+
             "childcities text)";
 
