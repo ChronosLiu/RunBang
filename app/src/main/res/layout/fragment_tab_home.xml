@@ -6,14 +6,14 @@
     android:background="@color/theme_while">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/tab_home_swiperefresh"
+        android:id="@+id/fragment_home_swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <ListView
+            android:id="@+id/fragment_home_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:scrollbars="none"
+            android:descendantFocusability="blocksDescendants"></ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

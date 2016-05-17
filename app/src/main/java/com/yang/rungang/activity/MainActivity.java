@@ -69,6 +69,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ImageView noticeImg;
     private TextView titleText;
     private ImageView setImg;
+    private ImageView publishImg;
 
 
     private TabHomeFragment homeFragment;
@@ -103,8 +104,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //初始化定位
         initLocationClient();
 
-        Log.i("TAG","开始定位");
-        client.start();
+//        Log.i("TAG","开始定位");
+//        client.start();
     }
 
     /**
@@ -112,6 +113,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
      */
     private void initState() {
         titleText.setText("动态");
+        publishImg.setVisibility(View.VISIBLE);
         homeImg.setImageResource(R.drawable.tab_home_press_img);
         homeText.setTextColor(getResources().getColor(R.color.colorTheme));
         setDefaultFragment();
@@ -150,6 +152,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         meImg = (ImageView) findViewById(R.id.main_tab_me_img);
         meText = (TextView) findViewById(R.id.main_tab_me_text);
 
+        publishImg = (ImageView) findViewById(R.id.toolbar_publish_img);
+
+        publishImg.setOnClickListener(this);
         noticeImg.setOnClickListener(this);
         setImg.setOnClickListener(this);
         homeLayout.setOnClickListener(this);
@@ -238,6 +243,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 homeImg.setImageResource(R.drawable.tab_home_press_img);
                 homeText.setTextColor(getResources().getColor(R.color.colorTheme));
                 titleText.setText("动态");
+                publishImg.setVisibility(View.VISIBLE);
 
                 if (homeFragment == null ) {
                     homeFragment = new TabHomeFragment();
@@ -290,6 +296,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                 break;
 
+            case R.id.toolbar_publish_img:
+
+                Intent publishIntent = new Intent(MainActivity.this,PublishDynamicActivity.class);
+
+                startActivity(publishIntent);
+                break;
+
         }
 
         transaction.commit();
@@ -303,6 +316,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //标题栏
 //        titleText.setVisibility(View.VISIBLE);
         setImg.setVisibility(View.GONE);
+        publishImg.setVisibility(View.GONE);
 
         //主布局
 

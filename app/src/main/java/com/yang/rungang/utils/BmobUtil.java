@@ -10,12 +10,18 @@ import com.yang.rungang.model.bean.News;
 import com.yang.rungang.model.bean.RunRecord;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.GetListener;
+import cn.bmob.v3.listener.GetServerTimeListener;
+import cn.bmob.v3.listener.UploadBatchListener;
 
 /**
  * bmob工具类
@@ -54,6 +60,42 @@ public class BmobUtil {
         });
     }
 
+
+    /**
+     * 批量上传文件
+     * @param context
+     * @param pathList
+     * @param callback
+     */
+    public static void uploadFileBatch(Context context ,List<String> pathList,final IBmobCallback callback){
+
+        final  String[] filePaths = new String[pathList.size()];
+
+        for (int i =0;i<pathList.size();i++) {
+            filePaths[i] = pathList.get(i);
+        }
+
+        BmobFile.uploadBatch(context, filePaths, new UploadBatchListener() {
+            @Override
+            public void onSuccess(List<BmobFile> list, List<String> list1) {
+
+                if (list1.size() == filePaths.length) { //全部上传完成
+
+                }
+            }
+
+            @Override
+            public void onProgress(int i, int i1, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+        });
+
+    }
     /**
      *
      * @param context
@@ -113,20 +155,35 @@ public class BmobUtil {
             @Override
             public void onSuccess() {
 
-                if(callback!= null) {
-                    callback.onFinish(IdentiferUtil.DELETE_RUN_RECORD_SUCCESS,null);
+                if (callback != null) {
+                    callback.onFinish(IdentiferUtil.DELETE_RUN_RECORD_SUCCESS, null);
                 }
             }
 
             @Override
             public void onFailure(int i, String s) {
 
-                if(callback!= null) {
-                    callback.onFinish(IdentiferUtil.DELETE_RUN_RECORD_FAILURE,null);
+                if (callback != null) {
+                    callback.onFinish(IdentiferUtil.DELETE_RUN_RECORD_FAILURE, null);
                 }
             }
         });
 
+    }
+
+
+    private void getServiceTime(Context context,final IBmobCallback callback) {
+        Bmob.getServerTime(context, new GetServerTimeListener() {
+            @Override
+            public void onSuccess(long l) {
+
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
     }
 
 }

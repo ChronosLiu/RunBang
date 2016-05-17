@@ -18,10 +18,13 @@ import android.widget.TextView;
 import com.yang.rungang.R;
 import com.yang.rungang.activity.RunRecordActivity;
 import com.yang.rungang.db.DBManager;
+import com.yang.rungang.https.HttpsUtil;
 import com.yang.rungang.model.bean.IBmobCallback;
+import com.yang.rungang.model.bean.IHttpCallback;
 import com.yang.rungang.model.bean.RunRecord;
 import com.yang.rungang.model.bean.User;
 import com.yang.rungang.utils.BmobUtil;
+import com.yang.rungang.utils.ConfigUtil;
 import com.yang.rungang.utils.FileUtil;
 import com.yang.rungang.utils.GeneralUtil;
 import com.yang.rungang.utils.IdentiferUtil;
@@ -68,6 +71,10 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
     private Context context;
 
     private User user;
+
+    private int fansCount = 0; //粉丝数
+
+    private int followCount = 0; //关注人数
 
     private double totalDistance = 0.0; //总距离
 
@@ -154,12 +161,13 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
             return;
         }
         if(user.getNickName()==null || user.getNickName().length()<=0) {
-            usernameText.setText("跑步帮众");
+            usernameText.setText("帮众");
         } else {
             usernameText.setText(user.getNickName());
         }
         setHeadImg();
         countTotalData();
+        getFansAndFollow();
 
     }
 
@@ -292,6 +300,54 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
 
     }
 
+
+    private void getFansAndFollow(){
+
+        String fansSql= "http://cloud.bmob.cn/"+ ConfigUtil.BMOB_SECRET_KEY+"/getFansCount?objectid="+user.getObjectId();
+
+        HttpsUtil.sendGetRequest(fansSql, new IHttpCallback() {
+            @Override
+            public void onSuccess(final String response) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        fansCount = Integer.parseInt(response);
+
+                        fansNubmer .setText(response);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+        String followSql = "http://cloud.bmob.cn/"+ ConfigUtil.BMOB_SECRET_KEY+"/getFollowCount?objectid="+user.getObjectId();
+
+        HttpsUtil.sendGetRequest(followSql, new IHttpCallback() {
+            @Override
+            public void onSuccess(final String response) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        followCount = Integer.parseInt(response);
+
+                        followNumber.setText(response);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+    }
 
 
 }

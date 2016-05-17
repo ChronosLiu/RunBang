@@ -31,6 +31,7 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <application
+        android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -45,7 +46,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.RegisterUserActivity" />
-        <activity android:name=".activity.MainActivity"></activity>
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.SelectPictureActivity" />
         <activity android:name=".activity.ResetPasswordActivity" />
         <activity android:name=".activity.SetActivity" />
@@ -77,7 +78,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.NotificationActivity"></activity>
+        <activity android:name=".activity.NotificationActivity" />
+        <activity android:name=".activity.PublishDynamicActivity"></activity>
+        <activity android:name=".activity.AlbumActivity"></activity>
+        <activity android:name=".activity.DynamicDetailsActivity"></activity>
     </application>
 
 </manifest>

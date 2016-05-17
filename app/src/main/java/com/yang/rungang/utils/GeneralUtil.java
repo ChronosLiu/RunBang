@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.bmob.v3.datatype.BmobDate;
+
 /**
  *
  * 通用工具类
@@ -317,6 +319,51 @@ public class GeneralUtil {
             ret = String.format("%.1fM", size / (1024 * 1024.0));
         }
         return ret;
+    }
+
+
+    /**
+     * 计算时间差
+     * @param date
+     * @return
+     */
+    public static String computeTime(String date){
+        Date nowDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date createDate = null;
+        try {
+            createDate = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long time = nowDate.getTime() - createDate.getTime();
+
+        if ( (time/1000)/60 <0 ) { //不到1分钟
+            int second = Math.round(time/1000);
+            return second+"秒前";
+        } else if ( (time/1000)/3600 <0){ //不到一小时
+
+            int minute = Math.round(time/1000/60);
+
+            return minute+"分钟前";
+
+        } else if ( (time/1000)/3600/24 <0) { //不到一天
+
+            int house = Math.round(time/1000/3600);
+
+            return house +"小时前";
+
+        } else if ( (time/1000)/3600/24/7 <0) { //不到一周
+
+            int day = Math.round(time/1000/3600/24);
+
+            return day +"周前";
+        } else {
+
+            return date;
+        }
+
     }
 
 }

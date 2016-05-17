@@ -111,4 +111,51 @@ public class HttpsUtil {
         }).start();
     }
 
+    /**
+     * 发送Get请求
+     * @param url
+     * @param callback
+     */
+
+    public static void sendGetRequest(final String url,final IHttpCallback callback) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL httpUrl= new URL(url);
+                    HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(8000);
+                    connection.setReadTimeout(8000);
+                    connection.connect();
+                    InputStream in=connection.getInputStream();
+                    BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+                    StringBuilder response=new StringBuilder();
+                    String line;
+                    while((line=reader.readLine())!=null){
+                        response.append(line);
+                    }
+                    reader.close();
+                    in.close();
+                    connection.disconnect();
+                    if(callback!=null){
+                        callback.onSuccess(response.toString());
+                    }
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+
+                }
+            }
+        }).start();
+    }
+
 }

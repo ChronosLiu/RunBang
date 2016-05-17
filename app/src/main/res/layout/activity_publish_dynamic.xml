@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/theme_while">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorTheme">
+        <ImageView
+            android:id="@+id/publish_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"
+            android:padding="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="写动态"
+            android:textSize="16sp"
+            android:textColor="@color/theme_while"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/publish_pulish_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="发布"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:gravity="center"
+            android:textColor="@color/theme_while"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/publish_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:lines="6"
+            android:textSize="16sp"
+            android:hint="说的什么吧"
+            android:gravity="top"
+            android:padding="3dp"
+            android:background="@drawable/edt_publish_shape"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_gray"/>
+    <GridView
+        android:id="@+id/publish_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="4"
+        android:scrollbars="none"
+        android:horizontalSpacing="3dp"
+        android:verticalSpacing="3dp"
+        >
+
+    </GridView>
+
+
+</LinearLayout>

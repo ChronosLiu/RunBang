@@ -45,7 +45,7 @@ public class ImageFloder {
     public void setDir(String dir) {
         this.dir = dir;
         int lastIndexOf = this.dir.lastIndexOf("/");
-        this.name = this.dir.substring(lastIndexOf);
+        this.name = this.dir.substring(lastIndexOf+1);
     }
 
     public void setCount(int count) {

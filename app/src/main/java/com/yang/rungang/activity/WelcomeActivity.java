@@ -31,8 +31,8 @@ public class WelcomeActivity extends BaseActivity {
 
         getFirstUserIndentifer();
 
-        //配置app
-        configAPP();
+//        //配置app
+//        configAPP();
 
         isFirstUse = false;
 
@@ -50,19 +50,19 @@ public class WelcomeActivity extends BaseActivity {
 
     }
 
-    /**
-     * 配置app
-     * @return
-     */
-    private void configAPP(){
-
-        if(isFirstUse) { //首次使用
-
-            //获取天气城市列表，存储进数据库
-            getWeatherCityList();
-
-        }
-    }
+//    /**
+//     * 配置app
+//     * @return
+//     */
+//    private void configAPP(){
+//
+//        if(isFirstUse) { //首次使用
+//
+//            //获取天气城市列表，存储进数据库
+//            getWeatherCityList();
+//
+//        }
+//    }
 
 
     /**

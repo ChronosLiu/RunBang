@@ -40,6 +40,14 @@
             android:layout_marginRight="3dp"
             android:src="@drawable/set"
             android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/toolbar_publish_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:src="@drawable/publish"
+            android:layout_marginRight="3dp"
+            android:visibility="gone"/>
     </FrameLayout>
 
 

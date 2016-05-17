@@ -21,6 +21,8 @@
     <color name="btn_login_pressed">#965677FC</color>
 
     <color name="hint_edt_text">#ff999999</color>
+
+    <color name="bg_popup">#3f4d4d4d</color>
     
     <color name="edit_press">#ff999999</color>
     <color name="edit_normal">#ffeeeeee</color>

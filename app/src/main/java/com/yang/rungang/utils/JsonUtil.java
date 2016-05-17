@@ -3,6 +3,7 @@ package com.yang.rungang.utils;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yang.rungang.model.bean.Friend;
 import com.yang.rungang.model.bean.OLCity;
 import com.yang.rungang.model.bean.weather.WeatherData;
 import com.yang.rungang.model.bean.weather.WeatherList;
@@ -99,6 +100,21 @@ public class JsonUtil {
         list = gson.fromJson(json,new TypeToken<List<OLCity>>(){}.getType());
 
         return list;
+    }
+
+    /**
+     * 解析JSON，获取朋友关系集合
+     * @param json
+     * @return
+     */
+    public static List<Friend> parseFriendJson(String json) {
+        List<Friend> friends = null;
+
+        Gson gson = new Gson();
+
+        friends = gson.fromJson(json,new TypeToken<List<Friend>>(){}.getType());
+
+        return friends;
     }
 
 }
