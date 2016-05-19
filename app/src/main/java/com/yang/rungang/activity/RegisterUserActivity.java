@@ -2,6 +2,7 @@ package com.yang.rungang.activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yang.rungang.R;
+import com.yang.rungang.model.bean.Timeline;
 import com.yang.rungang.model.bean.User;
 import com.yang.rungang.model.biz.ActivityManager;
 import com.yang.rungang.utils.FileUtil;
@@ -65,6 +67,10 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
 
     private final static int REGISTER_FAILURE = 0X22; // 注册失败
 
+    private final static int Create_Timeline_Success = 0x31; //创建时间线成功
+
+    private final static int Create_Timeline_Failure = 0x32; //创建时间线失败
+
     private ImageView backImg;
     private RoundImageView headImg;
     private TextView uploadText;
@@ -95,6 +101,10 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
     private String picPath = null; //头像路径
     private String headImgUrl = null; //头像存储在Bmob上的url
 
+    private User user; //用户
+
+    private ProgressDialog progressDialog;
+
 
 
 
@@ -109,13 +119,22 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                     registerUser();
                     break;
                 case UPLOAD_FAILURE:
+                    closeProgressDialog();
                     Toast.makeText(context,"上传头像失败，注册失败",Toast.LENGTH_SHORT).show();
                     break;
                 case REGISTER_SUCCESS:
+                    closeProgressDialog();
                     resultSuccessDialog();
                     break;
                 case REGISTER_FAILURE:
+                    closeProgressDialog();
                     Toast.makeText(context,"注册失败",Toast.LENGTH_SHORT).show();
+                    break;
+
+                case Create_Timeline_Failure: //创建时间线失败
+                    Log.i("TAG","创建时间线失败");
+                    closeProgressDialog();
+                    resultSuccessDialog();
                     break;
 
             }
@@ -173,15 +192,15 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         sexRGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.radio_sex_male:
-                        sex=true;
+                        sex = true;
                         break;
                     case R.id.radio_sex_female:
-                        sex=false;
+                        sex = false;
                         break;
                     default:
-                        sex=true;
+                        sex = true;
                         break;
                 }
             }
@@ -280,15 +299,19 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                 birthdayDialog.show();
                 break;
             case R.id.btn_register:
+
                 if(TextUtils.isEmpty(userName)){
                     Toast.makeText(context,"用户名不能为空！",Toast.LENGTH_SHORT).show();
                 }else if(picPath!=null){
                     //上传头像，注册用户
+                    showProgressDialog();
                     uploadImage();
                 }else{
                     //无头像，注册用户
+                    showProgressDialog();
                     registerUser();
                 }
+                break;
             case R.id.popup_camera:
                 if(GeneralUtil.isSDCard()){
                     Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -304,7 +327,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
             case R.id.popup_photo:
 
                 if(GeneralUtil.isSDCard()){
-                    Intent intent=new Intent(this,SelectPictureActivity.class);
+                    Intent intent=new Intent(this,AlbumActivity.class);
                     startActivityForResult(intent,REQUEST_CODE_ALBUM);
 
                 }else{
@@ -327,7 +350,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
      */
     private void registerUser(){
 
-        User user=new User();
+        user=new User();
         user.setUsername(userName);
         user.setNickName(nickName);
         user.setSex(sex);
@@ -341,21 +364,42 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
         user.signUp(context, new SaveListener() {
             @Override
             public void onSuccess() {
-
-                Message msg=new Message();
-                msg.what=REGISTER_SUCCESS;
-                handler.handleMessage(msg);
+                createTimeline();
             }
 
             @Override
             public void onFailure(int i, String s) {
-                Log.i("TAG",s+i);
-                Message msg=new Message();
-                msg.what=REGISTER_FAILURE;
-                handler.handleMessage(msg);
+                Log.i("TAG", s + i);
+                Message msg = new Message();
+                msg.what = REGISTER_FAILURE;
+                handler.sendMessage(msg);
             }
         });
 
+    }
+
+    /**
+     * 创建新用户时间线
+     */
+    private void createTimeline(){
+        Timeline timeline = new Timeline();
+        timeline.setFromUser(user);
+        timeline.save(context, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                Message msg = new Message();
+                msg.what = REGISTER_SUCCESS;
+                handler.sendMessage(msg);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+                Message msg = new Message();
+                msg.what = Create_Timeline_Failure;
+                handler.sendMessage(msg);
+            }
+        });
     }
 
     @Override
@@ -450,6 +494,27 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
 
                     }
                 }).create().show();
+    }
+
+    /**
+     * 展示注册弹窗
+     */
+    private void showProgressDialog(){
+         if (progressDialog == null) {
+             progressDialog = new ProgressDialog(RegisterUserActivity.this);
+             progressDialog.setMessage("正在注册......");
+         }
+
+        progressDialog.show();
+    }
+
+    /**
+     * 关闭注册弹窗
+     */
+    private void closeProgressDialog(){
+        if (progressDialog != null) {
+            progressDialog.cancel();
+        }
     }
 
 

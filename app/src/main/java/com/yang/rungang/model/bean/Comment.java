@@ -9,23 +9,23 @@ import cn.bmob.v3.BmobObject;
  */
 public class Comment  extends BmobObject{
 
-    private String dynamicId; //动态id
+    private Dynamic dynamic; //动态id
 
-    private String fromUser; //评论者
+    private User fromUser; //评论者
 
-    private String toUser; //被评论者
+    private User toUser; //被评论者
 
     private String content; //内容
 
-    public String getDynamicId() {
-        return dynamicId;
+    public Dynamic getDynamic() {
+        return dynamic;
     }
 
-    public String getFromUser() {
+    public User getFromUser() {
         return fromUser;
     }
 
-    public String getToUser() {
+    public User getToUser() {
         return toUser;
     }
 
@@ -33,19 +33,19 @@ public class Comment  extends BmobObject{
         return content;
     }
 
-    public void setDynamicId(String dynamicId) {
-        this.dynamicId = dynamicId;
-    }
-
-    public void setFromUser(String fromUser) {
-        this.fromUser = fromUser;
-    }
-
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
+    public void setDynamic(Dynamic dynamic) {
+        this.dynamic = dynamic;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
     }
 }

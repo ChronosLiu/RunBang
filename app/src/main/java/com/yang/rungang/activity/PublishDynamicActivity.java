@@ -1,6 +1,9 @@
 package com.yang.rungang.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,6 +55,11 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
 
     private static final int UPLOAD_PICTURE_SUCCESS = 0X12;
 
+
+    private static final int Push_Dynamic_Success = 0x13;
+
+
+
     private ImageView backImg;
 
     private TextView publish;
@@ -88,8 +96,11 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
                     pictureList = bundle.getStringArrayList("urls");
                     //发布动态
                     publishDynamic();
+                    break;
+                case Push_Dynamic_Success: //推送动态成功
 
-
+                    //展示dialog
+                    showDialog();
 
                     break;
 
@@ -154,6 +165,9 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(context,"动态不能为空",Toast.LENGTH_SHORT);
                 }
                 break;
+
+
+
         }
     }
 
@@ -310,25 +324,29 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
 
         //获取粉丝对象集合
         BmobQuery<Friend> query = new BmobQuery<>();
-        query.addWhereEqualTo("toUser",user);
+        query.addWhereEqualTo("toUser", user);
 
         query.findObjects(context, new FindListener<Friend>() {
             @Override
             public void onSuccess(List<Friend> list) {
-                if (list.size()>0) { //有粉丝
+                if (list.size() > 0) { //有粉丝
                     //遍历粉丝集合
-                    for (Friend friend:list) {
+                    for (Friend friend : list) {
                         String fansid = friend.getFromUser().getObjectId();
                         //推送给粉丝
                         pushToFans(fansid);
                     }
                 } else { // 粉丝为0
-                    Log.i("TAG","粉丝数为0");
+                    Log.i("TAG", "粉丝数为0");
+                    Message msg = new Message();
+                    msg.what = Push_Dynamic_Success;
+                    handler.sendMessage(msg);
                 }
             }
+
             @Override
             public void onError(int i, String s) {
-                Log.i("TAG",i+s);
+                Log.i("TAG", i + s);
             }
         });
 
@@ -360,6 +378,9 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
                         @Override
                         public void onSuccess() {
 
+                            Message msg= new Message();
+                            msg.what = Push_Dynamic_Success;
+                            handler.sendMessage(msg);
                             Log.i("TAG","添加给粉丝时间线成功");
                         }
 
@@ -371,7 +392,7 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
                     });
                 } else {
 
-                    Log.i("TAG","推送时间线失败");
+                    Log.i("TAG", "推送时间线失败");
                 }
             }
 
@@ -381,5 +402,20 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
                 Log.i("TAG",i+s);
             }
         });
+    }
+
+    /**
+     * 显示Dialog
+     */
+    private void showDialog(){
+        AlertDialog dialog = new AlertDialog.Builder(PublishDynamicActivity.this)
+                .setMessage("发布动态成功")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PublishDynamicActivity.this.finish();
+                    }
+                }).create();
+        dialog.show();
     }
 }

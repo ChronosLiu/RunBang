@@ -149,7 +149,7 @@ public class TabHomeFragment extends Fragment {
      */
     private void setAdapter() {
         if(data != null) {
-            adapter = new DynamicListAdapter(context, data);
+            adapter = new DynamicListAdapter(getActivity(), data);
             mListView.setAdapter(adapter);
         }
 

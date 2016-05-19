@@ -1,6 +1,7 @@
 package com.yang.rungang.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +11,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.yang.rungang.R;
+import com.yang.rungang.activity.UserProfileActivity;
 import com.yang.rungang.model.bean.Dynamic;
 import com.yang.rungang.utils.GeneralUtil;
 
@@ -31,6 +36,8 @@ public class DynamicListAdapter  extends BaseAdapter{
     private ImageLoader imageLoader;
 
     private DisplayImageOptions options;
+
+    private DisplayImageOptions circleOptions;
 
     private List<Dynamic> data;
 
@@ -51,6 +58,14 @@ public class DynamicListAdapter  extends BaseAdapter{
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+        circleOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.upload_head_pic)
+                .showImageOnFail(R.drawable.upload_head_pic)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .displayer(new CircleBitmapDisplayer())
                 .build();
     }
 
@@ -87,9 +102,13 @@ public class DynamicListAdapter  extends BaseAdapter{
 
             viewHolder.time = (TextView) convertView.findViewById(R.id.dynamic_time_text);
 
-            viewHolder.pictureLayout = (LinearLayout) convertView.findViewById(R.id.dynamic_picture_layout);
+            viewHolder.pictureLayout = (RelativeLayout) convertView.findViewById(R.id.dynamic_picture_layout);
 
             viewHolder.firseImg = (ImageView) convertView.findViewById(R.id.dynamic_picture_img);
+
+            viewHolder.pictureCountLayout = (LinearLayout) convertView.findViewById(R.id.dynamic_picture_count_layout);
+
+            viewHolder.pictureCount = (TextView) convertView.findViewById(R.id.dynamic_picture_count);
 
             viewHolder.content = (TextView) convertView.findViewById(R.id.dynamic_content_text);
 
@@ -111,11 +130,11 @@ public class DynamicListAdapter  extends BaseAdapter{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Dynamic dynamic = data.get(position);
+        final Dynamic dynamic = data.get(position);
 
-//        if (dynamic.getFromUser().getHeadImgUrl()!=null) {
-//            imageLoader.displayImage(dynamic.getFromUser().getHeadImgUrl(),viewHolder.headimg,options);
-//        }
+        if (dynamic.getFromUser().getHeadImgUrl()!=null) {
+            imageLoader.displayImage(dynamic.getFromUser().getHeadImgUrl(),viewHolder.headimg,circleOptions);
+        }
 
         viewHolder.name.setText(dynamic.getFromUser().getNickName());
 
@@ -133,18 +152,31 @@ public class DynamicListAdapter  extends BaseAdapter{
             viewHolder.pictureLayout.setVisibility(View.GONE);
 
         } else {
-            viewHolder.pictureLayout.setVisibility(View.VISIBLE);
-            String firstUrl = dynamic.getImage().get(0);
 
-            imageLoader.displayImage(firstUrl,viewHolder.firseImg,options);
+            viewHolder.pictureLayout.setVisibility(View.VISIBLE);
+
+            if (dynamic.getImage().size()>1) {
+                viewHolder.pictureCountLayout.setVisibility(View.VISIBLE);
+                viewHolder.pictureCount.setText(dynamic.getImage().size()+"");
+            } else {
+                viewHolder.pictureCountLayout.setVisibility(View.GONE);
+            }
+            String firstUrl = dynamic.getImage().get(0);
+            imageLoader.displayImage(firstUrl, viewHolder.firseImg, options);
 
         }
+
+
+
 
         //头像
         viewHolder.headimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,"头像",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("userid",dynamic.getFromUser().getObjectId());
+                context.startActivity(intent);
             }
         });
         //分享
@@ -178,9 +210,13 @@ public class DynamicListAdapter  extends BaseAdapter{
 
         private TextView time;
 
-        private LinearLayout pictureLayout;
+        private RelativeLayout pictureLayout;
 
         private ImageView firseImg;
+
+        private LinearLayout pictureCountLayout;
+
+        private TextView pictureCount;
 
         private TextView content;
 

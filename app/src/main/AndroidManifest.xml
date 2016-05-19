@@ -79,9 +79,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.NotificationActivity" />
-        <activity android:name=".activity.PublishDynamicActivity"></activity>
-        <activity android:name=".activity.AlbumActivity"></activity>
-        <activity android:name=".activity.DynamicDetailsActivity"></activity>
+        <activity android:name=".activity.PublishDynamicActivity" />
+        <activity android:name=".activity.AlbumActivity" />
+        <activity android:name=".activity.DynamicDetailsActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".activity.UserProfileActivity"></activity>
     </application>
 
 </manifest>

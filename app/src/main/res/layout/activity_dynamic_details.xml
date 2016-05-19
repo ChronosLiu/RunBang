@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dynamic_details_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,19 +15,16 @@
             android:layout_height="match_parent"
             android:src="@drawable/back"
             android:padding="12dp"/>
-
-        <com.yang.rungang.view.RoundImageView
+        <ImageView
             android:id="@+id/dynamic_details_head_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_toRightOf="@id/dynamic_details_back_img"
-            android:src="@drawable/upload_head_pic"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true" />
         <TextView
             android:id="@+id/dynamic_details_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="散步"
             android:textColor="@color/theme_while"
             android:layout_toRightOf="@id/dynamic_details_head_img"
             android:layout_alignTop="@id/dynamic_details_head_img"
@@ -35,7 +33,6 @@
             android:id="@+id/dynamic_details_time_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="2秒前"
             android:textColor="@color/theme_while"
             android:layout_toRightOf="@id/dynamic_details_head_img"
             android:layout_below="@id/dynamic_details_name_text"
@@ -43,43 +40,34 @@
             android:layout_marginLeft="12dp"
             />
     </RelativeLayout>
-    <ScrollView
+    <com.yang.rungang.view.NoLeftToRightScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:fillViewport="true">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/dynamic_details_pictures"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/dynamic_details_mViewpager"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:orientation="horizontal"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/dynamic_details_picture_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp">
-                <TextView
+                ></android.support.v4.view.ViewPager>
+            <TextView
                     android:id="@+id/dynamic_details_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12332323232323"
                     android:textColor="@color/text_black"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                android:layout_margin="12dp"/>
 
-            </LinearLayout>
+
             <TextView
                 android:id="@+id/dynamic_details_theme_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#秀身材"
                 android:textColor="@color/text_black"
                 android:layout_marginLeft="12dp"/>
             <View
@@ -88,8 +76,31 @@
                 android:background="@color/bg_gray"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"/>
-
-            <include layout="@layout/comment_dynamic_layout"/>
+            <include
+                layout="@layout/comment__layout"/>
         </LinearLayout>
-    </ScrollView>
+    </com.yang.rungang.view.NoLeftToRightScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:padding="3dp"
+        android:gravity="center_vertical"
+        >
+        <EditText
+            android:id="@+id/dynamic_comment_edt"
+            android:layout_width="1dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:hint="评论..."
+            android:layout_marginLeft="12dp"/>
+        <Button
+            android:id="@+id/dynamic_comment_send_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送"
+            android:layout_marginRight="12dp"
+            android:layout_marginLeft="12dp"
+            />
+    </LinearLayout>
 </LinearLayout>
