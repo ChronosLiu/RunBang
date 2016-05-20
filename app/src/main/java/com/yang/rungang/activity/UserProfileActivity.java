@@ -230,18 +230,20 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
                 if (followCount > 0) {
 
-                    Intent followIntent = new Intent();
+                    Intent followIntent = new Intent(this,FriendActivity.class);
                     followIntent.putExtra("userid",nowUser.getObjectId());
-                    followIntent.putExtra("sign","follow");
+                    followIntent.putExtra("sign",false);
+                    followIntent.putExtra("username",nowUser.getNickName());
                     startActivity(followIntent);
                 }
 
                 break;
             case R.id.user_fans_count_text: //粉丝数量
                 if(fansCount > 0) {
-                    Intent fansIntent = new Intent();
+                    Intent fansIntent = new Intent(this,FriendActivity.class);
                     fansIntent.putExtra("userid",nowUser.getObjectId());
-                    fansIntent.putExtra("sign","fans");
+                    fansIntent.putExtra("username",nowUser.getNickName());
+                    fansIntent.putExtra("sign",true);
                     startActivity(fansIntent);
                 }
 

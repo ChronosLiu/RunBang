@@ -80,7 +80,7 @@ public class PublishDynamicActivity extends BaseActivity implements View.OnClick
 
     private String theme = null;//主题
 
-    private List<String> pictureList = null; //图片url
+    private List<String> pictureList = new ArrayList<>(); //图片url
 
 
     Handler handler = new Handler(){

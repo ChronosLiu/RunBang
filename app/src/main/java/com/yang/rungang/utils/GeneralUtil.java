@@ -10,6 +10,7 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -364,6 +365,107 @@ public class GeneralUtil {
             return date;
         }
 
+    }
+
+    /**
+     * 获取日期
+     * @param str
+     * @return
+     */
+    public static  String getDayFromDate(String str) {
+        Date date;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int day = 0;
+        try {
+            date =sdf.parse(str);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return String.valueOf(day);
+
+    }
+
+    /**
+     * 获取月份
+     * @param str
+     * @return
+     */
+    public static String getMonthFromDate(String str) {
+        Date date;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int month = 0;
+        try {
+            date =sdf.parse(str);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            month = calendar.get(Calendar.MONTH);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return String.valueOf(month);
+    }
+
+    /**
+     * 判断是否为同一天
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public static  boolean isSameDate(String str1,String str2) {
+        Date date1,date2;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        boolean isMonth = false,isDay = false,isYear = false;
+        try {
+            date1 = sdf.parse(str1);
+            date2 = sdf.parse(str2);
+
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(date1);
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.setTime(date2);
+
+            isDay = calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
+            isMonth = calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH);
+            isYear = calendar1.get(Calendar.YEAR)==calendar2.get(Calendar.YEAR);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return isYear&&isMonth&&isDay;
+    }
+
+    /**
+     *根据生日计算年龄
+     * @param date
+     * @return
+     */
+    public static String getAgeByBirthday(String date) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date birthday ;
+        Date nowDate = new Date();
+
+        int age = 0;
+
+        try {
+            birthday = sdf.parse(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(birthday);
+
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(nowDate);
+            //计算年龄
+            age = calendar1.get(Calendar.YEAR)-calendar.get(Calendar.YEAR)+1;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(age);
     }
 
 }

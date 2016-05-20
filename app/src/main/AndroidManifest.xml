@@ -81,9 +81,11 @@
         <activity android:name=".activity.NotificationActivity" />
         <activity android:name=".activity.PublishDynamicActivity" />
         <activity android:name=".activity.AlbumActivity" />
-        <activity android:name=".activity.DynamicDetailsActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".activity.UserProfileActivity"></activity>
+        <activity
+            android:name=".activity.DynamicDetailsActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity android:name=".activity.UserProfileActivity" />
+        <activity android:name=".activity.FriendActivity"></activity>
     </application>
 
 </manifest>

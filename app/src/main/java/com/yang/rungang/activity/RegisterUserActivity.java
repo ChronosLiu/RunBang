@@ -90,7 +90,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
     private String userName=null; //用户名
     private String nickName=null; //昵称
     private Date birthday=null; //生日
-    private Integer age=null; //年龄
+    private Integer age = 0; //年龄
     private boolean sex=true; //性别
 
     private String mobileNumber=null;
@@ -258,6 +258,7 @@ public class RegisterUserActivity extends BaseActivity implements View.OnClickLi
                 birthdayText.setText(birthdayStr);
                 //字符串转化为日期Date
                 birthday=GeneralUtil.stringToDate(birthdayStr);
+
 
         }
         },c.get(Calendar.YEAR),c.get(Calendar.MONTH),Calendar.DAY_OF_MONTH);
