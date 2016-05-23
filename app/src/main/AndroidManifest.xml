@@ -117,7 +117,9 @@
         <service android:name="cn.bmob.newim.core.service.HeartBeatService" />
 
         <activity android:name=".activity.ChatActivity" />
-        <activity android:name=".activity.ModifyInformatonActivity"></activity>
+        <activity android:name=".activity.ModifyInformatonActivity" />
+        <activity android:name=".activity.BindAccountActivity" />
+        <activity android:name=".activity.BindActivity"></activity>
     </application>
 
 </manifest>

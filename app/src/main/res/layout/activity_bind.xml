@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorTheme">
+
+        <ImageView
+            android:id="@+id/bind_account_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/bind_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="24dp"
+            android:layout_toRightOf="@id/bind_account_back_img"
+            android:text="绑定手机号"
+            android:textColor="@color/theme_while"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/bind_email_relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_horizontal"
+            android:padding="5dp">
+            <EditText
+                android:id="@+id/bind_email_account"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/edit_gray_selector"
+                android:hint="@string/hint_email"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bind_phone_relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_horizontal"
+            android:padding="5dp">
+            <EditText
+                android:id="@+id/bind_phone_account"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/edit_gray_selector"
+                android:hint="@string/hint_mobile"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/bind_send_code_btn"
+                android:layout_width="100dp"
+                android:layout_height="44dp"
+                android:layout_alignRight="@id/bind_phone_account"
+                android:layout_below="@id/bind_phone_account"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_login_verify_code"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/text_get_verify_code"
+                android:textColor="@color/text_light_blue"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/bind_phone_code_edt"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_alignTop="@id/bind_send_code_btn"
+                android:layout_below="@id/bind_phone_account"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/bind_send_code_btn"
+                android:background="@drawable/edit_gray_selector"
+                android:hint="@string/hint_verify_code"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <!--<EditText-->
+            <!--android:id="@+id/bind_password_edt"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="44dp"-->
+            <!--android:background="@drawable/edit_gray_selector"-->
+            <!--android:hint="@string/hint_set_pwd"-->
+            <!--android:inputType="textPassword"-->
+            <!--android:maxLength="20"-->
+            <!--android:maxLines="1"-->
+            <!--android:padding="5dp"-->
+            <!--android:singleLine="true"-->
+            <!--android:textSize="16sp" />-->
+
+        <Button
+            android:id="@+id/bind_finish_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/btn_login_selector"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="绑定"
+            android:textColor="@color/theme_while"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

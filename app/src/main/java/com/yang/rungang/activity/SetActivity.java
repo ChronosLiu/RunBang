@@ -17,7 +17,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView backImg;
     private RelativeLayout modifyInfo;
-    private RelativeLayout collection;
     private RelativeLayout bindAccount;
     private RelativeLayout notification;
     private RelativeLayout updateVersion;
@@ -43,7 +42,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
     private void initComponent() {
         backImg = (ImageView) findViewById(R.id.set_back_img);
         modifyInfo = (RelativeLayout) findViewById(R.id.set_modify_info_relative);
-        collection = (RelativeLayout) findViewById(R.id.set_collection_relative);
         bindAccount = (RelativeLayout) findViewById(R.id.set_bind_account_relative);
         notification = (RelativeLayout) findViewById(R.id.set_notification_relative);
         updateVersion = (RelativeLayout) findViewById(R.id.set_update_version_relative);
@@ -54,7 +52,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
 
         backImg.setOnClickListener(this);
         modifyInfo.setOnClickListener(this);
-        collection.setOnClickListener(this);
         bindAccount.setOnClickListener(this);
         notification.setOnClickListener(this);
         updateVersion.setOnClickListener(this);
@@ -76,9 +73,9 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
                 Intent modifyIntent = new Intent(this,ModifyInformatonActivity.class);
                 startActivity(modifyIntent);
                 break;
-            case R.id.set_collection_relative:
-                break;
             case R.id.set_bind_account_relative:
+                Intent bindIntent = new Intent(this,BindAccountActivity.class);
+                startActivity(bindIntent);
                 break;
             case R.id.set_notification_relative:
                 break;

@@ -40,16 +40,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="24dp"
                 android:background="@color/bg_gray">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="个人"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_gray"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/set_modify_info_relative"
@@ -76,45 +68,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/bg_gray"/>
-            <RelativeLayout
-                android:id="@+id/set_collection_relative"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="@color/theme_while">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我的收藏"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/text_black"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/goimg"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="12dp"/>
-
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/bg_gray"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="@color/bg_gray">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="偏好"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_gray"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"/>
-            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/set_bind_account_relative"
                 android:layout_width="match_parent"
@@ -167,16 +120,8 @@
                 android:background="@color/bg_gray"/>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="24dp"
                 android:background="@color/bg_gray">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="更多"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_gray"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"/>
             </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/set_update_version_relative"
