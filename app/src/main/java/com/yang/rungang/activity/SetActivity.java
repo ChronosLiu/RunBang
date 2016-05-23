@@ -1,5 +1,6 @@
 package com.yang.rungang.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -72,6 +73,8 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
                 this.finish();
                 break;
             case R.id.set_modify_info_relative:
+                Intent modifyIntent = new Intent(this,ModifyInformatonActivity.class);
+                startActivity(modifyIntent);
                 break;
             case R.id.set_collection_relative:
                 break;

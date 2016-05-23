@@ -20,9 +20,12 @@ public class User extends BmobUser {
 
     private BmobDate birthday; // 生日
 
+    private String signature;// 个性签名
+
     private String headImgPath; //头像本地文件路径
 
     private String headImgUrl; //头像网络Url
+
 
     public String getNickName() {
         return nickName;
@@ -70,5 +73,13 @@ public class User extends BmobUser {
 
     public void setHeadImgPath(String headImgPath) {
         this.headImgPath = headImgPath;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }
