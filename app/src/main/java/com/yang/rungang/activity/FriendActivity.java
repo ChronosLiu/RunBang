@@ -1,9 +1,13 @@
 package com.yang.rungang.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +24,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 
-public class FriendActivity extends BaseActivity {
+public class FriendActivity extends BaseActivity implements View.OnClickListener {
 
 
     private static final int Get_Fans_Success = 0x11;
@@ -66,6 +70,7 @@ public class FriendActivity extends BaseActivity {
         username = getIntent().getStringExtra("username");
         sign = getIntent().getBooleanExtra("sign", false);
         initComponent();
+        setListener();
 
         if (sign) { //粉丝
             titleText.setText(username+"的粉丝");
@@ -83,6 +88,8 @@ public class FriendActivity extends BaseActivity {
         backImg = (ImageView) findViewById(R.id.friend_back_img);
         titleText = (TextView) findViewById(R.id.friend_title_text);
         mListView = (ListView) findViewById(R.id.friend_listview);
+
+        backImg.setOnClickListener(this);
     }
 
     private void setAdapter(){
@@ -92,6 +99,16 @@ public class FriendActivity extends BaseActivity {
         }
     }
 
+    private void setListener(){
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(FriendActivity.this,UserProfileActivity.class);
+                intent.putExtra("userid",data.get(position).getObjectId());
+                startActivity(intent);
+            }
+        });
+    }
     /**
      * 获取关注用户集合
      */
@@ -153,8 +170,18 @@ public class FriendActivity extends BaseActivity {
             @Override
             public void onError(int i, String s) {
 
+                Log.i("TAG",s+i);
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch ( v.getId()) {
+            case R.id.friend_back_img:
+                this.finish();
+                break;
+        }
     }
 }

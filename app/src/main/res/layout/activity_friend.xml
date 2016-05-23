@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorTheme">
+        <ImageView
+            android:id="@+id/friend_back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:src="@drawable/back"/>
+
+        <TextView
+            android:id="@+id/friend_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="liuyd关注"
+            android:textColor="@color/theme_while"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@id/friend_back_img"
+            android:layout_marginLeft="12dp"/>
+
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/friend_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"></ListView>
+
+</LinearLayout>

@@ -34,6 +34,9 @@ import com.yang.rungang.view.NoScrollListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -250,6 +253,17 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.user_chat_layout: //私聊
 
+                if (nowUser != null) {
+                    BmobIMUserInfo info = new BmobIMUserInfo(
+                            nowUser.getObjectId(),nowUser.getNickName(), nowUser.getHeadImgUrl());
+                    //启动一个会话，实际上就是在本地数据库的会话列表中先创建（如果没有）与该用户的会话信息，且将用户信息存储到本地的用户表中
+                    BmobIMConversation c = BmobIM.getInstance().startPrivateConversation(info, null);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("c", c);
+                    Intent intent = new Intent(this,ChatActivity.class);
+                    intent.putExtra(getPackageName(),bundle);
+                    startActivity(intent);
+                }
 
                 break;
         }

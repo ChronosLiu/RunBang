@@ -44,7 +44,11 @@ dependencies {
     compile 'com.squareup.okio:okio:1.4.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'cn.bmob.android:bmob-push:0.8'
-    compile 'cn.bmob.android:bmob-im:2.0.3'
+    compile 'cn.bmob.android:bmob-im:2.0.4'
     compile 'com.android.support:support-v4:23.3.0'
     compile files('libs/universal-image-loader-1.9.5.jar')
+    compile 'com.android.support:recyclerview-v7:23.3.0'
+    compile 'com.orhanobut:logger:1.4'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'cn.bmob.android:androidasync:2.1.6'
 }

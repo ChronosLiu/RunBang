@@ -4,13 +4,27 @@
     android:layout_height="55dp"
     android:background="@color/colorTheme">
 
-    <ImageView
-        android:id="@+id/toolbar_notice_img"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:padding="12dp"
-        android:src="@drawable/notice" />
+        android:layout_marginLeft="3dp">
+        <ImageView
+            android:id="@+id/toolbar_notice_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:src="@drawable/notice" />
+        <ImageView
+            android:id="@+id/toolbar_tips_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/msg_tips"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="7dp"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"

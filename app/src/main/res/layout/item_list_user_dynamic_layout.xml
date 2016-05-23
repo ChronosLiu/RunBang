@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp">
+
+        <TextView
+            android:id="@+id/user_dynamic_day_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01"
+            android:textColor="@color/text_black"
+            android:textSize="45sp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/user_dynamic_month_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2月"
+            android:textColor="@color/text_black"
+            android:textSize="20sp"
+            android:layout_below="@+id/user_dynamic_day_text"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="1dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:id="@+id/user_dynamic_picture_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/upload_head_pic"
+            android:layout_marginLeft="24dp"/>
+        <TextView
+            android:id="@+id/user_dynamic_picture_count_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="共2张"
+            android:layout_toRightOf="@id/user_dynamic_picture_img"
+            android:layout_alignBottom="@id/user_dynamic_picture_img"
+            android:textSize="14sp"
+            android:textColor="@color/text_black"
+            android:layout_marginLeft="24dp"/>
+        <TextView
+            android:id="@+id/user_dynamic_content_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black"
+            android:textSize="16sp"
+            android:layout_below="@id/user_dynamic_picture_img"
+            android:layout_margin="3dp"
+            android:paddingRight="12dp"
+            />
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,31 +24,31 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.yang.rungang.R;
-import com.yang.rungang.cache.ACache;
 import com.yang.rungang.db.DBManager;
 import com.yang.rungang.fragment.TabHomeFragment;
 import com.yang.rungang.fragment.TabMeFragment;
 import com.yang.rungang.fragment.TabRunFragment;
 
-import com.yang.rungang.https.HttpsUtil;
-import com.yang.rungang.model.bean.IHttpCallback;
 import com.yang.rungang.model.bean.User;
 
-import com.yang.rungang.model.bean.weather.WeatherData;
 import com.yang.rungang.model.biz.ActivityManager;
-import com.yang.rungang.utils.ConfigUtil;
-import com.yang.rungang.utils.GeneralUtil;
-import com.yang.rungang.utils.IdentiferUtil;
-import com.yang.rungang.utils.JsonUtil;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.greenrobot.eventbus.Subscribe;
 
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.core.ConnectionStatus;
+import cn.bmob.newim.event.MessageEvent;
+import cn.bmob.newim.event.OfflineMessageEvent;
+import cn.bmob.newim.listener.ConnectListener;
+import cn.bmob.newim.listener.ConnectStatusChangeListener;
+import cn.bmob.newim.listener.ObseverListener;
+import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener{
+public class MainActivity extends FragmentActivity implements View.OnClickListener, ObseverListener {
 
     private Context context;
 
@@ -70,6 +68,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TextView titleText;
     private ImageView setImg;
     private ImageView publishImg;
+    private ImageView tipsImg;
 
 
     private TabHomeFragment homeFragment;
@@ -95,14 +94,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         context=getApplicationContext();
         ActivityManager.getInstance().pushOneActivity(this);
 
+        user = BmobUser.getCurrentUser(context,User.class);
+
        //判断是否初次登录，是否有缓存用户
         judeFirstLogin();
+
+        setIMConnect();
         //初始化组件
         initComponent();
         //初始状态
         initState();
         //初始化定位
         initLocationClient();
+
+
 
 //        Log.i("TAG","开始定位");
 //        client.start();
@@ -119,6 +124,32 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setDefaultFragment();
     }
 
+    private void setIMConnect(){
+        BmobIM.connect(user.getObjectId(), new ConnectListener() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Log.i("TAG", "连接成功");
+                } else {
+                    Log.i("TAG", s + e);
+                }
+            }
+        });
+
+        //监听连接状态，也可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
+        BmobIM.getInstance().setOnConnectStatusChangeListener(new ConnectStatusChangeListener() {
+            @Override
+            public void onChange(ConnectionStatus connectionStatus) {
+
+                if (connectionStatus == ConnectionStatus.DISCONNECT){ //断开连接
+                    //重新连接
+                    setIMConnect();
+                } else if(connectionStatus == ConnectionStatus.NETWORK_UNAVAILABLE){ //网络问题
+
+                }
+            }
+        });
+    }
     /**
      * 初始化定位
      */
@@ -153,6 +184,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         meText = (TextView) findViewById(R.id.main_tab_me_text);
 
         publishImg = (ImageView) findViewById(R.id.toolbar_publish_img);
+        tipsImg = (ImageView) findViewById(R.id.toolbar_tips_img);
+
 
         publishImg.setOnClickListener(this);
         noticeImg.setOnClickListener(this);
@@ -166,7 +199,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
      * 判断是否初次登录
      */
     private  void  judeFirstLogin(){
-        user = BmobUser.getCurrentUser(context,User.class);
         if(user ==null){ //无缓存的用户信息，初次登录，
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
@@ -290,7 +322,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             case R.id.toolbar_notice_img:
 
-                Intent notifiIntent = new Intent(MainActivity.this,NotificationActivity.class);
+                Intent notifiIntent = new Intent(MainActivity.this,NewsActivity.class);
 
                 startActivity(notifiIntent);
 
@@ -334,7 +366,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
      */
     private void saveLocationCity(){
 
-        SharedPreferences sharedPreferences = getSharedPreferences("rungang",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("rungang", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("cityname", cityName);
         editor.putString("citycode", cityCode);
@@ -350,5 +382,59 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         cityCode = sharedPreferences.getString("citycode",null);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //显示小红点
+        checkRedPoint();
+        //添加观察者-用于是否显示通知消息
+        BmobNotificationManager.getInstance(this).addObserver(this);
+        //进入应用后，通知栏应取消
+        BmobNotificationManager.getInstance(this).cancelNotification();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //移除观察者
+        BmobNotificationManager.getInstance(this).removeObserver(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //清理导致内存泄露的资源
+        BmobIM.getInstance().clear();
+        //断开服务器连接
+        BmobIM.getInstance().disConnect();
+        //完全退出应用时需调用clearObserver来清除观察者
+        BmobNotificationManager.getInstance(this).clearObserver();
+    }
+
+    /**注册消息接收事件
+     * @param event
+     */
+    @Subscribe
+    public void onEventMainThread(MessageEvent event){
+        checkRedPoint();
+    }
+
+    /**注册离线消息接收事件
+     * @param event
+     */
+    @Subscribe
+    public void onEventMainThread(OfflineMessageEvent event){
+        checkRedPoint();
+    }
+
+    /**
+     * 检查红点
+     */
+    private void checkRedPoint(){
+        if(BmobIM.getInstance().getAllUnReadCount()>0){
+            tipsImg.setVisibility(View.VISIBLE);
+        }else{
+            tipsImg.setVisibility(View.GONE);
+        }
+    }
 }

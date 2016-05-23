@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <!-- 获取wifi网络状态的信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 改变wifi网络转态 -->
@@ -29,6 +30,13 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 通知震动 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 设备休眠 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".application.MyApplication"
@@ -42,6 +50,9 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="nhturWDn5lC7Gwiuzx7UwXlcgUx9zHNn" />
+        <meta-data
+            android:name="Bmob_APP_KEY"
+            android:value="99ab5f136b4e6339a7c11a3a65b2248f" />
 
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
@@ -78,14 +89,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.NotificationActivity" />
+        <activity android:name=".activity.NewsActivity" />
         <activity android:name=".activity.PublishDynamicActivity" />
         <activity android:name=".activity.AlbumActivity" />
         <activity
             android:name=".activity.DynamicDetailsActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".activity.UserProfileActivity" />
-        <activity android:name=".activity.FriendActivity"></activity>
+        <activity android:name=".activity.FriendActivity" />
+
+        <receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver">
+            <intent-filter>
+                <action android:name="cn.bmob.action.RECONNECT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="cn.bmob.newim.core.service.BmobImService"
+            android:process=":bmobcore" />
+        <service
+            android:name="cn.bmob.newim.core.service.NotifyService"
+            android:process=":bmobcore" />
+        <service android:name="cn.bmob.newim.core.service.ReConnectService" />
+        <service android:name="cn.bmob.newim.core.service.HeartBeatService" />
+
+        <activity android:name=".activity.ChatActivity"></activity>
     </application>
 
 </manifest>
