@@ -16,9 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yang.rungang.R;
+import com.yang.rungang.activity.FriendActivity;
 import com.yang.rungang.activity.RunRecordActivity;
+import com.yang.rungang.activity.UserProfileActivity;
 import com.yang.rungang.db.DBManager;
 import com.yang.rungang.https.HttpsUtil;
+import com.yang.rungang.model.bean.Friend;
 import com.yang.rungang.model.bean.IBmobCallback;
 import com.yang.rungang.model.bean.IHttpCallback;
 import com.yang.rungang.model.bean.RunRecord;
@@ -32,7 +35,9 @@ import com.yang.rungang.view.RoundImageView;
 
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -47,6 +52,8 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int Query_Fans_Count_Success = 0x11;
+    private static final int Query_Follow_Count_Success = 0x12;
 
     private static final int REQUEST_CODE_SCORE = 0x11;
 
@@ -161,13 +168,14 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
             return;
         }
         if(user.getNickName()==null || user.getNickName().length()<=0) {
-            usernameText.setText("帮众");
+            usernameText.setText(user.getUsername());
         } else {
             usernameText.setText(user.getNickName());
         }
         setHeadImg();
         countTotalData();
-        getFansAndFollow();
+        queryFollowCount();
+        queryFansCount();
 
     }
 
@@ -193,12 +201,34 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
             }
         }
 
+
     }
 
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
+
+            case R.id.me_headimg_roundImg: //头像
+                Intent avatarIntent = new Intent (getActivity(), UserProfileActivity.class);
+                avatarIntent.putExtra("userid",user.getObjectId());
+                startActivity(avatarIntent);
+                break;
+
+            case R.id.me_follow_relative: //关注
+                Intent followIntent = new Intent(getActivity(), FriendActivity.class);
+                followIntent.putExtra("userid",user.getObjectId());
+                followIntent.putExtra("username",user.getNickName());
+                followIntent.putExtra("sign",false);
+                startActivity(followIntent);
+                break;
+            case R.id.me_fans_relative: //粉丝
+                Intent fansIntent = new Intent(getActivity(), FriendActivity.class);
+                fansIntent.putExtra("userid",user.getObjectId());
+                fansIntent.putExtra("username",user.getNickName());
+                fansIntent.putExtra("sign",true);
+                startActivity(fansIntent);
+                break;
 
             case R.id.me_run_score_relative: //跑步记录
 
@@ -207,6 +237,7 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
                 break;
 
             case R.id.me_run_list_relative: //排行榜
+
 
                 break;
 
@@ -275,6 +306,13 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
 
                     break;
 
+                case Query_Fans_Count_Success:
+                    fansNubmer.setText(fansCount+"");
+                    break;
+                case Query_Follow_Count_Success:
+                    followNumber.setText(followCount+"");
+                    break;
+
             }
             super.handleMessage(msg);
         }
@@ -300,49 +338,51 @@ public class TabMeFragment extends Fragment implements View.OnClickListener, IBm
 
     }
 
+    /**
+     * 查询粉丝数量
+     */
+    private void queryFansCount() {
 
-    private void getFansAndFollow(){
-
-        String fansSql= "http://cloud.bmob.cn/"+ ConfigUtil.BMOB_SECRET_KEY+"/getFansCount?objectid="+user.getObjectId();
-
-        HttpsUtil.sendGetRequest(fansSql, new IHttpCallback() {
+        BmobQuery<Friend> query = new BmobQuery<>();
+        query.addWhereEqualTo("toUser", user);
+        query.count(context, Friend.class, new CountListener() {
             @Override
-            public void onSuccess(final String response) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+            public void onSuccess(int i) {
 
-                        fansCount = Integer.parseInt(response);
-
-                        fansNubmer .setText(response);
-                    }
-                });
+                fansCount = i;
+                Message msg = new Message();
+                msg.what = Query_Fans_Count_Success;
+                handler.sendMessage(msg);
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(int i, String s) {
 
+                Log.i("TAG", s + i);
             }
         });
 
-        String followSql = "http://cloud.bmob.cn/"+ ConfigUtil.BMOB_SECRET_KEY+"/getFollowCount?objectid="+user.getObjectId();
+    }
 
-        HttpsUtil.sendGetRequest(followSql, new IHttpCallback() {
+    /**
+     * 查询关注数量
+     */
+    private void queryFollowCount() {
+
+        BmobQuery<Friend> query = new BmobQuery<>();
+        query.addWhereEqualTo("fromUser", user);
+        query.count(context, Friend.class, new CountListener() {
             @Override
-            public void onSuccess(final String response) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+            public void onSuccess(int i) {
 
-                        followCount = Integer.parseInt(response);
-
-                        followNumber.setText(response);
-                    }
-                });
+                followCount = i;
+                Message msg = new Message();
+                msg.what = Query_Follow_Count_Success;
+                handler.sendMessage(msg);
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(int i, String s) {
 
             }
         });

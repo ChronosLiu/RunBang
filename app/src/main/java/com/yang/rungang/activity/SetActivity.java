@@ -6,12 +6,18 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yang.rungang.R;
 import com.yang.rungang.model.biz.ActivityManager;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.BmobUpdateListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
+import cn.bmob.v3.update.UpdateResponse;
+import cn.bmob.v3.update.UpdateStatus;
 
 public class SetActivity extends BaseActivity implements View.OnClickListener {
 
@@ -80,12 +86,34 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
             case R.id.set_notification_relative:
                 break;
             case R.id.set_update_version_relative:
+
+                BmobUpdateAgent.forceUpdate(context);
+
+                BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+                    @Override
+                    public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+                        if (i == UpdateStatus.Yes) {//版本有更新
+
+                        } else if (i == UpdateStatus.No) {
+                            Toast.makeText(SetActivity.this, "版本无更新", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
                 break;
             case R.id.set_feedback_relative:
                 break;
             case R.id.set_clear_cache_relative:
+
+                ImageLoader.getInstance().clearMemoryCache();
+                ImageLoader.getInstance().clearDiskCache();
+                Toast.makeText(context,"清理完成",Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.set_about_relative:
+
+                Intent aboutIntent = new Intent(this,AboutAppActivity.class);
+                startActivity(aboutIntent);
                 break;
             case R.id.set_sign_out_relative:
                 BmobUser.logOut(context);//清除缓存用户对象
@@ -93,4 +121,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
                 break;
         }
     }
+
+
 }

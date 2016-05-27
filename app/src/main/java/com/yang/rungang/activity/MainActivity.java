@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -44,8 +45,14 @@ import cn.bmob.newim.listener.ConnectListener;
 import cn.bmob.newim.listener.ConnectStatusChangeListener;
 import cn.bmob.newim.listener.ObseverListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
+import cn.bmob.push.BmobPush;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.BmobUpdateListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
+import cn.bmob.v3.update.UpdateResponse;
+import cn.bmob.v3.update.UpdateStatus;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener, ObseverListener {
@@ -99,20 +106,41 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
        //判断是否初次登录，是否有缓存用户
         judeFirstLogin();
 
-        setIMConnect();
+        if (user!= null) {
+            setIMConnect();
+        }
+
+        //自动更新
+        setUpdate();
+        // 使用推送服务时的初始化操作
+        BmobInstallation.getCurrentInstallation(this).save();
+        // 启动推送服务
+        BmobPush.startWork(this);
+
         //初始化组件
         initComponent();
         //初始状态
         initState();
         //初始化定位
         initLocationClient();
-
-
-
 //        Log.i("TAG","开始定位");
 //        client.start();
     }
 
+
+    /**
+     * 检查版本更新
+     */
+    private void setUpdate(){
+        BmobUpdateAgent.update(context);
+        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+            @Override
+            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+                //根据i来判断更新是否成功
+            }
+        });
+        BmobUpdateAgent.setUpdateCheckConfig(false);
+    }
     /**
      * 初始状态
      */

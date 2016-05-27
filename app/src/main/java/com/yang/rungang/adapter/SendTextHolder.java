@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.yang.rungang.R;
@@ -62,8 +63,8 @@ public class SendTextHolder extends BaseViewHolder{
 
 
         this.circleOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.head)
-                .showImageOnFail(R.drawable.head)
+                .showImageOnLoading(R.drawable.default_head)
+                .showImageOnFail(R.drawable.default_head)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
@@ -90,7 +91,10 @@ public class SendTextHolder extends BaseViewHolder{
                 }
             }
         } else { //默认
-            avatar.setImageResource(R.drawable.head);
+            String defaultUrl = ImageDownloader.Scheme.DRAWABLE.wrap("R.drawable.default_head");
+            ImageAware imageAware = new ImageViewAware(avatar,false);
+            ImageLoader.getInstance().displayImage(defaultUrl,imageAware,circleOptions);
+//            avatar.setImageResource(R.drawable.default_head);
         }
 
         String time = dateFormat.format(message.getCreateTime());

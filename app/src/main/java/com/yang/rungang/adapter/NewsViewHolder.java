@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.yang.rungang.R;
@@ -95,7 +96,10 @@ public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCl
                 ImageLoader.getInstance().displayImage(conversation.getConversationIcon(), imageAware, circleOptions);
             }
         } else {
-            this.avatar.setImageResource(R.drawable.head);
+            String defaultUrl = ImageDownloader.Scheme.DRAWABLE.wrap("R.drawable.default_head");
+            ImageAware imageAware = new ImageViewAware(avatar,false);
+            ImageLoader.getInstance().displayImage(defaultUrl,imageAware,circleOptions);
+//            this.avatar.setImageResource(R.drawable.head);
         }
 
         this.name.setText(conversation.getConversationTitle());

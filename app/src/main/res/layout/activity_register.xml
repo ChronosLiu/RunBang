@@ -44,7 +44,7 @@
             android:layout_marginRight="24dp"
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
-            android:visibility="invisible"
+
             android:padding="5dp">
 
             <EditText
@@ -68,6 +68,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
+            android:visibility="gone"
            >
 
             <EditText
@@ -99,21 +100,21 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/edt_register_verify_code"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_alignTop="@id/btn_get_rerify_code"
-                android:layout_below="@id/edt_register_mobile"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/btn_get_rerify_code"
-                android:background="@drawable/edit_gray_selector"
-                android:hint="@string/hint_verify_code"
-                android:inputType="number"
-                android:maxLength="6"
-                android:maxLines="1"
-                android:padding="5dp"
-                android:singleLine="true"
-                android:textSize="16sp" />
+            android:id="@+id/edt_register_verify_code"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_alignTop="@id/btn_get_rerify_code"
+            android:layout_below="@id/edt_register_mobile"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/btn_get_rerify_code"
+            android:background="@drawable/edit_gray_selector"
+            android:hint="@string/hint_verify_code"
+            android:inputType="number"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textSize="16sp" />
         </RelativeLayout>
     </FrameLayout>
     <LinearLayout

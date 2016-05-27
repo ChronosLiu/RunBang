@@ -21,8 +21,8 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/head"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/default_head"/>
 
         <TextView
             android:id="@+id/chat_item_message"

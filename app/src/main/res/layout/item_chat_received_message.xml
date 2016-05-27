@@ -23,7 +23,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/head"
+            android:src="@drawable/default_head"
             android:scaleType="fitXY" />
 
         <TextView
