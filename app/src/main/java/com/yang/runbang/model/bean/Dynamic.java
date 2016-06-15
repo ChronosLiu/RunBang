@@ -1,4 +1,4 @@
-package com.yang.rungang.model.bean;
+package com.yang.runbang.model.bean;
 
 import java.util.List;
 
@@ -82,5 +82,15 @@ public class Dynamic extends BmobObject {
 
     public void setCommentCount(Integer commentCount) {
         this.commentCount = commentCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Dynamic) {
+            Dynamic d = (Dynamic)o;
+
+            return this.getObjectId().equals(d.getObjectId());
+        }
+        return super.equals(o);
     }
 }

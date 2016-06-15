@@ -1,4 +1,4 @@
-package com.yang.rungang.activity;
+package com.yang.runbang.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,21 +19,20 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.yang.rungang.R;
-import com.yang.rungang.db.DBManager;
-import com.yang.rungang.fragment.TabHomeFragment;
-import com.yang.rungang.fragment.TabMeFragment;
-import com.yang.rungang.fragment.TabRunFragment;
+import com.yang.runbang.R;
+import com.yang.runbang.db.DBManager;
+import com.yang.runbang.fragment.TabHomeFragment;
+import com.yang.runbang.fragment.TabMeFragment;
+import com.yang.runbang.fragment.TabRunFragment;
 
-import com.yang.rungang.model.bean.User;
+import com.yang.runbang.model.bean.User;
 
-import com.yang.rungang.model.biz.ActivityManager;
+import com.yang.runbang.model.biz.ActivityManager;
 
 
 import org.greenrobot.eventbus.Subscribe;
@@ -52,10 +52,18 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.BmobUpdateListener;
 import cn.bmob.v3.update.BmobUpdateAgent;
 import cn.bmob.v3.update.UpdateResponse;
-import cn.bmob.v3.update.UpdateStatus;
+import cn.sharesdk.framework.ShareSDK;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener, ObseverListener {
+
+
+    private static final int request_code_publish_dynamic = 0x11;
+    private static final int request_code_set = 0x12;
+    private static final int request_code_run_record = 0x13;
+    private static final int request_code_run = 0x14;
+
+
 
     private Context context;
 
@@ -73,11 +81,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private ImageView noticeImg;
     private TextView titleText;
-    private ImageView setImg;
+    private ImageView addUserImg;
     private ImageView publishImg;
     private ImageView tipsImg;
 
 
+    private Fragment mFragmentContent;
     private TabHomeFragment homeFragment;
     private TabMeFragment meFragment;
     private TabRunFragment runFragment;
@@ -102,9 +111,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         ActivityManager.getInstance().pushOneActivity(this);
 
         user = BmobUser.getCurrentUser(context,User.class);
-
-       //判断是否初次登录，是否有缓存用户
-        judeFirstLogin();
 
         if (user!= null) {
             setIMConnect();
@@ -169,10 +175,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void onChange(ConnectionStatus connectionStatus) {
 
-                if (connectionStatus == ConnectionStatus.DISCONNECT){ //断开连接
+                if (connectionStatus == ConnectionStatus.DISCONNECT) { //断开连接
                     //重新连接
                     setIMConnect();
-                } else if(connectionStatus == ConnectionStatus.NETWORK_UNAVAILABLE){ //网络问题
+                } else if (connectionStatus == ConnectionStatus.NETWORK_UNAVAILABLE) { //网络问题
 
                 }
             }
@@ -195,7 +201,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         noticeImg = (ImageView) findViewById(R.id.toolbar_notice_img);
         titleText = (TextView) findViewById(R.id.toobar_title_text);
-        setImg = (ImageView) findViewById(R.id.toolbar_set_img);
+        addUserImg = (ImageView) findViewById(R.id.image_toolbar_add_user);
 
         frameLayout = (FrameLayout) findViewById(R.id.main_framenlayout);
 
@@ -217,23 +223,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         publishImg.setOnClickListener(this);
         noticeImg.setOnClickListener(this);
-        setImg.setOnClickListener(this);
+        addUserImg.setOnClickListener(this);
         homeLayout.setOnClickListener(this);
         runLayout.setOnClickListener(this);
         meLayout.setOnClickListener(this);
     }
-
-    /**
-     * 判断是否初次登录
-     */
-    private  void  judeFirstLogin(){
-        if(user ==null){ //无缓存的用户信息，初次登录，
-            Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-            startActivity(intent);
-            MainActivity.this.finish();
-        }
-    }
-
 
     /**
      * 设置默认fragment
@@ -244,6 +238,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         homeFragment = new TabHomeFragment();
         transaction.replace(R.id.main_framenlayout, homeFragment);
         transaction.commit();
+
+        mFragmentContent = homeFragment;
     }
 
 
@@ -294,9 +290,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-
         switch (v.getId()) {
             case R.id.main_tab_home_layout: //首页
                 resetComponentState();
@@ -308,7 +301,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 if (homeFragment == null ) {
                     homeFragment = new TabHomeFragment();
                 }
-                transaction.replace(R.id.main_framenlayout,homeFragment);
+                switchFragment(homeFragment);
 
                 break;
             case R.id.main_tab_run_layout: //跑步
@@ -324,7 +317,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     runFragment = TabRunFragment.newInstance(cityName,cityCode);
                 }
 
-                transaction.replace(R.id.main_framenlayout,runFragment);
+                switchFragment(runFragment);
                 break;
             case R.id.main_tab_me_layout:  //我的
                 resetComponentState();
@@ -333,18 +326,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
                 titleText.setVisibility(View.VISIBLE);
                 titleText.setText("我的");
-                setImg.setVisibility(View.VISIBLE);
+                addUserImg.setVisibility(View.VISIBLE);
 
                 if(meFragment == null) {
                     meFragment = new TabMeFragment();
                 }
 
-                transaction.replace(R.id.main_framenlayout,meFragment);
-
+                switchFragment(meFragment);
                 break;
 
-            case R.id.toolbar_set_img:
-                Intent intent = new Intent(MainActivity.this,SetActivity.class);
+            case R.id.image_toolbar_add_user:
+                Intent intent = new Intent(MainActivity.this,AddFriendActivity.class);
                 startActivity(intent);
                 break;
 
@@ -365,7 +357,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         }
 
-        transaction.commit();
     }
 
     /**
@@ -375,7 +366,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         //标题栏
 //        titleText.setVisibility(View.VISIBLE);
-        setImg.setVisibility(View.GONE);
+        addUserImg.setVisibility(View.GONE);
         publishImg.setVisibility(View.GONE);
 
         //主布局
@@ -387,6 +378,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         runText.setTextColor(getResources().getColor(R.color.theme_black));
         meImg.setImageResource(R.drawable.tab_me_normal_img);
         meText.setTextColor(getResources().getColor(R.color.theme_black));
+    }
+
+    /**
+     * Fragment切换，不重新加载
+     * @param fragment
+     *
+     */
+    private void switchFragment(Fragment fragment){
+
+        if (mFragmentContent!=fragment) {
+
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+
+            if (!fragment.isAdded()) {
+                transaction.hide(mFragmentContent).add(R.id.main_framenlayout,fragment).commit();//隐藏当前，添加下一个
+            } else {
+                transaction.hide(mFragmentContent).show(fragment).commit();//隐藏当前，显示下一个
+            }
+
+            mFragmentContent = fragment;
+        }
     }
 
     /**
@@ -431,6 +444,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ShareSDK.stopSDK(context);
         //清理导致内存泄露的资源
         BmobIM.getInstance().clear();
         //断开服务器连接
