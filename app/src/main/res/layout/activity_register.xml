@@ -6,32 +6,11 @@
     android:orientation="vertical"
     android:background="@color/theme_while">
 
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_register"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorTheme">
-
-        <ImageView
-            android:id="@+id/img_register_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:padding="10dp"
-            android:src="@drawable/back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/img_register_back"
-            android:gravity="center"
-            android:text="@string/title_register"
-            android:textColor="@color/theme_while"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
-
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"></android.support.v7.widget.Toolbar>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -44,7 +23,7 @@
             android:layout_marginRight="24dp"
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
-
+            android:visibility="gone"
             android:padding="5dp">
 
             <EditText
@@ -55,6 +34,7 @@
                 android:hint="@string/hint_email"
                 android:maxLines="1"
                 android:padding="5dp"
+                android:textColor="@color/text_black"
                 android:singleLine="true"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -68,7 +48,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
-            android:visibility="gone"
+            android:visibility="visible"
            >
 
             <EditText
@@ -77,6 +57,7 @@
                 android:layout_height="44dp"
                 android:background="@drawable/edit_gray_selector"
                 android:hint="@string/hint_mobile"
+                android:textColor="@color/text_black"
                 android:inputType="phone"
                 android:maxLength="11"
                 android:maxLines="1"
@@ -109,6 +90,7 @@
             android:layout_toLeftOf="@id/btn_get_rerify_code"
             android:background="@drawable/edit_gray_selector"
             android:hint="@string/hint_verify_code"
+                android:textColor="@color/text_black"
             android:inputType="number"
             android:maxLength="6"
             android:maxLines="1"
@@ -133,6 +115,7 @@
             android:hint="@string/hint_set_pwd"
             android:inputType="textPassword"
             android:maxLength="20"
+            android:textColor="@color/text_black"
             android:maxLines="1"
             android:padding="5dp"
             android:singleLine="true"
@@ -164,6 +147,7 @@
             android:textSize="16sp"
             android:padding="10dp"
             android:layout_marginBottom="36dp"
+            android:elevation="4dp"
             />
     </RelativeLayout>
 </LinearLayout>

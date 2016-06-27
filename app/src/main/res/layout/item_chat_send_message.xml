@@ -22,7 +22,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitXY"
-            android:src="@drawable/default_head"/>
+            android:src="@drawable/default_avatar_blue"/>
 
         <TextView
             android:id="@+id/chat_item_message"

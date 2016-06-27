@@ -4,11 +4,12 @@
     android:id="@+id/dynamic_details_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/theme_while">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/colorTheme">
+        android:background="@color/colorPrimary">
         <ImageView
             android:id="@+id/dynamic_details_back_img"
             android:layout_width="wrap_content"
@@ -17,8 +18,8 @@
             android:padding="12dp"/>
         <ImageView
             android:id="@+id/dynamic_details_head_img"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_toRightOf="@id/dynamic_details_back_img"
             android:layout_centerVertical="true" />
         <TextView
@@ -40,7 +41,7 @@
             android:layout_marginLeft="12dp"
             />
     </RelativeLayout>
-    <com.yang.rungang.view.NoLeftToRightScrollView
+    <com.yang.runbang.view.NoLeftToRightScrollView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_weight="1"
@@ -53,33 +54,72 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/dynamic_details_mViewpager"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="250dp"
                 ></android.support.v4.view.ViewPager>
             <TextView
-                    android:id="@+id/dynamic_details_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp"
-                android:layout_margin="12dp"/>
-
-
-            <TextView
-                android:id="@+id/dynamic_details_theme_text"
+                android:id="@+id/dynamic_details_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_black"
-                android:layout_marginLeft="12dp"/>
+                android:textSize="16sp"
+                android:layout_margin="12dp"/>
+            <!--<TextView-->
+                <!--android:id="@+id/dynamic_details_theme_text"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/text_black"-->
+                <!--android:layout_marginLeft="12dp"/>-->
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="2dp"
                 android:background="@color/bg_gray"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginTop="12dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/bg_gray">
+
+                <TextView
+                    android:id="@+id/text_commnet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="评论 ("
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginLeft="12dp"/>
+                <TextView
+                    android:id="@+id/text_comment_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/text_commnet"
+                    android:textSize="18sp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/text_black"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/text_comment_number"
+                    android:text=")"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_centerVertical="true"
+                    android:textSize="16sp"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/bg_gray" />
             <include
                 layout="@layout/comment__layout"/>
         </LinearLayout>
-    </com.yang.rungang.view.NoLeftToRightScrollView>
+    </com.yang.runbang.view.NoLeftToRightScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_gray"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -93,12 +133,17 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:hint="评论..."
+            android:paddingLeft="3dp"
+            android:textColor="@color/text_black"
+            android:background="@drawable/edit_gray_selector"
             android:layout_marginLeft="12dp"/>
         <Button
             android:id="@+id/dynamic_comment_send_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发送"
+            android:textColor="@color/theme_while"
+            android:background="@color/colorPrimary"
             android:layout_marginRight="12dp"
             android:layout_marginLeft="12dp"
             />

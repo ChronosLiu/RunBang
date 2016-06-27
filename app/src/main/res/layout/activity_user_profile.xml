@@ -117,14 +117,14 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-                <com.yang.rungang.view.NoScrollListView
+                <com.yang.runbang.view.NoScrollListView
                     android:id="@+id/user_dynamic_listview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/user_title_layout"
                     android:scrollbars="none">
 
-                </com.yang.rungang.view.NoScrollListView>
+                </com.yang.runbang.view.NoScrollListView>
 
             </RelativeLayout>
 

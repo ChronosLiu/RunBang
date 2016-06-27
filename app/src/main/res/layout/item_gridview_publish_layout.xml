@@ -7,7 +7,9 @@
     <ImageView
         android:id="@+id/publish_gridview_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="6dp"/>
+        android:layout_height="100dp"
+        android:layout_margin="6dp"
+        android:src="@drawable/default_no_picture"
+        android:scaleType="fitXY"/>
 
 </RelativeLayout>

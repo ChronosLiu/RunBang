@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yang.rungang">
+    package="com.yang.runbang">
 
     <!-- 允许联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -41,13 +41,16 @@
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
     <application
-        android:name=".application.MyApplication"
+        android:name="com.yang.runbang.application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/RungangTheme">
+        android:theme="@style/AppTheme">
 
         <!-- 百度地图api配置 -->
         <meta-data
@@ -57,14 +60,14 @@
             android:name="Bmob_APP_KEY"
             android:value="99ab5f136b4e6339a7c11a3a65b2248f" />
 
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.RegisterUserActivity" />
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.SelectPictureActivity" />
-        <activity android:name=".activity.ResetPasswordActivity" />
-        <activity android:name=".activity.SetActivity" />
-        <activity android:name=".activity.RunActivity" />
+        <activity android:name="com.yang.runbang.activity.LoginActivity" />
+        <activity android:name="com.yang.runbang.activity.RegisterActivity" />
+        <activity android:name="com.yang.runbang.activity.RegisterUserActivity" />
+        <activity android:name="com.yang.runbang.activity.MainActivity" />
+        <activity android:name="com.yang.runbang.activity.SelectPictureActivity" />
+        <activity android:name="com.yang.runbang.activity.ResetPasswordActivity" />
+        <activity android:name="com.yang.runbang.activity.SetActivity" />
+        <activity android:name="com.yang.runbang.activity.RunActivity" />
 
         <!-- 百度定位服务 -->
         <service
@@ -78,28 +81,42 @@
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".service.MonitorService"
+            android:name="com.yang.runbang.service.MonitorService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.OLMapActivity" />
-        <activity android:name=".activity.RunRecordActivity" />
-        <activity android:name=".activity.RunRecordDetailsActivity" />
-        <activity android:name=".activity.WelcomeActivity">
+        <!-- shareSDK配置 -->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="tencent1104646053" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.NewsActivity" />
-        <activity android:name=".activity.PublishDynamicActivity" />
-        <activity android:name=".activity.AlbumActivity" />
+        <!--微信分享回调-->
         <activity
-            android:name=".activity.DynamicDetailsActivity"
+            android:name="com.yang.runbang.wxaqi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity android:name="com.yang.runbang.activity.OLMapActivity" />
+        <activity android:name="com.yang.runbang.activity.RunRecordActivity" />
+        <activity android:name="com.yang.runbang.activity.RunRecordDetailsActivity" />
+        <activity android:name="com.yang.runbang.activity.NewsActivity" />
+        <activity android:name="com.yang.runbang.activity.PublishDynamicActivity" />
+        <activity android:name="com.yang.runbang.activity.AlbumActivity" />
+        <activity
+            android:name="com.yang.runbang.activity.DynamicDetailsActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".activity.UserProfileActivity" />
-        <activity android:name=".activity.FriendActivity" />
+        <activity android:name="com.yang.runbang.activity.FriendActivity" />
 
         <receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver">
             <intent-filter>
@@ -119,15 +136,15 @@
         <service android:name="cn.bmob.newim.core.service.ReConnectService" />
         <service android:name="cn.bmob.newim.core.service.HeartBeatService" />
 
-        <activity android:name=".activity.ChatActivity" />
-        <activity android:name=".activity.ModifyInformatonActivity" />
-        <activity android:name=".activity.BindAccountActivity" />
-        <activity android:name=".activity.BindActivity" />
-        <activity android:name=".activity.AboutAppActivity" />
+        <activity android:name="com.yang.runbang.activity.ChatActivity" />
+        <activity android:name="com.yang.runbang.activity.ModifyInformatonActivity" />
+        <activity android:name="com.yang.runbang.activity.BindAccountActivity" />
+        <activity android:name="com.yang.runbang.activity.BindActivity" />
+        <activity android:name="com.yang.runbang.activity.AboutAppActivity" />
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.PushSetActivity" />
+        <activity android:name="com.yang.runbang.activity.PushSetActivity" />
 
         <service
             android:name="cn.bmob.push.lib.service.PushService"
@@ -152,13 +169,23 @@
         </receiver>
         <!-- 第四部中创建的消息接收器，在这里进行注册 -->
         <receiver
-            android:name=".receiver.MyPushMessageReceiver"
+            android:name="com.yang.runbang.receiver.MyPushMessageReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name="com.yang.runbang.activity.PersonProfileActivity" />
+        <activity android:name="com.yang.runbang.activity.AddFriendActivity" />
+        <activity android:name="com.yang.runbang.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.yang.runbang.activity.NoticeActivity"></activity>
     </application>
 
 </manifest>

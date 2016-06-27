@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/theme_while">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/colorTheme">
+        android:background="@color/colorPrimary">
         <ImageView
             android:id="@+id/ol_map__back_img"
             android:layout_width="wrap_content"
@@ -69,6 +70,7 @@
                     android:background="@drawable/edit_text_gray_normal"
                     android:drawableLeft="@drawable/search"
                     android:paddingLeft="5dp"
+                    android:textColor="@color/text_black"
                     android:drawablePadding="5dp"
                     android:hint="输入城市名称进行搜索"/>
             </RelativeLayout>

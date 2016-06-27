@@ -1,41 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_run"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorTheme">
-        <ImageView
-            android:id="@+id/run_back_img"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:padding="10dp"
-            android:src="@drawable/back" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextAppearance="@style/ToolBarTitle">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/run_back_img"
-            android:gravity="center"
-            android:text="跑步"
-            android:textColor="@color/theme_while"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/run_set_img"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="12dp"
-            android:src="@drawable/set"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="3dp"
-            />
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/run_mapview"

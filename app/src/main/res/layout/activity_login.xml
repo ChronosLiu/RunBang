@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme_gray">
+    android:background="@color/theme_while">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="@color/colorTheme"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -39,6 +39,7 @@
             android:padding="5dp"
             android:maxLines="1"
             android:singleLine="true"
+            android:textColor="@color/text_black"
             />
         <EditText
             android:id="@+id/edt_login_password"
@@ -50,6 +51,7 @@
             android:padding="5dp"
             android:maxLines="1"
             android:singleLine="true"
+            android:textColor="@color/text_black"
             android:textColorHint="@color/hint_edt_text"
             android:background="@drawable/edit_gray_selector"
             />

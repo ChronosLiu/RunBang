@@ -1,4 +1,4 @@
-package com.yang.rungang;
+package com.yang.runbang;
 
 import org.junit.Test;
 

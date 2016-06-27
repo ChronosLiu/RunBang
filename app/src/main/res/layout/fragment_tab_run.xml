@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yang.rungang.fragment.TabRunFragment">
+    android:background="@color/theme_while"
+    tools:context="com.yang.runbang.fragment.TabRunFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,11 +18,7 @@
                 android:orientation="vertical"
                 android:layout_centerHorizontal="true"
                 >
-                <include layout="@layout/main_run_weather_layout"
-                    android:id="@+id/main_run_weather"/>
-
                 <include layout="@layout/main_run_data_layout"/>
-
             </LinearLayout>
 
             <Button

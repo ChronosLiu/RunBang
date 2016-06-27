@@ -2,18 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yang.rungang.fragment.TabHomeFragment"
+    tools:context="com.yang.runbang.fragment.TabHomeFragment"
     android:background="@color/theme_while">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragment_home_swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/fragment_home_listview"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_dynamic"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:descendantFocusability="blocksDescendants"></ListView>
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

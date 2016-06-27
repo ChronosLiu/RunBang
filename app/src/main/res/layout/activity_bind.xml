@@ -1,35 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app= "http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_bind"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorTheme">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextAppearance="@style/ToolBarTitle"
+        >
 
-        <ImageView
-            android:id="@+id/bind_account_back_img"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="12dp"
-            android:src="@drawable/back" />
-
-        <TextView
-            android:id="@+id/bind_title_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="24dp"
-            android:layout_toRightOf="@id/bind_account_back_img"
-            android:text="绑定手机号"
-            android:textColor="@color/theme_while"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-
+    </android.support.v7.widget.Toolbar>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -49,6 +33,7 @@
                 android:layout_height="44dp"
                 android:background="@drawable/edit_gray_selector"
                 android:hint="@string/hint_email"
+                android:textColor="@color/text_black"
                 android:maxLines="1"
                 android:padding="5dp"
                 android:singleLine="true"
@@ -70,6 +55,7 @@
                 android:layout_height="44dp"
                 android:background="@drawable/edit_gray_selector"
                 android:hint="@string/hint_mobile"
+                android:textColor="@color/text_black"
                 android:inputType="phone"
                 android:maxLength="11"
                 android:maxLines="1"
@@ -102,6 +88,7 @@
                 android:layout_toLeftOf="@id/bind_send_code_btn"
                 android:background="@drawable/edit_gray_selector"
                 android:hint="@string/hint_verify_code"
+                android:textColor="@color/text_black"
                 android:inputType="number"
                 android:maxLength="6"
                 android:maxLines="1"

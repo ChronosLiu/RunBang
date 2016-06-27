@@ -8,7 +8,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.yang.rungang"
+        applicationId "com.yang.runbang"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
@@ -51,4 +51,6 @@ dependencies {
     compile 'com.orhanobut:logger:1.4'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'cn.bmob.android:androidasync:2.1.6'
+    compile 'com.android.support:design:23.3.0'
+    compile project(':onekeyshare')
 }

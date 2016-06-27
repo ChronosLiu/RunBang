@@ -2,19 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorTheme">
-    <com.yang.rungang.view.RoundImageView
-        android:id="@+id/me_headimg_roundImg"
+    android:background="@color/colorPrimary">
+    <ImageView
+        android:id="@+id/image_fragment_me_avatar"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:src="@drawable/default_head"
+        android:src="@drawable/default_avatar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"/>
     <TextView
         android:id="@+id/me_username_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/me_headimg_roundImg"
+        android:layout_below="@id/image_fragment_me_avatar"
         android:layout_centerHorizontal="true"
         android:textColor="@color/theme_while"
         android:textSize="24sp"

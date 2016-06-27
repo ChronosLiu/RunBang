@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/theme_while">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/colorTheme">
+        android:background="@color/colorPrimary">
         <ImageView
             android:id="@+id/friend_back_img"
             android:layout_width="wrap_content"
@@ -19,7 +20,6 @@
             android:id="@+id/friend_title_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="liuyd关注"
             android:textColor="@color/theme_while"
             android:textSize="18sp"
             android:gravity="center_vertical"
@@ -27,10 +27,11 @@
             android:layout_marginLeft="12dp"/>
 
     </RelativeLayout>
-    <ListView
-        android:id="@+id/friend_listview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_friend"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"></ListView>
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
 
 </LinearLayout>

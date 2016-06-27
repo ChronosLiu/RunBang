@@ -3,27 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <RelativeLayout
+    android:orientation="vertical"
+    android:background="@color/theme_while">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_run_record"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorTheme">
-        <ImageView
-            android:id="@+id/run_record_back_img"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/back"
-            android:padding="12dp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="跑步记录"
-            android:textSize="18sp"
-            android:textColor="@color/theme_while"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/run_record_sync_identifer"

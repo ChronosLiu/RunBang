@@ -7,7 +7,8 @@
         android:id="@+id/child_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@color/bg_gray">
         <TextView
             android:id="@+id/child_city_name"
             android:layout_width="wrap_content"
@@ -22,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="18.2"
+            android:textColor="@color/text_black"
             android:textSize="16sp"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/child_city_name"/>
@@ -50,6 +52,7 @@
             android:layout_height="wrap_content"
             android:text="53%"
             android:textSize="16sp"
+            android:textColor="@color/colorPrimary"
             android:layout_alignParentRight="true"
             android:layout_marginRight="48dp"
 
