@@ -3,6 +3,8 @@
 
 针对跑步运动，为年轻人定制的跑步社交APP
 
+采用Material Design设计原则，使用Bmob后端云，百度地图SDK,ImageLoader等实现
+
 应用官网： http://runbang.bmob.cn
 
 ##ScreenShot：
