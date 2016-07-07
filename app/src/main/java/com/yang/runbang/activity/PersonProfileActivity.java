@@ -195,8 +195,12 @@ public class PersonProfileActivity extends BaseActivity implements View.OnClickL
 
         ImageLoader.getInstance().displayImage(queryUser.getHeadImgUrl(),avatar,circleOptions);
         nickName.setText(queryUser.getNickName());
-        ageText.setText(GeneralUtil.getAgeByBirthday(queryUser.getBirthday().getDate()));
-        signature.setText(queryUser.getSignature());
+        if (queryUser.getBirthday()!=null) {
+            ageText.setText(GeneralUtil.getAgeByBirthday(queryUser.getBirthday().getDate()));
+        }
+        if (queryUser.getSignature()!=null) {
+            signature.setText(queryUser.getSignature());
+        }
 
         fansNumber.setText(fansCount+"");
         followNumber.setText(followCount+"");

@@ -356,9 +356,9 @@ public class RunRecordDetailsActivity extends BaseActivity implements View.OnCli
 //                oks.setImageUrl(dynamic1.getImage().get(0));//网络图片rul
 
 //                // url：仅在微信（包括好友和朋友圈）中使用
-//                oks.setUrl("http://sharesdk.cn");   //网友点进链接后，可以看到分享的详情
+                oks.setUrl("http://runbang.bmob.cn");   //网友点进链接后，可以看到分享的详情
 //                // Url：仅在QQ空间使用
-//                oks.setTitleUrl("http://www.baidu.com");  //网友点进链接后，可以看到分享的详情
+                oks.setTitleUrl("http://runbang.bmob.cn");  //网友点进链接后，可以看到分享的详情
                 // 启动分享GUI
                 oks.show(context);
 

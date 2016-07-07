@@ -61,9 +61,9 @@
     <SinaWeibo
         Id="1"
         SortId="1"
-        AppKey="568898243"
-        AppSecret="38a4f8204cc784f81f9f0daaf31e02e3"
-        RedirectUrl="http://www.sharesdk.cn"
+        AppKey="1072562708"
+        AppSecret="d32492f1a38be1dea0f9e8dbf0132315"
+        RedirectUrl="http://runbang.bmob.cn"
         ShareByAppClient="true"
         Enable="true" />
 
@@ -97,8 +97,8 @@
     <Wechat
         Id="4"
         SortId="4"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wxe93a0ec0277717c4"
+        AppSecret="cf2c2b1e62c6fbeb979415e40b893962"
         BypassApproval="false"
         Enable="true" />
     
@@ -121,8 +121,8 @@
 	<QQ
         Id="7"
         SortId="7"
-        AppId="100371282"
-        AppKey="aed9b0303e3ed1e27bae87c33761161d"
+        AppId="1105450721"
+        AppKey="dOJstTsRlTHz9nOs"
         ShareByAppClient="true"
         Enable="true" />
     

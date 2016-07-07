@@ -158,22 +158,25 @@ public class ModifyInformatonActivity extends BaseActivity implements View.OnCli
     private void setDataToView(){
         if (user!= null) {
             nickNameEdt.setText(user.getNickName());
-            if (user.getSex()) {
+            if (user.getSex()!=null && user.getSex()) {
                 sexText.setText("男");
-            } else {
+            } else if (user.getSex()!=null){
                 sexText.setText("女");
+            } else {
+                sexText.setText("未知");
             }
             ImageLoader.getInstance().displayImage(user.getHeadImgUrl(), avatarImg, circleOptions);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date date = null;
-            try {
-                date= sdf.parse(user.getBirthday().getDate().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (user.getBirthday()!=null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date date = null;
+                try {
+                    date = sdf.parse(user.getBirthday().getDate().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                birthdayText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
             }
-            birthdayText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-
             if (user.getSignature()!= null) {
                 signatureEdt.setText(user.getSignature());
             }

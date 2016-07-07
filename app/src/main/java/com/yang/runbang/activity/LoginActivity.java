@@ -19,11 +19,18 @@ import com.yang.runbang.model.bean.User;
 import com.yang.runbang.model.biz.ActivityManager;
 import com.yang.runbang.utils.GeneralUtil;
 
-import java.util.HashMap;
+import org.json.JSONArray;
 
+import java.util.HashMap;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindCallback;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -38,6 +45,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private static final int MSG_AUTH_CANCEL = 2;
     private static final int MSG_AUTH_ERROR= 3;
     private static final int MSG_AUTH_COMPLETE = 4;
+    private static final int IS_User = 5;
+    private static final int IS_NOT_USER = 6;
+    private static final int Third_Register_login_Success = 7;
+    private static final int Third_Register_login_Failure = 8;
 
 
     private EditText usernameEdt;
@@ -133,7 +144,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 break;
             case R.id.img_qq_login: // qq登录
-                //新浪微博
+                //qq微博
                 Platform qq = ShareSDK.getPlatform(QQ.NAME);
                 authorize(qq);
                 break;
@@ -170,7 +181,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         if (plat.isAuthValid()) {//已授权
 
-            return;
+            plat.removeAccount();//清除授权缓存信息
+//            return;
         }
 
         plat.setPlatformActionListener(this);
@@ -185,6 +197,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         if (i == Platform.ACTION_USER_INFOR) {
             Log.i("TAG",hashMap.toString());
+
+            String accessToken = platform.getDb().getToken();
+            String openId = platform.getDb().getUserId();
+            Log.i("TAG","id"+openId);
+            Log.i("TAG","token"+accessToken);
+
+            Log.i("TAG","db"+platform.getDb().exportData());
+
             Message msg = new Message();
             msg.what = MSG_AUTH_COMPLETE;
             msg.obj = new Object[] {platform.getName(), hashMap};
@@ -228,44 +248,126 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 case MSG_AUTH_COMPLETE:
                     //授权成功
-                    Toast.makeText(context, "授权成功", Toast.LENGTH_SHORT).show();
+                    showProgressDialog(LoginActivity.this,"正在登录...");
                     Object[] objs = (Object[]) msg.obj;
                     String platform = (String) objs[0];
-
                     HashMap<String, Object> res = (HashMap<String, Object>) objs[1];
-                    if (signupListener != null && signupListener.onSignin(platform, res)) {
 
-                        Log.i("TAG",res.toString());
-                    }
-
+                    //判断用户是否存在
+                    isUser(platform);
 
                  break;
+                case IS_NOT_USER://没有用户，注册
+
+                    registerUser((String) msg.obj);
+
+                    break;
+                case IS_User://直接登录成功
+                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    closeProgressDialog();
+                    LoginActivity.this.finish();
+
+                    break;
+                case Third_Register_login_Success:
+                    Intent i=new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(i);
+                    closeProgressDialog();
+                    LoginActivity.this.finish();
+                    break;
+                case Third_Register_login_Failure:
+                    closeProgressDialog();
+                    Toast.makeText(LoginActivity.this,"登录失败，请重新尝试",Toast.LENGTH_SHORT).show();
+                    break;
             }
             super.handleMessage(msg);
         }
     };
 
-    private OnLoginListener signupListener = new OnLoginListener() {
-        @Override
-        public boolean onSignin(String platform, HashMap<String, Object> res) {
-            // 在这个方法填写尝试的代码，返回true表示还不能登录，需要注册
-            // 此处全部给回需要注册
-            return true;
-        }
+    /**
+     * 第三方注册用户
+     * @param platformName
+     */
+    private void registerUser(String platformName) {
 
-        @Override
-        public boolean onSignUp(User user) {
-            // 填写处理注册信息的代码，返回true表示数据合法，注册页面可以关闭
+        Platform platform = ShareSDK.getPlatform(platformName);
+        String openId = platform.getDb().getUserId();
+
+        final User user = new User();
+        user.setHeadImgUrl(platform.getDb().getUserIcon());
+        user.setUsername(openId);
+        user.setPassword(openId);
+        user.setNickName(platform.getDb().getUserName());
+
+        user.signUp(context, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                user.login(context, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        handler.sendEmptyMessage(Third_Register_login_Success);
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+
+                        handler.sendEmptyMessage(Third_Register_login_Failure);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                handler.sendEmptyMessage(Third_Register_login_Failure);
+            }
+        });
 
 
 
-            return true;
-        }
-    };
+    }
 
+    /**
+     * 第三方，判断是否已存在
+     * @param platformName
+     */
+    private void isUser(final String platformName){
 
-    private void registerUser() {
+        Platform platform = ShareSDK.getPlatform(platformName);
+        String openId = platform.getDb().getUserId();
 
+        BmobQuery<User> query = new BmobQuery<>();
+        query.addWhereEqualTo("username",openId);
+        query.findObjects(context, new FindListener<User>() {
+            @Override
+            public void onSuccess(List<User> list) {
+
+                if (list!=null&&list.size() ==1) {//存在用户
+                    //用户登录
+                    User user = list.get(0);
+                    user.setPassword(user.getUsername());
+                    user.login(context, new SaveListener() {
+                        @Override
+                        public void onSuccess() {
+                            handler.sendEmptyMessage(IS_User);
+                        }
+                        @Override
+                        public void onFailure(int i, String s) {
+                            handler.sendEmptyMessage(Third_Register_login_Failure);
+                        }
+                    });
+                } else { //不存在用户
+                    Message msg = new Message();
+                    msg.what = IS_NOT_USER;
+                    msg.obj = platformName;
+                    handler.sendMessage(msg);
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                handler.sendEmptyMessage(Third_Register_login_Failure);
+            }
+        });
     }
 
 
