@@ -26,9 +26,13 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务
+
     //bmob-push：Bmob的推送包
+
     //bmob-im：Bmob的即时通讯包，如果想使用即时通讯服务，则添加以下两个包，注意每个版本的im依赖特定版本的bmob-sdk，而bmob-sdk又需要特定的依赖库，具体可以查看下面注释[2]中的对应关系
+
     //okhttp：自`V3.4.3版本`开始，使用`okhttp`优化SDK的网络框架，和bmob-sdk一起配套使用。
+
     //bmob-sdk:3.4.6需要依赖okhttp（2.4.0）、okio（2.4.0），如果需要兼容Android6.0系统，则还需要添加support-v4（23.2.1）及org.apache.http.legacy包，具体可查看下面注释[1]的解释
     compile files('libs/locSDK_6.13.jar')
     compile files('libs/baidumapapi_base_v3_7_3.jar')
@@ -53,4 +57,5 @@ dependencies {
     compile 'cn.bmob.android:androidasync:2.1.6'
     compile 'com.android.support:design:23.3.0'
     compile project(':onekeyshare')
+    compile 'com.android.support:cardview-v7:23.3.0'
 }

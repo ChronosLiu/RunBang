@@ -3,7 +3,10 @@ package com.yang.runbang.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import com.yang.runbang.R;
 import com.yang.runbang.listener.OnRecyclerViewListener;
 import com.yang.runbang.model.bean.Dynamic;
 
@@ -37,6 +40,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implemen
     public void setLikes(List<Dynamic> likes) {
         this.likes = likes;
     }
+
+    public abstract void setAnimation();
 
     @Override
     public void onClick(View v) {

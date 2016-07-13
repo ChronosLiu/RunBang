@@ -14,6 +14,8 @@ import com.yang.runbang.utils.JsonUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
+
 /**
  * 数据库管理类，单例类
  *
@@ -154,7 +156,7 @@ public class DBManager {
 
         List<RunRecord> points =  new ArrayList<>();
 
-        String sql = "select * from runrecord";
+        String sql = "select * from runrecord ";
         db = dbHelper.getWritableDatabase();
 
         db.beginTransaction();

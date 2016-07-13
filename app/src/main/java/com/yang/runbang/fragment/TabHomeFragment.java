@@ -142,6 +142,7 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_dynamic);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(context,LinearLayoutManager.VERTICAL));
         adapter = new DynamicRecyclerAdapter(this);
@@ -152,10 +153,16 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             public void onRefresh() {
 
                 if (userTimeline != null) {
-                    //获取动态
-                    refreshDynamic();
 
-                    getLikes();
+                    if(GeneralUtil.isNetworkAvailable(context)) {//网络提供
+                        //获取动态
+                        refreshDynamic();
+
+                        getLikes();
+                    } else{
+                        refreshLayout.setRefreshing(false);
+                        Toast.makeText(context,"没有网络连接，请检查网络",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -279,6 +286,14 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG", "s+i");
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -326,6 +341,13 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             public void onError(int i, String s) {
 
                 Log.i("TAG",s+i);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -351,6 +373,13 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG", s + i);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -375,12 +404,11 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
         switch (childId){
 
             case R.id.relative_like_dynamic:
-                Log.i("TAG","点赞");
+
                 final Dynamic dynamic = data.get(position);
 
                 if (!likes.contains(dynamic) ) { //当前用户没有对此动态点赞
 
-                    Log.i("TAG",likes.size()+"点赞数");
                     int likeCount = data.get(position).getLikesCount();
                     dynamic.setLikesCount(likeCount + 1);
                     dynamic.update(context, new UpdateListener() {
@@ -403,14 +431,24 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
 
                                 @Override
                                 public void onFailure(int i, String s) {
-
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(context,"点赞失败，服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             });
                         }
 
                         @Override
                         public void onFailure(int i, String s) {
-
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context,"点赞失败，服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
                 }else {//当前用户对此动态已点赞
@@ -441,12 +479,24 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
                                 @Override
                                 public void onFailure(int i, String s) {
                                     Log.i("TAG",s+i);
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(context,"取消点赞失败，请稍后重试",Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             });
                         }
 
                         @Override
                         public void onFailure(int i, String s) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(context,"取消点赞失败，请稍后重试",Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                         }
                     });
@@ -526,6 +576,13 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG",s+i);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                        refreshLayout.setRefreshing(false);
+                    }
+                });
             }
         });
     }

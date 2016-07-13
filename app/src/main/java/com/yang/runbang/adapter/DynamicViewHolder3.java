@@ -2,7 +2,10 @@ package com.yang.runbang.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ public class DynamicViewHolder3 extends BaseViewHolder {
 
     private OnRecyclerViewListener listener;
 
+    private CardView cardView;
     private ImageView avatar;
     private TextView nickName;
     private TextView time;
@@ -42,6 +46,7 @@ public class DynamicViewHolder3 extends BaseViewHolder {
     public DynamicViewHolder3(View itemView, Context context, final OnRecyclerViewListener listener) {
         super(itemView, context, listener);
         this.listener = listener;
+        cardView = (CardView) itemView.findViewById(R.id.cardview);
         avatar = (ImageView) itemView.findViewById(R.id.image_avatar_dynamic);
         nickName = (TextView) itemView.findViewById(R.id.text_nickname_dynamic);
         time = (TextView) itemView.findViewById(R.id.text_time_dynamic);
@@ -137,5 +142,12 @@ public class DynamicViewHolder3 extends BaseViewHolder {
             this.likeImage.setImageResource(R.drawable.like);
         }
 
+    }
+
+    @Override
+    public void setAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_bottom_in);
+
+        cardView.startAnimation(animation);
     }
 }

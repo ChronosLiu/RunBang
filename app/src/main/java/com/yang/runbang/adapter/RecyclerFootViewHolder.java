@@ -22,4 +22,9 @@ public class RecyclerFootViewHolder extends BaseViewHolder {
     public void bindData(Object o) {
 
     }
+
+    @Override
+    public void setAnimation() {
+
+    }
 }

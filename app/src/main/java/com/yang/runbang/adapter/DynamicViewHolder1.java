@@ -2,7 +2,10 @@ package com.yang.runbang.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ public class DynamicViewHolder1 extends BaseViewHolder {
 
     private OnRecyclerViewListener listener;
 
+    private CardView cardView;
     private ImageView avatar;
     private TextView nickName;
     private TextView time;
@@ -44,6 +48,8 @@ public class DynamicViewHolder1 extends BaseViewHolder {
     public DynamicViewHolder1(View itemView, Context context,final OnRecyclerViewListener listener) {
         super(itemView,context,listener);
         this.listener = listener;
+
+        cardView = (CardView) itemView.findViewById(R.id.cardview);
         avatar = (ImageView) itemView.findViewById(R.id.image_avatar_dynamic);
         nickName = (TextView) itemView.findViewById(R.id.text_nickname_dynamic);
         time = (TextView) itemView.findViewById(R.id.text_time_dynamic);
@@ -82,7 +88,9 @@ public class DynamicViewHolder1 extends BaseViewHolder {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 listener.onChildClick(getAdapterPosition(),R.id.image_avatar_dynamic);
+
             }
         });
         shareRelative.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +103,9 @@ public class DynamicViewHolder1 extends BaseViewHolder {
         likeRelative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onChildClick(getAdapterPosition(),R.id.relative_like_dynamic);
+
+                listener.onChildClick(getAdapterPosition(), R.id.relative_like_dynamic);
+
             }
         });
         itemView.setOnClickListener(this);
@@ -140,4 +150,10 @@ public class DynamicViewHolder1 extends BaseViewHolder {
     }
 
 
+    @Override
+    public void setAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(cardView.getContext(), R.anim.item_bottom_in);
+
+        cardView.startAnimation(animation);
+    }
 }

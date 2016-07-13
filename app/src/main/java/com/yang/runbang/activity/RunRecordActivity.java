@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.yang.runbang.R;
 import com.yang.runbang.adapter.RunRecordListAdapter;
@@ -19,6 +21,7 @@ import com.yang.runbang.db.DBManager;
 import com.yang.runbang.model.bean.RunRecord;
 import com.yang.runbang.model.bean.User;
 import com.yang.runbang.model.biz.ActivityManager;
+import com.yang.runbang.utils.GeneralUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,8 +152,13 @@ public class RunRecordActivity extends BaseActivity{
             @Override
             public void onRefresh() {
 
-                //同步数据
-                syncData();
+                if (GeneralUtil.isNetworkAvailable(context)) {
+                    //同步数据
+                    syncData();
+                }else {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(context,"网络状态异常，请稍后重试",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -188,6 +196,7 @@ public class RunRecordActivity extends BaseActivity{
                     }
                     @Override
                     public void onFailure(int i, String s) {
+
                     }
                 });
             }

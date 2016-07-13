@@ -149,4 +149,9 @@ public class SendTextHolder extends BaseViewHolder{
     public void showTime(boolean isShow) {
         this.time.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
+
+    @Override
+    public void setAnimation() {
+
+    }
 }
