@@ -6,4 +6,10 @@
         <attr name="civ_border_overlay" format="boolean" />
         <attr name="civ_fill_color" format="color" />
     </declare-styleable>
+    
+    <declare-styleable name="NineGridLayout">
+        <attr name="singleImageSize" format="dimension"/>
+        <attr name="singleImageRadio" format="float"/>
+        <attr name="spacing" format="dimension"/>
+    </declare-styleable>
 </resources>

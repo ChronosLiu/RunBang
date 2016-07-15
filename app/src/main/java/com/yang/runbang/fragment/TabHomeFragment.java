@@ -47,14 +47,14 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  * Use the {@link TabHomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabHomeFragment extends Fragment implements OnRecyclerViewListener {
+public class TabHomeFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static final int request_code_Dynamic_details = 0x12;
-    private static final int request_code_push_dynamic = 0x13;
+    public static final int request_code_Dynamic_details = 0x12;
+    public static final int request_code_push_dynamic = 0x13;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -110,6 +110,7 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        ShareSDK.initSDK(context);
     }
 
     @Override
@@ -145,7 +146,7 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(context,LinearLayoutManager.VERTICAL));
-        adapter = new DynamicRecyclerAdapter(this);
+        adapter = new DynamicRecyclerAdapter(getActivity(),this);
         recyclerView.setAdapter(adapter);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -204,19 +205,6 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-//                if(lastVisibleItemPosition + 1 == adapter.getItemCount()) {
-//                    boolean isRefreshing = refreshLayout.isRefreshing();
-//                    if (isRefreshing) {//正在刷新
-//                        return;
-//                    }
-//                    if (!isLoading) {
-//                        isLoading = true;
-//                        //显示加载更多布局
-//                        adapter.setIsLoadMore(true);
-//
-//                    }
-//
-//                }
             }
         });
 
@@ -250,50 +238,35 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
                     //没有新动态
                     if(data!=null && data.size()>0&& data.get(0).equals(list.get(0))){
 
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshLayout.setRefreshing(false);
-                                Toast.makeText(context, "没有新动态", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        refreshLayout.setRefreshing(false);
+                        Toast.makeText(context, "没有新动态", Toast.LENGTH_SHORT).show();
+
                     }else {
 
                         //清除data集合中数据
                         data.clear();
                         data = list;
-                        new Handler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshLayout.setRefreshing(false);
-                                adapter.setData(data);
-                                adapter.setIsLoadMore(false);
-                                Toast.makeText(context, "刷新完成", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+
+                        refreshLayout.setRefreshing(false);
+                        adapter.setData(data);
+                        adapter.setIsLoadMore(false);
+                        Toast.makeText(context, "刷新完成", Toast.LENGTH_SHORT).show();
+
                     }
                 } else {
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            adapter.setIsLoadMore(false);
-                            Toast.makeText(context, "没有动态，去发布一个吧！！", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    refreshLayout.setRefreshing(false);
+                    adapter.setIsLoadMore(false);
+                    Toast.makeText(context, "没有动态，去发布一个吧！！", Toast.LENGTH_SHORT).show();
+
                 }
             }
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG", "s+i");
+                refreshLayout.setRefreshing(false);
+                Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
-                    }
-                });
+
             }
         });
 
@@ -318,36 +291,22 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
                     for (Dynamic d:list) {
                         data.add(d);
                     }
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            adapter.setData(data);
-                            adapter.setIsLoadMore(false);
-                        }
-                    });
+                    refreshLayout.setRefreshing(false);
+                    adapter.setData(data);
+                    adapter.setIsLoadMore(false);
                 }else {
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            adapter.setIsLoadMore(false);
-                            Toast.makeText(context, "已到最底部", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    refreshLayout.setRefreshing(false);
+                    adapter.setIsLoadMore(false);
+                    Toast.makeText(context, "已到最底部", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onError(int i, String s) {
 
                 Log.i("TAG",s+i);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                refreshLayout.setRefreshing(false);
+                adapter.setIsLoadMore(false);
+                Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -369,182 +328,13 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
 
                 }
             }
-
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG", s + i);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                refreshLayout.setRefreshing(false);
+                Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public void onItemClick(int position) {
-
-        Intent intent = new Intent(getActivity(),DynamicDetailsActivity.class);
-        intent.putExtra("dynamicId", data.get(position).getObjectId());
-        startActivityForResult(intent, request_code_Dynamic_details);
-
-    }
-
-    @Override
-    public boolean onItemLongClick(int position) {
-        return false;
-    }
-
-    @Override
-    public void onChildClick(final int position, int childId) {
-
-        switch (childId){
-
-            case R.id.relative_like_dynamic:
-
-                final Dynamic dynamic = data.get(position);
-
-                if (!likes.contains(dynamic) ) { //当前用户没有对此动态点赞
-
-                    int likeCount = data.get(position).getLikesCount();
-                    dynamic.setLikesCount(likeCount + 1);
-                    dynamic.update(context, new UpdateListener() {
-                        @Override
-                        public void onSuccess() {
-                            Like  like = new Like();
-                            like.setFromUser(user);
-                            like.setToDynamic(dynamic);
-                            like.save(context, new SaveListener() {
-                                @Override
-                                public void onSuccess() {
-                                    getLikes();
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getActivity(), "点赞成功", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onFailure(int i, String s) {
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(context,"点赞失败，服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(int i, String s) {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(context,"点赞失败，服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                }else {//当前用户对此动态已点赞
-                    Log.i("TAG","已点赞");
-
-                    int posit=likes.indexOf(dynamic);
-                    Like like = likesList.get(posit);
-                    like.delete(context, new DeleteListener() {
-                        @Override
-                        public void onSuccess() {
-
-                            dynamic.setLikesCount(dynamic.getLikesCount()-1);
-                            dynamic.update(context, new UpdateListener() {
-                                @Override
-                                public void onSuccess() {
-
-                                    //获取点赞
-                                    getLikes();
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getActivity(), "取消点赞", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                                }
-
-                                @Override
-                                public void onFailure(int i, String s) {
-                                    Log.i("TAG",s+i);
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(context,"取消点赞失败，请稍后重试",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(int i, String s) {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(context,"取消点赞失败，请稍后重试",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        }
-                    });
-                }
-
-                break;
-
-            case R.id.relative_share_dynamic://分享
-
-                Dynamic dynamic1 =data.get(position);
-
-                ShareSDK.initSDK(context);
-                OnekeyShare oks= new OnekeyShare();
-
-                //关闭sso授权
-                oks.disableSSOWhenAuthorize();
-                // title标题：微信、QQ（新浪微博不需要标题）
-                oks.setTitle("动态");  //最多30个字符
-                // text是分享文本：所有平台都需要这个字段
-                if (dynamic1.getContent()!=null) {
-                    int lengthStr = dynamic1.getContent().length();
-                    oks.setText(dynamic1.getContent().substring(0, lengthStr > 40 ? 35 : lengthStr));  //最多40个字符
-                }
-                // imagePath是图片的本地路径：除Linked-In以外的平台都支持此参数
-                //oks.setImagePath(Environment.getExternalStorageDirectory() + "/meinv.jpg");//确保SDcard下面存在此张图片
-
-                if (dynamic1.getImage()!=null&&dynamic1.getImage().size()>0) {
-                    //网络图片的url：所有平台
-                    oks.setImageUrl(dynamic1.getImage().get(0));//网络图片rul
-                }
-//                // url：仅在微信（包括好友和朋友圈）中使用
-                oks.setUrl("http://runbang.bmob.cn");   //网友点进链接后，可以看到分享的详情
-//                // Url：仅在QQ空间使用
-                oks.setTitleUrl("http://runbang.bmob.cn");  //网友点进链接后，可以看到分享的详情
-                // 启动分享GUI
-                oks.show(context);
-
-                break;
-
-            case R.id.image_avatar_dynamic: //用户头像
-
-                Intent avatarIntent = new Intent(getActivity(), PersonProfileActivity.class);
-                avatarIntent.putExtra("userid",data.get(position).getFromUser().getObjectId());
-                getActivity().startActivity(avatarIntent);
-
-                break;
-        }
-
     }
 
     /**
@@ -565,24 +355,14 @@ public class TabHomeFragment extends Fragment implements OnRecyclerViewListener 
                     }
 
                 }
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.setLikes(likes);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+                adapter.setLikes(likes);
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG",s+i);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
-                        refreshLayout.setRefreshing(false);
-                    }
-                });
+                Toast.makeText(context,"服务器错误，请稍后重试",Toast.LENGTH_SHORT).show();
+                refreshLayout.setRefreshing(false);
             }
         });
     }

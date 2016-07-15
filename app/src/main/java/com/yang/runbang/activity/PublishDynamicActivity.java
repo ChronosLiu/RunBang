@@ -64,6 +64,8 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
 
     private static final int Save_Dynamic_To_MYTimeline = 0x14;
 
+    private static final int Push_Dynamic_Failure = 0x15;
+
 
 
     private EditText contentEdt; //动态内容
@@ -87,6 +89,8 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
 
     private List<String> pictureList = new ArrayList<>(); //图片url
 
+    //发布动态完成标志
+    private boolean isPushFinish = true;
 
     Handler handler = new Handler(){
         @Override
@@ -104,11 +108,16 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
                     break;
                 case Push_Dynamic_Success: //推送动态成功
 
+                    isPushFinish = true;
                     //关闭提示
                     closeProgressDialog();
                     //展示dialog
                     showDialog();
 
+                    break;
+                case Push_Dynamic_Failure://发布动态失败
+                    isPushFinish = true;
+                    Toast.makeText(PublishDynamicActivity.this, "发布动态失败,请稍后重试", Toast.LENGTH_SHORT).show();
                     break;
 
             }
@@ -184,12 +193,13 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
             @Override
             public void onProgress(int i, int i1, int i2, int i3) {
 
+
             }
 
             @Override
             public void onError(int i, String s) {
 
-                Toast.makeText(PublishDynamicActivity.this, "发布动态失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                handler.sendEmptyMessage(Push_Dynamic_Failure);
             }
         });
     }
@@ -321,6 +331,8 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
             @Override
             public void onFailure(int i, String s) {
 
+                handler.sendEmptyMessage(Push_Dynamic_Failure);
+
                 Toast.makeText(PublishDynamicActivity.this, "发布动态失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
@@ -406,6 +418,7 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
             @Override
             public void onError(int i, String s) {
                 Log.i("TAG", i + s);
+                handler.sendEmptyMessage(Push_Dynamic_Failure);
             }
         });
 
@@ -446,11 +459,13 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
                         @Override
                         public void onFailure(int i, String s) {
 
+                            handler.sendEmptyMessage(Push_Dynamic_Failure);
                             Log.i("TAG",s+i);
                         }
                     });
                 } else {
 
+                    handler.sendEmptyMessage(Push_Dynamic_Failure);
                     Log.i("TAG", "推送时间线失败");
                 }
             }
@@ -458,6 +473,7 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
             @Override
             public void onError(int i, String s) {
 
+                handler.sendEmptyMessage(Push_Dynamic_Failure);
                 Log.i("TAG",i+s);
             }
         });
@@ -484,21 +500,30 @@ public class PublishDynamicActivity extends BaseActivity implements Toolbar.OnMe
         switch (item.getItemId()) {
             case R.id.action_publish:
 
-                if (checkInput()) { //有内容
+                Log.i("TAG","发布动态");
 
-                    showProgressDialog(PublishDynamicActivity.this,"发布中...");
+                if(GeneralUtil.isNetworkAvailable(context)) {
 
-                    if (mSelectedPicture.size() > 0) { //有图片，先上传图片
+                    if (checkInput()&&isPushFinish) { //有内容
 
-                        uploadPicture();
+                        isPushFinish = false;
+                        showProgressDialog(PublishDynamicActivity.this, "发布中...");
 
-                    } else {//无图片
-                        //发布动态
-                        publishDynamic();
+                        if (mSelectedPicture.size() > 0) { //有图片，先上传图片
+
+                            uploadPicture();
+
+                        } else {//无图片
+                            //发布动态
+                            publishDynamic();
+                        }
+
+
+                    } else { //无内容
+                        Toast.makeText(context, "动态不能为空", Toast.LENGTH_SHORT).show();
                     }
-
-                } else { //无内容
-                    Toast.makeText(context,"动态不能为空",Toast.LENGTH_SHORT);
+                }else {
+                    Toast.makeText(context, "未检测到网络", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
