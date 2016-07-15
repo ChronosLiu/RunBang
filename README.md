@@ -5,7 +5,7 @@
 
 采用Material Design设计原则，使用Bmob后端云，百度地图SDK,ImageLoader等实现
 
-应用官网： http://runbang.bmob.cn
+应用官网： http://fir.im/runbang
 
 ##ScreenShot：
 
