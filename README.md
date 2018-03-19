@@ -8,7 +8,7 @@
 应用官网： http://fir.im/runbang
 
 注意：
- 1、后端使用Bmob后端云，可能长时间未调用API，Bmob关闭应用,会导致出现无法登陆，无法注册、服务器错误等。可以邮件联系我解决。
+ 1、后端使用Bmob后端云，可能长时间未调用API，Bmob关闭应用,会导致出现无法登陆，无法注册、服务器错误等。。
  2、该应用只是以前做的Demo,已不在更新维护，仅供学习参考使用。
 
 ##ScreenShot：
@@ -32,6 +32,5 @@
 
 ##About Me
 
-* CSDN: http://blog.csdn.net/ly20116
 * Email:liuyang8218@163.com
 
